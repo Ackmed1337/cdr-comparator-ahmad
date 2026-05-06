@@ -34,7 +34,7 @@ function Page() {
       <DataSourcePanel/>
       <ConsolePanel/>
       <AppBar position="static" style={{marginTop: 8, marginBottom: 8}}>
-        <Tabs value={value} onChange={handleChange}>
+        <Tabs value={value} onChange={handleChange} aria-label="Product sections">
           <Tab label="Banking" />
           <Tab label="Energy" />
           <Tab label="Status and Outages" />

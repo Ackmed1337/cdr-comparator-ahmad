@@ -10,9 +10,7 @@
     "caniuse-lite": "1.0.30001632",
     "immer": "^8.0.1"
   },
-  "overrides": {
-    "caniuse-lite": "1.0.30001632"
-  },
+
   "dependencies": {
     "@material-ui/core": "^4.9.10",
     "@material-ui/icons": "^4.2.1",
@@ -38,8 +36,8 @@
   },
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build"
