@@ -53,7 +53,7 @@ const styles = theme => ({
 })
 
 const xMinVVersions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-const xVVersions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '999']
+const xVVersions = ['999', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 
 class DataSourcePanel extends React.Component {
   componentDidMount() {
@@ -116,7 +116,7 @@ class DataSourcePanel extends React.Component {
               {this.props.readOnly ? (
                 <div className={classes.version}>
                   <TextField value={xMinV} label="x-min-v" helperText="Min version" inputProps={{ readOnly: true }} />
-                  <TextField value={xV} label="x-v" helperText="Preferred version" inputProps={{ readOnly: true }} />
+                  <TextField value={xV === '999' ? 'Auto' : xV} label="x-v" helperText={xV === '999' ? 'Auto-negotiates best version' : 'Preferred version'} inputProps={{ readOnly: true }} />
                   <IconButton color="primary" style={{ marginTop: 20 }} onClick={this.props.setVersionsEditable}>
                     <Tooltip title="Edit API versions">
                       <EditIcon />
@@ -137,8 +137,9 @@ class DataSourcePanel extends React.Component {
                     freeSolo
                     options={xVVersions}
                     value={xV}
-                    renderInput={params => <TextField {...params} label="x-v" helperText="Preferred version" />}
-                    onInputChange={(_, v) => { xV = v }}
+                    getOptionLabel={o => o === '999' ? 'Auto (999)' : o}
+                    renderInput={params => <TextField {...params} label="x-v" helperText="999 = auto-negotiate best version" />}
+                    onInputChange={(_, v) => { xV = v === 'Auto (999)' ? '999' : v }}
                     style={{ display: 'inline' }}
                   />
                   <IconButton color="primary" style={{ marginTop: 20 }} onClick={applyVersions}>

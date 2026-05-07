@@ -27,6 +27,10 @@ export const retrieveProductList = (dataSourceIdx, baseUrl, productListUrl, xV, 
       payload: fetch(request)
         .then(response => {
           if (response.ok) {
+            const usedVersion = response.headers.get('x-v')
+            if (usedVersion) {
+              dispatch(conoutInfo(`Version negotiated for ${new URL(productListUrl).hostname}: x-v=${usedVersion}`))
+            }
             checkExposedHeaders(response, productListUrl, dispatch)
             return response.json()
           }

@@ -5,7 +5,7 @@ import {
   SET_VERSIONS_READ_ONLY
 } from './actions'
 
-export default function versionInfo(state={vHeaders: {xV: '4', xMinV: '1'}}, action) {
+export default function versionInfo(state={vHeaders: {xV: '999', xMinV: '1'}}, action) {
   const vHeaders = {
     xV: loadVersionField("x-v") || state.vHeaders.xV,
     xMinV: loadVersionField("x-min-v") || state.vHeaders.xMinV
@@ -27,8 +27,15 @@ export default function versionInfo(state={vHeaders: {xV: '4', xMinV: '1'}}, act
   }
 }
 
+const DEPRECATED_VERSIONS = ['4']
+
 function loadVersionField(vf) {
-  return window.localStorage.getItem(vf)
+  const val = window.localStorage.getItem(vf)
+  if (vf === 'x-v' && DEPRECATED_VERSIONS.includes(val)) {
+    window.localStorage.removeItem(vf)
+    return null
+  }
+  return val
 }
 
 function saveVersionField(vf, value) {
