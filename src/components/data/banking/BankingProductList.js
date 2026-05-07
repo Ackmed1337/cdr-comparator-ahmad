@@ -4,9 +4,22 @@ import { START_RETRIEVE_PRODUCT_LIST, startRetrieveProductList, retrieveProductL
 import LinearProgress from '@material-ui/core/LinearProgress'
 import ProductCategory from './ProductCategory'
 import { normalise } from '../../../utils/url'
+import { translateProductCategory } from '../../../utils/dict'
+
+const pillBase = {
+  border: 'none',
+  borderRadius: 20,
+  padding: '3px 10px',
+  fontSize: '0.7rem',
+  fontWeight: 600,
+  cursor: 'pointer',
+  fontFamily: 'inherit',
+  transition: 'all 0.1s',
+  whiteSpace: 'nowrap',
+}
 
 class BankingProductList extends React.Component {
-  state = { search: '' }
+  state = { search: '', activeCategory: null }
 
   componentDidMount() {
     const { dataSourceIndex, dataSource, versionInfo } = this.props
@@ -17,7 +30,7 @@ class BankingProductList extends React.Component {
 
   render() {
     const { dataSourceIndex } = this.props
-    const { search } = this.state
+    const { search, activeCategory } = this.state
     const data = this.props.productList[dataSourceIndex] || {}
     const { progress, totalRecords, detailRecords = 0, failedDetailRecords = 0, products, productDetails } = data
     const processed = detailRecords + failedDetailRecords
@@ -39,10 +52,13 @@ class BankingProductList extends React.Component {
       })
     }
 
+    const categories = Object.keys(byCategory).sort()
+
     const filtered = {}
     if (done) {
       const q = search.trim().toLowerCase()
       Object.entries(byCategory).forEach(([cat, prods]) => {
+        if (activeCategory && cat !== activeCategory) return
         const matched = q ? prods.filter(p => p.name?.toLowerCase().includes(q)) : prods
         if (matched.length) filtered[cat] = matched
       })
@@ -52,7 +68,7 @@ class BankingProductList extends React.Component {
     const pct = totalRecords ? (processed / totalRecords) * 100 : 0
 
     return (
-      <div style={{ maxHeight: 380, overflow: 'auto', paddingRight: 4 }}>
+      <div style={{ maxHeight: 420, overflow: 'auto', paddingRight: 4 }}>
         {progress === START_RETRIEVE_PRODUCT_LIST && (
           <div style={{ padding: '12px 0' }}>
             <LinearProgress style={{ width: '100%', marginBottom: 8 }} />
@@ -68,38 +84,67 @@ class BankingProductList extends React.Component {
           </div>
         )}
         {done && products && (
-          <div style={{ position: 'relative', marginBottom: 8 }}>
-            <input
-              type="text"
-              placeholder="Filter products..."
-              value={search}
-              onChange={e => this.setState({ search: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '6px 28px 6px 10px',
-                border: '1px solid #e2e8f0',
-                borderRadius: 6,
-                fontSize: '0.82rem',
-                fontFamily: 'inherit',
-                outline: 'none',
-                boxSizing: 'border-box',
-                color: '#1e293b',
-                background: '#fff',
-              }}
-            />
-            {search && (
-              <button
-                onClick={() => this.setState({ search: '' })}
-                style={{
-                  position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)',
-                  background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8',
-                  fontSize: 14, lineHeight: 1, padding: 2,
-                }}
-              >
-                ✕
-              </button>
+          <>
+            {categories.length > 1 && (
+              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 6 }}>
+                <button
+                  onClick={() => this.setState({ activeCategory: null })}
+                  style={{
+                    ...pillBase,
+                    background: activeCategory === null ? '#2563eb' : '#f1f5f9',
+                    color: activeCategory === null ? '#fff' : '#475569',
+                  }}
+                >
+                  All
+                </button>
+                {categories.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => this.setState(prev => ({ activeCategory: prev.activeCategory === cat ? null : cat }))}
+                    style={{
+                      ...pillBase,
+                      background: activeCategory === cat ? '#2563eb' : '#f1f5f9',
+                      color: activeCategory === cat ? '#fff' : '#475569',
+                    }}
+                  >
+                    {translateProductCategory(cat)}
+                  </button>
+                ))}
+              </div>
             )}
-          </div>
+            <div style={{ position: 'relative', marginBottom: 8 }}>
+              <input
+                type="text"
+                placeholder="Filter products..."
+                value={search}
+                onChange={e => this.setState({ search: e.target.value })}
+                style={{
+                  width: '100%',
+                  padding: '6px 28px 6px 10px',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: 6,
+                  fontSize: '0.82rem',
+                  fontFamily: 'inherit',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  color: '#1e293b',
+                  background: '#fff',
+                }}
+              />
+              {search && (
+                <button
+                  onClick={() => this.setState({ search: '' })}
+                  style={{
+                    position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)',
+                    background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8',
+                    fontSize: 14, lineHeight: 1, padding: 2,
+                  }}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </>
         )}
         {done && Object.keys(filtered).sort().map((cat, i) => (
           <ProductCategory key={i} category={cat} products={filtered[cat]} dataSourceIndex={dataSourceIndex} />
@@ -109,7 +154,7 @@ class BankingProductList extends React.Component {
             {search.trim() ? `No products matching "${search}"` : 'No products found.'}
           </div>
         )}
-        {done && search.trim() && totalFiltered > 0 && (
+        {done && (search.trim() || activeCategory) && totalFiltered > 0 && (
           <div style={{ fontSize: '0.72rem', color: '#94a3b8', padding: '4px 2px' }}>
             {totalFiltered} result{totalFiltered !== 1 ? 's' : ''}
           </div>

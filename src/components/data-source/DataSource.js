@@ -18,9 +18,19 @@ import {
   modifyDataSourceEnergyPrdUrl,
 } from '../../store/data-source'
 import { clearSelection } from '../../store/banking/selection'
-import { startRetrieveProductList, retrieveProductList, deleteData, clearData } from '../../store/banking/data'
+import {
+  startRetrieveProductList,
+  retrieveProductList,
+  deleteData,
+  clearData,
+  START_RETRIEVE_PRODUCT_LIST,
+} from '../../store/banking/data'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
+  '@keyframes pulse': {
+    '0%, 100%': { opacity: 1 },
+    '50%': { opacity: 0.25 },
+  },
   row: {
     display: 'flex',
     alignItems: 'center',
@@ -36,12 +46,46 @@ const useStyles = makeStyles(theme => ({
     marginTop: 2,
     marginLeft: 2,
   },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: '50%',
+    flexShrink: 0,
+    cursor: 'help',
+  },
+  dotLoading: {
+    width: 8,
+    height: 8,
+    borderRadius: '50%',
+    flexShrink: 0,
+    cursor: 'help',
+    animation: '$pulse 1.2s ease-in-out infinite',
+  },
 }))
+
+const getStatus = (dataSource, index, banking) => {
+  if (!dataSource.enabled || dataSource.unsaved) return null
+  const d = banking[index] || {}
+  const processed = (d.detailRecords || 0) + (d.failedDetailRecords || 0)
+  const done = !!d.totalRecords && d.totalRecords <= processed
+
+  if (d.progress === START_RETRIEVE_PRODUCT_LIST || (d.totalRecords > 0 && !done))
+    return { color: '#3b82f6', label: d.totalRecords ? `Loading ${processed} / ${d.totalRecords}` : 'Fetching...', loading: true }
+  if (done && !d.failedDetailRecords)
+    return { color: '#16a34a', label: `${d.totalRecords} product${d.totalRecords !== 1 ? 's' : ''} loaded` }
+  if (done && d.failedDetailRecords > 0)
+    return { color: '#f59e0b', label: `${d.detailRecords} loaded, ${d.failedDetailRecords} failed` }
+  if (d.products !== undefined && d.totalRecords === 0)
+    return { color: '#dc2626', label: 'Failed to load — check console' }
+  return { color: '#94a3b8', label: 'Not yet fetched' }
+}
 
 const DataSource = (props) => {
   const classes = useStyles()
-  const { dataSource, index, vHeaders } = props
+  const { dataSource, index, vHeaders, banking } = props
   const [error, setError] = React.useState('')
+
+  const status = getStatus(dataSource, index, banking)
 
   const change = name => e => {
     const val = name === 'enabled' ? e.target.checked : e.target.value
@@ -131,7 +175,15 @@ const DataSource = (props) => {
             inputProps={{ style: { fontSize: '0.82rem', padding: '6px 8px' } }}
           />
         </div>
-        <div style={{ flexShrink: 0 }}>
+        <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6 }}>
+          {status && (
+            <Tooltip title={status.label}>
+              <div
+                className={status.loading ? classes.dotLoading : classes.dot}
+                style={{ background: status.color }}
+              />
+            </Tooltip>
+          )}
           {dataSource.unsaved ? (
             <Tooltip title="Save">
               <IconButton size="small" onClick={save}>
@@ -154,6 +206,7 @@ const DataSource = (props) => {
 
 const mapStateToProps = state => ({
   vHeaders: state.versionInfo.vHeaders,
+  banking: state.banking,
 })
 
 const mapDispatchToProps = {

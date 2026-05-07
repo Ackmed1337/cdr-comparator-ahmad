@@ -68,6 +68,14 @@ const useStyles = makeStyles(theme => ({
     '&:last-child': { borderRight: 'none' },
   },
   emptyCell: { color: '#d1d5db' },
+  bestCell: {
+    background: '#f0fdf4 !important',
+    borderTop: '2px solid #16a34a',
+  },
+  worstCell: {
+    background: '#fef2f2 !important',
+    borderTop: '2px solid #dc2626',
+  },
   stickyHead: {
     position: 'sticky',
     top: 0,
@@ -94,6 +102,27 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const listStyle = { margin: 0, padding: '0 0 0 16px' }
+
+const RATE_KEYS = new Set(['depositRates', 'lendingRates'])
+
+const getRepresentativeRate = (product, key) => {
+  const val = product[key]
+  if (!val?.length) return null
+  const rates = val.map(r => parseFloat(r.rate)).filter(r => !isNaN(r))
+  if (!rates.length) return null
+  return key === 'depositRates' ? Math.max(...rates) : Math.min(...rates)
+}
+
+const getHighlight = (products, key) => {
+  const higherIsBetter = key === 'depositRates'
+  const values = products.map(pd => getRepresentativeRate(pd.product, key))
+  const defined = values.filter(v => v !== null)
+  if (defined.length < 2) return null
+  const bestVal = higherIsBetter ? Math.max(...defined) : Math.min(...defined)
+  const worstVal = higherIsBetter ? Math.min(...defined) : Math.max(...defined)
+  if (bestVal === worstVal) return null
+  return { bestIdx: values.indexOf(bestVal), worstIdx: values.indexOf(worstVal) }
+}
 
 const render = (product, key) => {
   const val = product[key]
@@ -175,7 +204,6 @@ const downloadCSV = (products, dataSources) => {
       return [dk.label, ...cells]
     })
     .filter(Boolean)
-
   const esc = v => `"${String(v).replace(/"/g, '""')}"`
   const csv = [headers, ...rows].map(row => row.map(esc).join(',')).join('\r\n')
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
@@ -222,16 +250,29 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
               const cells = products.map(pd => render(pd.product, dataKey.key))
               const hasAny = cells.some(c => c !== null && c !== undefined && c !== false)
               if (!hasAny) return null
+              const highlight = RATE_KEYS.has(dataKey.key) ? getHighlight(products, dataKey.key) : null
               return (
                 <tr key={dataKey.key} style={{ background: rowIdx % 2 === 0 ? '#fff' : '#f8fafc' }}>
                   <td className={classes.labelCell} style={{ background: rowIdx % 2 === 0 ? '#f8fafc' : '#f1f5f9' }}>
                     {dataKey.label}
                   </td>
-                  {cells.map((cell, i) => (
-                    <td key={i} className={`${classes.dataCell} ${!cell ? classes.emptyCell : ''}`}>
-                      {cell || '—'}
-                    </td>
-                  ))}
+                  {cells.map((cell, i) => {
+                    const isBest = highlight?.bestIdx === i
+                    const isWorst = highlight?.worstIdx === i
+                    return (
+                      <td
+                        key={i}
+                        className={[
+                          classes.dataCell,
+                          !cell ? classes.emptyCell : '',
+                          isBest ? classes.bestCell : '',
+                          isWorst ? classes.worstCell : '',
+                        ].join(' ')}
+                      >
+                        {cell || '—'}
+                      </td>
+                    )
+                  })}
                 </tr>
               )
             })}
@@ -239,8 +280,18 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
         </table>
       </div>
       <Divider />
-      <AccordionActions style={{ padding: '8px 16px', justifyContent: 'flex-end' }}>
-        <Tooltip title="Export comparison as CSV">
+      <AccordionActions style={{ padding: '8px 16px', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: '0.72rem', color: '#64748b' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span style={{ display: 'inline-block', width: 10, height: 10, borderRadius: 2, background: '#f0fdf4', border: '1.5px solid #16a34a' }} />
+            Best rate
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span style={{ display: 'inline-block', width: 10, height: 10, borderRadius: 2, background: '#fef2f2', border: '1.5px solid #dc2626' }} />
+            Worst rate
+          </span>
+        </div>
+        <Tooltip title="Export as CSV">
           <Fab size="small" color="primary" onClick={() => downloadCSV(products, dataSources)}>
             <GetAppIcon style={{ fontSize: 18 }} />
           </Fab>
