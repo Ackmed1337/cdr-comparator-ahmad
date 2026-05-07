@@ -3,13 +3,13 @@ import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
+import AccordionActions from '@material-ui/core/AccordionActions'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import GetAppIcon from '@material-ui/icons/GetApp'
+import Fab from '@material-ui/core/Fab'
+import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
+import Divider from '@material-ui/core/Divider'
 import { productDataKeys } from '../../utils/dict'
 import { format } from '../../utils/datetime'
 import AdditionalInfo from '../data/banking/AdditionalInfo'
@@ -91,8 +91,6 @@ const useStyles = makeStyles(theme => ({
     width: '15%',
     minWidth: 130,
   },
-  oddRow: { background: '#fafafa' },
-  evenRow: { background: '#fff' },
 }))
 
 const listStyle = { margin: 0, padding: '0 0 0 16px' }
@@ -133,6 +131,60 @@ const render = (product, key) => {
     default:
       return null
   }
+}
+
+const toText = (product, key) => {
+  const val = product[key]
+  if (val === null || val === undefined) return ''
+  switch (key) {
+    case 'lastUpdated': case 'effectiveFrom': case 'effectiveTo':
+      return val ? format(val) : ''
+    case 'isTailored':
+      return val ? 'Yes' : 'No'
+    case 'additionalInformation':
+      return typeof val === 'object'
+        ? Object.entries(val).filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join('; ')
+        : String(val)
+    case 'bundles':
+      return val?.map(x => x.name).filter(Boolean).join('; ') || ''
+    case 'constraints':
+      return val?.map(x => [x.constraintType, x.additionalValue].filter(Boolean).join(' ')).join('; ') || ''
+    case 'depositRates':
+      return val?.map(x => `${x.depositRateType}${x.rate ? ' ' + (parseFloat(x.rate) * 100).toFixed(2) + '%' : ''}`).join('; ') || ''
+    case 'lendingRates':
+      return val?.map(x => `${x.lendingRateType}${x.rate ? ' ' + (parseFloat(x.rate) * 100).toFixed(2) + '%' : ''}`).join('; ') || ''
+    case 'eligibility':
+      return val?.map(x => [x.eligibilityType, x.additionalValue].filter(Boolean).join(': ')).join('; ') || ''
+    case 'features':
+      return val?.map(x => [x.featureType, x.additionalValue].filter(Boolean).join(': ')).join('; ') || ''
+    case 'fees':
+      return val?.filter(Boolean).map(x => [x.name, x.amount ? '$' + x.amount : '', x.feeType ? '(' + x.feeType + ')' : ''].filter(Boolean).join(' ')).join('; ') || ''
+    case 'cardArt':
+      return val?.length ? `${val.length} image(s)` : ''
+    default:
+      return val ? String(val) : ''
+  }
+}
+
+const downloadCSV = (products, dataSources) => {
+  const headers = ['Field', ...products.map(pd => `${dataSources[pd.dataSourceIdx]?.name} - ${pd.product.name}`)]
+  const rows = productDataKeys
+    .map(dk => {
+      const cells = products.map(pd => toText(pd.product, dk.key))
+      if (cells.every(c => !c)) return null
+      return [dk.label, ...cells]
+    })
+    .filter(Boolean)
+
+  const esc = v => `"${String(v).replace(/"/g, '""')}"`
+  const csv = [headers, ...rows].map(row => row.map(esc).join(',')).join('\r\n')
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `comparison-${new Date().toISOString().slice(0, 10)}.csv`
+  a.click()
+  URL.revokeObjectURL(url)
 }
 
 const BankingComparisonPanel = ({ dataSources, products }) => {
@@ -186,6 +238,14 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
           </tbody>
         </table>
       </div>
+      <Divider />
+      <AccordionActions style={{ padding: '8px 16px', justifyContent: 'flex-end' }}>
+        <Tooltip title="Export comparison as CSV">
+          <Fab size="small" color="primary" onClick={() => downloadCSV(products, dataSources)}>
+            <GetAppIcon style={{ fontSize: 18 }} />
+          </Fab>
+        </Tooltip>
+      </AccordionActions>
     </Accordion>
   )
 }

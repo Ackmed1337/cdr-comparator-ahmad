@@ -7,7 +7,7 @@ import DoneOutlineIcon from '@material-ui/icons/DoneOutline'
 import DeleteIcon from '@material-ui/icons/Delete'
 import Tooltip from '@material-ui/core/Tooltip'
 import { connect } from 'react-redux'
-import isUrl from '../../utils/url'
+import isUrl, { normalise } from '../../utils/url'
 import {
   saveDataSource,
   deleteDataSource,
@@ -18,7 +18,7 @@ import {
   modifyDataSourceEnergyPrdUrl,
 } from '../../store/data-source'
 import { clearSelection } from '../../store/banking/selection'
-import { deleteData, clearData } from '../../store/banking/data'
+import { startRetrieveProductList, retrieveProductList, deleteData, clearData } from '../../store/banking/data'
 
 const useStyles = makeStyles(theme => ({
   row: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 
 const DataSource = (props) => {
   const classes = useStyles()
-  const { dataSource, index } = props
+  const { dataSource, index, vHeaders } = props
   const [error, setError] = React.useState('')
 
   const change = name => e => {
@@ -53,7 +53,14 @@ const DataSource = (props) => {
       props.modifyDataSourceIcon(index, { ...dataSource, [name]: val })
     } else if (name === 'enabled') {
       props.enableDataSource(index, { ...dataSource, [name]: val })
-      if (dataSource.enabled) { props.clearSelection(index); props.clearData(index) }
+      if (dataSource.enabled) {
+        props.clearSelection(index)
+        props.clearData(index)
+      } else if (!dataSource.unsaved) {
+        const url = normalise(dataSource.url)
+        props.startRetrieveProductList(index)
+        props.retrieveProductList(index, url, url + '/banking/products', vHeaders.xV, vHeaders.xMinV)
+      }
     }
   }
 
@@ -145,6 +152,10 @@ const DataSource = (props) => {
   )
 }
 
+const mapStateToProps = state => ({
+  vHeaders: state.versionInfo.vHeaders,
+})
+
 const mapDispatchToProps = {
   saveDataSource,
   deleteDataSource,
@@ -154,8 +165,10 @@ const mapDispatchToProps = {
   modifyDataSourceEnergyPrdUrl,
   modifyDataSourceIcon,
   clearSelection,
+  startRetrieveProductList,
+  retrieveProductList,
   deleteData,
   clearData,
 }
 
-export default connect(null, mapDispatchToProps)(DataSource)
+export default connect(mapStateToProps, mapDispatchToProps)(DataSource)

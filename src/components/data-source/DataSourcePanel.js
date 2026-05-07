@@ -106,7 +106,7 @@ class DataSourcePanel extends React.Component {
         <AccordionActions>
           <Grid container alignItems="center">
             <Grid item xs={1}>
-              <Tooltip title="Sync data sources">
+              <Tooltip title="Sync with CDR Register">
                 <Fab size="medium" color="secondary" onClick={syncDataSources}>
                   <SyncIcon />
                 </Fab>

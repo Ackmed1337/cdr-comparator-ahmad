@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/cdr-comparator-ahmad/static/css/main.8737c73d.chunk.css",
-    "main.js": "/cdr-comparator-ahmad/static/js/main.ce836642.chunk.js",
-    "main.js.map": "/cdr-comparator-ahmad/static/js/main.ce836642.chunk.js.map",
+    "main.js": "/cdr-comparator-ahmad/static/js/main.13115c0d.chunk.js",
+    "main.js.map": "/cdr-comparator-ahmad/static/js/main.13115c0d.chunk.js.map",
     "runtime-main.js": "/cdr-comparator-ahmad/static/js/runtime-main.514bbcd1.js",
     "runtime-main.js.map": "/cdr-comparator-ahmad/static/js/runtime-main.514bbcd1.js.map",
-    "static/js/2.831c4d96.chunk.js": "/cdr-comparator-ahmad/static/js/2.831c4d96.chunk.js",
-    "static/js/2.831c4d96.chunk.js.map": "/cdr-comparator-ahmad/static/js/2.831c4d96.chunk.js.map",
+    "static/js/2.9b0e05b8.chunk.js": "/cdr-comparator-ahmad/static/js/2.9b0e05b8.chunk.js",
+    "static/js/2.9b0e05b8.chunk.js.map": "/cdr-comparator-ahmad/static/js/2.9b0e05b8.chunk.js.map",
     "index.html": "/cdr-comparator-ahmad/index.html",
     "static/css/main.8737c73d.chunk.css.map": "/cdr-comparator-ahmad/static/css/main.8737c73d.chunk.css.map",
-    "static/js/2.831c4d96.chunk.js.LICENSE.txt": "/cdr-comparator-ahmad/static/js/2.831c4d96.chunk.js.LICENSE.txt"
+    "static/js/2.9b0e05b8.chunk.js.LICENSE.txt": "/cdr-comparator-ahmad/static/js/2.9b0e05b8.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.514bbcd1.js",
-    "static/js/2.831c4d96.chunk.js",
+    "static/js/2.9b0e05b8.chunk.js",
     "static/css/main.8737c73d.chunk.css",
-    "static/js/main.ce836642.chunk.js"
+    "static/js/main.13115c0d.chunk.js"
   ]
 }
