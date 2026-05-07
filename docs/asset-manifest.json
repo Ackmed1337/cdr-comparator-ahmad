@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/product-comparator-demo-Ahmad-s-Version-/static/css/main.55cfc66d.chunk.css",
+    "main.js": "/product-comparator-demo-Ahmad-s-Version-/static/js/main.76ca36b8.chunk.js",
+    "main.js.map": "/product-comparator-demo-Ahmad-s-Version-/static/js/main.76ca36b8.chunk.js.map",
+    "runtime-main.js": "/product-comparator-demo-Ahmad-s-Version-/static/js/runtime-main.949b4b5a.js",
+    "runtime-main.js.map": "/product-comparator-demo-Ahmad-s-Version-/static/js/runtime-main.949b4b5a.js.map",
+    "static/js/2.59838d00.chunk.js": "/product-comparator-demo-Ahmad-s-Version-/static/js/2.59838d00.chunk.js",
+    "static/js/2.59838d00.chunk.js.map": "/product-comparator-demo-Ahmad-s-Version-/static/js/2.59838d00.chunk.js.map",
+    "index.html": "/product-comparator-demo-Ahmad-s-Version-/index.html",
+    "static/css/main.55cfc66d.chunk.css.map": "/product-comparator-demo-Ahmad-s-Version-/static/css/main.55cfc66d.chunk.css.map",
+    "static/js/2.59838d00.chunk.js.LICENSE.txt": "/product-comparator-demo-Ahmad-s-Version-/static/js/2.59838d00.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.949b4b5a.js",
+    "static/js/2.59838d00.chunk.js",
+    "static/css/main.55cfc66d.chunk.css",
+    "static/js/main.76ca36b8.chunk.js"
+  ]
+}

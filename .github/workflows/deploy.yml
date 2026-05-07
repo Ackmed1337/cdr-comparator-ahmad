@@ -34,11 +34,14 @@ jobs:
         run: npm install
       - name: Build The Comparator
         run: npm run build
+        env:
+          BUILD_PATH: docs
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Commit docs
         if: ${{ github.ref == 'refs/heads/master' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
-          force_orphan: true
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add -f docs
+          git commit -m "deploy: update build" || echo "nothing to commit"
+          git push
