@@ -5,15 +5,14 @@ import AccordionSummary from '@material-ui/core/AccordionSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
-import Grid from '@material-ui/core/Grid'
 import Tooltip from '@material-ui/core/Tooltip'
 import Fab from '@material-ui/core/Fab'
 import DeleteIcon from '@material-ui/icons/Delete'
-import RefreshIcon from '@material-ui/icons/Refresh'
+
 import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import moment from 'moment'
-import { refreshConout, cleanConout } from '../../store/conout/actions'
+import { cleanConout } from '../../store/conout/actions'
 import _ from 'lodash'
 
 const useStyles = makeStyles(theme => ({
@@ -85,22 +84,11 @@ const ConsolePanel = (props) => {
       </div>
       <Divider />
       <AccordionActions className={classes.actions}>
-        <Grid container alignItems="center">
-          <Grid item xs={1}>
-            <Tooltip title="Clear console">
-              <Fab size="small" color="secondary" onClick={props.cleanConout}>
-                <DeleteIcon style={{ fontSize: 18 }} />
-              </Fab>
-            </Tooltip>
-          </Grid>
-          <Grid item xs={11} style={{ textAlign: 'end' }}>
-            <Tooltip title="Refresh">
-              <Fab size="small" color="primary" onClick={props.refreshConout}>
-                <RefreshIcon style={{ fontSize: 18 }} />
-              </Fab>
-            </Tooltip>
-          </Grid>
-        </Grid>
+        <Tooltip title="Clear console">
+          <Fab size="small" color="secondary" onClick={props.cleanConout}>
+            <DeleteIcon style={{ fontSize: 18 }} />
+          </Fab>
+        </Tooltip>
       </AccordionActions>
     </Accordion>
   )
@@ -152,4 +140,4 @@ const Print = ({ val }) => {
 
 const mapStateToProps = state => ({ conout: state.conout })
 
-export default connect(mapStateToProps, { refreshConout, cleanConout })(ConsolePanel)
+export default connect(mapStateToProps, { cleanConout })(ConsolePanel)

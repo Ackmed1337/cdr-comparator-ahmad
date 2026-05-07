@@ -1,4 +1,4 @@
-import { CONSOLE_OUT, CONSOLE_REFRESH, CONSOLE_CLEAN } from './actions'
+import { CONSOLE_OUT, CONSOLE_CLEAN } from './actions'
 
 export default function conout(state = {actions: []}, action) {
   switch (action.type) {
@@ -9,12 +9,9 @@ export default function conout(state = {actions: []}, action) {
       } else {
         console[payload.lvl](payload.txt, payload.obj)
       }
-      state.actions.push(action)
-      return state
-    case CONSOLE_REFRESH:
-      return {...state}
+      return { actions: [...state.actions, action] }
     case CONSOLE_CLEAN:
-      return {actions: []}
+      return { actions: [] }
     default:
       return state
   }
