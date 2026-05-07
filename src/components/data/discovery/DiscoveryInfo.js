@@ -1,60 +1,59 @@
 import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionActions from '@material-ui/core/AccordionActions'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import SubjectIcon from '@material-ui/icons/Subject'
 import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
+import Grid from '@material-ui/core/Grid'
 import StatusOutages from './StatusOutages'
-import { makeStyles } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
 import { normalise } from '../../../utils/url'
 import { retrieveStatus, retrieveOutages } from '../../../store/discovery'
 
 const useStyles = makeStyles(theme => ({
-  panel: {
-    backgroundColor: '#fff',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-  },
+  panel: { backgroundColor: '#fff' },
   heading: {
     display: 'flex',
     alignItems: 'center',
     gap: 8,
-    fontSize: theme.typography.pxToRem(18),
-    fontWeight: 500,
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: 600,
+    color: '#1e293b',
   },
   details: {
-    maxWidth: '95%',
+    maxWidth: '98%',
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   container: {
-    marginLeft: theme.typography.pxToRem(20),
-    marginRight: theme.typography.pxToRem(20),
+    marginLeft: theme.typography.pxToRem(8),
+    marginRight: theme.typography.pxToRem(8),
+  },
+  sourceCard: {
+    background: '#f8fafc',
+    border: '1px solid #e2e8f0',
+    borderRadius: 8,
+    padding: '12px 14px',
   },
   sourceHeader: {
     display: 'flex',
     alignItems: 'center',
     gap: 10,
-    padding: '8px 0 4px',
-    marginBottom: 4,
-    borderBottom: '2px solid #e8eaf6',
+    marginBottom: 10,
+    paddingBottom: 10,
+    borderBottom: '1px solid #e2e8f0',
   },
-  sourceIcon: {
-    width: 32,
-    height: 32,
-    objectFit: 'contain',
-  },
+  sourceIcon: { width: 28, height: 28, objectFit: 'contain' },
   sourceName: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: 600,
-    color: '#3f51b5',
+    fontSize: theme.typography.pxToRem(13),
+    fontWeight: 700,
+    color: '#1e293b',
   },
 }))
 
@@ -66,8 +65,8 @@ const DiscoveryInfo = (props) => {
   const refresh = () => {
     const { versionInfo } = props
     props.dataSources.forEach((ds, i) => {
-      const url = normalise(ds.url)
       if (!ds.unsaved && ds.enabled && !ds.deleted) {
+        const url = normalise(ds.url)
         props.retrieveStatus(i, url, versionInfo.xV, versionInfo.xMinV)
         props.retrieveOutages(i, url, versionInfo.xV, versionInfo.xMinV)
       }
@@ -85,12 +84,16 @@ const DiscoveryInfo = (props) => {
     <Accordion defaultExpanded className={classes.panel} expanded={expanded} onChange={(_, v) => setExpanded(v)}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="discovery-content">
         <div className={classes.heading}>
-          <SubjectIcon />
-          <Typography>Status &amp; Outages</Typography>
+          <Typography style={{ fontWeight: 600, fontSize: '0.95rem' }}>Status &amp; Outages</Typography>
+          {savedDataSourcesCount > 0 && (
+            <span style={{ background: '#eff6ff', color: '#2563eb', fontSize: '0.72rem', fontWeight: 700, padding: '2px 8px', borderRadius: 10 }}>
+              {savedDataSourcesCount} source{savedDataSourcesCount !== 1 ? 's' : ''}
+            </span>
+          )}
         </div>
       </AccordionSummary>
       <div className={classes.details}>
-        {savedDataSourcesCount > 0 && (
+        {savedDataSourcesCount > 0 ? (
           <Grid container alignItems="flex-start" spacing={2} className={classes.container}>
             {dataSources.map((ds, i) => {
               const data = props.data[i]
@@ -103,22 +106,28 @@ const DiscoveryInfo = (props) => {
                   lg={colWidth(savedDataSourcesCount, 4)}
                   xl={colWidth(savedDataSourcesCount, 3)}
                 >
-                  <div className={classes.sourceHeader}>
-                    {ds.icon && <img src={ds.icon} alt="" className={classes.sourceIcon} />}
-                    <span className={classes.sourceName}>{ds.name}</span>
+                  <div className={classes.sourceCard}>
+                    <div className={classes.sourceHeader}>
+                      {ds.icon && <img src={ds.icon} alt="" className={classes.sourceIcon} />}
+                      <span className={classes.sourceName}>{ds.name}</span>
+                    </div>
+                    <StatusOutages statusDetails={data.statusDetails} outagesDetails={data.outagesDetails} />
                   </div>
-                  <StatusOutages statusDetails={data.statusDetails} outagesDetails={data.outagesDetails} />
                 </Grid>
               )
             })}
           </Grid>
+        ) : (
+          <div style={{ padding: '24px 20px', color: '#94a3b8', fontSize: '0.875rem', textAlign: 'center' }}>
+            Add a data source above to check status.
+          </div>
         )}
       </div>
       <Divider />
       <AccordionActions>
-        <Tooltip title="Refresh">
-          <Fab size="medium" color="primary" onClick={refresh}>
-            <RefreshIcon />
+        <Tooltip title="Refresh status">
+          <Fab size="small" color="primary" onClick={refresh} style={{ margin: 8 }}>
+            <RefreshIcon style={{ fontSize: 18 }} />
           </Fab>
         </Tooltip>
       </AccordionActions>

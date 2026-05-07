@@ -4,7 +4,6 @@ import MuiAccordion from '@material-ui/core/Accordion'
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
 import { makeStyles, withStyles } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Typography from '@material-ui/core/Typography'
 import Checkbox from '@material-ui/core/Checkbox'
 import Bundle from './Bundle'
 import Constraint from './Constraint'
@@ -20,25 +19,30 @@ import AdditionalInfo from './AdditionalInfo'
 import ecomp from '../../../utils/enum-comp'
 
 const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    alignItems: 'flex-start',
-  },
+  root: { display: 'flex', alignItems: 'flex-start', marginBottom: 2 },
   body: {
     fontSize: '0.8rem',
-    lineHeight: '1.8rem',
-    paddingRight: 40,
+    lineHeight: 1.8,
+    paddingRight: 8,
+    paddingBottom: 8,
+    color: '#374151',
+  },
+  field: { marginBottom: 2 },
+  label: { color: '#9ca3af', fontWeight: 500, marginRight: 4 },
+  section: {
+    marginTop: 8,
+    paddingTop: 6,
+    borderTop: '1px solid #f1f5f9',
   },
   sectionTitle: {
-    fontStyle: 'italic',
-    color: '#555',
-    marginTop: 4,
+    fontSize: '0.72rem',
+    fontWeight: 700,
+    color: '#6366f1',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+    marginBottom: 2,
   },
-  sectionList: {
-    marginTop: 0,
-    marginBottom: 0,
-    paddingLeft: 20,
-  },
+  list: { margin: '0 0 0 0', padding: '0 0 0 16px' },
 }))
 
 const Accordion = withStyles({
@@ -56,31 +60,37 @@ const Accordion = withStyles({
 const AccordionSummary = withStyles({
   root: {
     paddingLeft: 0,
-    paddingRight: 24,
+    paddingRight: 20,
     alignItems: 'flex-start',
     backgroundColor: 'transparent',
-    marginBottom: -1,
-    maxHeight: 36,
-    minHeight: 24,
-    '&$expanded': { maxHeight: 36, minHeight: 24 },
+    minHeight: 36,
+    '&$expanded': { minHeight: 36 },
   },
   content: {
     margin: '8px 0',
     '&$expanded': { margin: '8px 0' },
   },
-  expandIcon: {
-    paddingTop: 8,
-    '&$expanded': { paddingTop: 8 },
-  },
+  expandIcon: { paddingTop: 8, '&$expanded': { paddingTop: 8 } },
   expanded: {},
 })(MuiAccordionSummary)
+
+const Field = ({ label, value }) => {
+  const classes = useStyles()
+  if (!value && value !== 0 && value !== false) return null
+  return (
+    <div className={classes.field}>
+      <span className={classes.label}>{label}:</span>
+      {value}
+    </div>
+  )
+}
 
 const Section = ({ title, children }) => {
   const classes = useStyles()
   return (
-    <div>
-      <div className={classes.sectionTitle}>{title}:</div>
-      <ul className={classes.sectionList}>{children}</ul>
+    <div className={classes.section}>
+      <div className={classes.sectionTitle}>{title}</div>
+      <ul className={classes.list}>{children}</ul>
     </div>
   )
 }
@@ -97,25 +107,28 @@ const Product = (props) => {
 
   return (
     <div className={classes.root}>
-      <Checkbox checked={selected} onChange={toggle} color="primary" />
+      <Checkbox checked={selected} onChange={toggle} color="primary" size="small" style={{ padding: 4, marginTop: 6 }} />
       <Accordion defaultExpanded={false}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="product-content">
-          <Typography style={{ fontSize: '0.8rem' }}>{product.name}</Typography>
+        <AccordionSummary expandIcon={<ExpandMoreIcon style={{ fontSize: 16 }} />}>
+          <span style={{ fontSize: '0.82rem', fontWeight: selected ? 600 : 400, color: selected ? '#2563eb' : '#374151', lineHeight: 1.4 }}>
+            {product.name}
+          </span>
         </AccordionSummary>
         <div className={classes.body}>
-          <div>{product.description}</div>
-          <div>Brand: {product.brand}{product.bandName && ` (${product.bandName})`}</div>
-          <div>
-            Last updated: <DateTime rfc3339={product.lastUpdated} />{' '}
-            <a href={URL.createObjectURL(blob)} target="_blank" rel="noopener noreferrer">JSON</a>
-          </div>
-          <div>{product.isTailored ? 'Tailored' : 'Not tailored'}</div>
-          {product.effectiveFrom && <div>Effective from <DateTime rfc3339={product.effectiveFrom} /></div>}
-          {product.effectiveTo && <div>Effective to <DateTime rfc3339={product.effectiveTo} /></div>}
-          {product.applicationUri && <div><a href={product.applicationUri} target="_blank" rel="noopener noreferrer">Apply here</a></div>}
+          {product.description && (
+            <div style={{ color: '#6b7280', marginBottom: 6, fontSize: '0.78rem', lineHeight: 1.5 }}>
+              {product.description}
+            </div>
+          )}
+          <Field label="Brand" value={product.brand} />
+          <Field label="Last updated" value={<><DateTime rfc3339={product.lastUpdated} /> &nbsp;<a href={URL.createObjectURL(blob)} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.72rem' }}>JSON</a></>} />
+          <Field label="Tailored" value={product.isTailored ? 'Yes' : 'No'} />
+          {product.effectiveFrom && <Field label="Effective from" value={<DateTime rfc3339={product.effectiveFrom} />} />}
+          {product.effectiveTo && <Field label="Effective to" value={<DateTime rfc3339={product.effectiveTo} />} />}
+          {product.applicationUri && <div className={classes.field}><a href={product.applicationUri} target="_blank" rel="noopener noreferrer">Apply here →</a></div>}
           {product.additionalInformation && (
-            <div>
-              <div className={classes.sectionTitle}>Additional Information:</div>
+            <div className={classes.section}>
+              <div className={classes.sectionTitle}>Additional Info</div>
               <AdditionalInfo additionalInfo={product.additionalInformation} />
             </div>
           )}

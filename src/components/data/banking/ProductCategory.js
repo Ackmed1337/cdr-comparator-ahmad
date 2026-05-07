@@ -1,22 +1,39 @@
 import React from 'react'
 import Product from './Product'
-import {translateProductCategory} from '../../../utils/dict'
+import { translateProductCategory } from '../../../utils/dict'
 
-const strcomp = (a, b) => {
-  if ( a < b) return -1
-  else if (a === b) return 0
-  else return 1
-}
-
-const ProductCategory = (props) => {
-  const { dataSourceIndex, category, products } = props
-  return (
-    <div>
-      <h4>{translateProductCategory(category)}</h4>
-      {products.sort((a,b)=>(strcomp(a.name, b.name))).map(
-        (product, index) => <Product key={index} product={product} dataSourceIndex={dataSourceIndex}/>)}
+const ProductCategory = ({ category, products, dataSourceIndex }) => (
+  <div style={{ marginBottom: 10 }}>
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      padding: '5px 10px',
+      background: '#eff6ff',
+      borderLeft: '3px solid #2563eb',
+      borderRadius: '0 6px 6px 0',
+      marginBottom: 4,
+    }}>
+      <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1d4ed8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        {translateProductCategory(category)}
+      </span>
+      <span style={{
+        background: '#2563eb',
+        color: '#fff',
+        borderRadius: 20,
+        padding: '1px 8px',
+        fontSize: '0.68rem',
+        fontWeight: 700,
+      }}>
+        {products.length}
+      </span>
     </div>
-  )
-}
+    {products
+      .slice()
+      .sort((a, b) => a.name < b.name ? -1 : 1)
+      .map((product, i) => <Product key={i} product={product} dataSourceIndex={dataSourceIndex} />)
+    }
+  </div>
+)
 
 export default ProductCategory

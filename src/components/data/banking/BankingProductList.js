@@ -23,9 +23,7 @@ class BankingProductList extends React.Component {
     const byCategory = {}
     if (done) {
       const fallback = {}
-      if (failedDetailRecords > 0) {
-        products.forEach(p => { fallback[p.productId] = p })
-      }
+      if (failedDetailRecords > 0) products.forEach(p => { fallback[p.productId] = p })
       productDetails?.forEach(pd => {
         if (!pd) return
         byCategory[pd.productCategory] = byCategory[pd.productCategory] || []
@@ -38,16 +36,30 @@ class BankingProductList extends React.Component {
       })
     }
 
+    const pct = totalRecords ? (processed / totalRecords) * 100 : 0
+
     return (
-      <div style={{ maxHeight: 300, overflow: 'auto' }}>
-        {!!totalRecords && processed < totalRecords && (
-          <LinearProgress variant="determinate" value={(processed / totalRecords) * 100} style={{ width: '93%' }} />
+      <div style={{ maxHeight: 380, overflow: 'auto', paddingRight: 4 }}>
+        {progress === START_RETRIEVE_PRODUCT_LIST && (
+          <div style={{ padding: '12px 0' }}>
+            <LinearProgress style={{ width: '100%', marginBottom: 8 }} />
+            <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>Fetching product list...</span>
+          </div>
         )}
-        {progress === START_RETRIEVE_PRODUCT_LIST && <p>Loading products...</p>}
-        {processed < totalRecords && <p>Loading product details...</p>}
+        {!!totalRecords && processed < totalRecords && (
+          <div style={{ padding: '4px 0 8px' }}>
+            <LinearProgress variant="determinate" value={pct} style={{ width: '100%', marginBottom: 6 }} />
+            <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+              Loading details {processed} / {totalRecords}
+            </span>
+          </div>
+        )}
         {products && done && Object.keys(byCategory).sort().map((cat, i) => (
           <ProductCategory key={i} category={cat} products={byCategory[cat]} dataSourceIndex={dataSourceIndex} />
         ))}
+        {products && done && Object.keys(byCategory).length === 0 && (
+          <div style={{ padding: '12px 0', fontSize: '0.82rem', color: '#94a3b8' }}>No products found.</div>
+        )}
       </div>
     )
   }

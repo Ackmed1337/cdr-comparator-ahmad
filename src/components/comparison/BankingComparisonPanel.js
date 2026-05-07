@@ -1,19 +1,17 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {makeStyles} from '@material-ui/core/styles'
+import { connect } from 'react-redux'
+import { makeStyles } from '@material-ui/core/styles'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import CompareArrowsIcon from '@material-ui/icons/CompareArrows'
 import Typography from '@material-ui/core/Typography'
-import {fade} from '@material-ui/core/styles/colorManipulator'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import {productDataKeys} from '../../utils/dict'
-import {format} from '../../utils/datetime'
+import { productDataKeys } from '../../utils/dict'
+import { format } from '../../utils/datetime'
 import AdditionalInfo from '../data/banking/AdditionalInfo'
 import ecomp from '../../utils/enum-comp'
 import Bundle from '../data/banking/Bundle'
@@ -26,149 +24,175 @@ import Fee from '../data/banking/Fee'
 import CardArt from '../data/banking/CardArt'
 
 const useStyles = makeStyles(theme => ({
-  panel: {
-    backgroundColor: fade('#fff', 0.9)
-  },
+  panel: { backgroundColor: '#fff' },
   heading: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    fontSize: theme.typography.pxToRem(20),
+    gap: 8,
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: 600,
+    color: '#1e293b',
   },
-  table: {
-    width:'95%',
+  wrapper: {
+    width: '97%',
     marginLeft: 'auto',
-    marginRight: 'auto'
-  },
-  headerContainer: {
-    width: '100%',
-    display: 'table'
-  },
-  dataContainer: {
-    height: 600,
-    width: '100%',
+    marginRight: 'auto',
+    marginBottom: 20,
     overflow: 'auto',
-    display: 'block'
+    maxHeight: 640,
+    borderRadius: 8,
+    border: '1px solid #e2e8f0',
   },
-  headCell: {
-    color: fade('#000', 0.9),
-    fontWeight: 700,
-    fontSize: '0.8rem'
+  table: { width: '100%', borderCollapse: 'separate', borderSpacing: 0 },
+  labelCell: {
+    background: '#f8fafc',
+    fontWeight: 600,
+    color: '#64748b',
+    fontSize: '0.78rem',
+    width: '15%',
+    minWidth: 130,
+    textAlign: 'right',
+    verticalAlign: 'top',
+    padding: '10px 14px',
+    borderRight: '2px solid #e2e8f0',
+    position: 'sticky',
+    left: 0,
+    zIndex: 1,
   },
   dataCell: {
-    verticalAlign: 'top'
-  }
+    verticalAlign: 'top',
+    fontSize: '0.8rem',
+    padding: '10px 14px',
+    color: '#374151',
+    borderRight: '1px solid #f1f5f9',
+    '&:last-child': { borderRight: 'none' },
+  },
+  emptyCell: { color: '#d1d5db' },
+  stickyHead: {
+    position: 'sticky',
+    top: 0,
+    zIndex: 3,
+    background: '#fff',
+    boxShadow: '0 1px 0 #e2e8f0',
+  },
+  productHeader: {
+    padding: '12px 14px',
+    borderRight: '1px solid #f1f5f9',
+    '&:last-child': { borderRight: 'none' },
+  },
+  productName: { fontWeight: 700, color: '#1e293b', fontSize: '0.85rem' },
+  sourceName: { fontSize: '0.72rem', color: '#6366f1', fontWeight: 600, marginBottom: 2 },
+  cornerCell: {
+    background: '#f8fafc',
+    position: 'sticky',
+    left: 0,
+    zIndex: 4,
+    borderRight: '2px solid #e2e8f0',
+    width: '15%',
+    minWidth: 130,
+  },
+  oddRow: { background: '#fafafa' },
+  evenRow: { background: '#fff' },
 }))
 
+const listStyle = { margin: 0, padding: '0 0 0 16px' }
+
 const render = (product, key) => {
+  const val = product[key]
   switch (key) {
     case 'description':
     case 'brand':
     case 'brandName':
-      return product[key]
+      return val || null
     case 'lastUpdated':
     case 'effectiveFrom':
     case 'effectiveTo':
-      return !!product[key] ? format(product[key]) : ''
+      return val ? format(val) : null
     case 'isTailored':
-      return product[key] ? 'Yes' : 'No'
+      return val ? 'Yes' : 'No'
     case 'applicationUri':
-      return !!product[key] && <a href={product[key]} target='_blank' rel='noopener noreferrer'>Apply here</a>
+      return val ? <a href={val} target="_blank" rel="noopener noreferrer">Apply →</a> : null
     case 'additionalInformation':
-      return !!product[key] && <AdditionalInfo additionalInfo={product[key]} tableCell/>
+      return val ? <AdditionalInfo additionalInfo={val} tableCell /> : null
     case 'bundles':
-      return !!product[key] && product[key].length > 0 &&
-        <ul style={{margin: 0, padding:0}}>
-            {product[key].sort((a, b)=>ecomp(a.name, b.name)).map((bundle, index) => <Bundle key={index} bundle={bundle}/>)}
-        </ul>
+      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <Bundle key={i} bundle={x} />)}</ul> : null
     case 'constraints':
-      return !!product[key] && product[key].length > 0 &&
-        <ul style={{margin: 0, padding:0}}>
-          {product[key].sort((a, b)=>ecomp(a.name, b.name)).map((constraint, index) => <Constraint key={index} constraint={constraint}/>)}
-        </ul>
+      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <Constraint key={i} constraint={x} />)}</ul> : null
     case 'depositRates':
-      return !!product[key] && product[key].length > 0 &&
-        <ul style={{margin: 0, padding:0}}>
-          {product[key].sort((a, b)=>ecomp(a.name, b.name)).map((depositRate, index) => <DepositRate key={index} depositRate={depositRate}/>)}
-        </ul>
+      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <DepositRate key={i} depositRate={x} />)}</ul> : null
     case 'lendingRates':
-      return !!product[key] && product[key].length > 0 &&
-        <ul style={{margin: 0, padding:0}}>
-          {product[key].sort((a, b)=>ecomp(a.name, b.name)).map((lendingRate, index) => <LendingRate key={index} lendingRate={lendingRate}/>)}
-        </ul>
+      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <LendingRate key={i} lendingRate={x} />)}</ul> : null
     case 'eligibility':
-      return !!product[key] && product[key].length > 0 &&
-        <ul style={{margin: 0, padding:0}}>
-          {product[key].sort((a, b)=>ecomp(a.name, b.name)).map((eligibility, index) =><Eligibility key={index} eligibility={eligibility}/>)}
-        </ul>
+      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <Eligibility key={i} eligibility={x} />)}</ul> : null
     case 'features':
-      return !!product[key] && product[key].length > 0 &&
-        <ul style={{margin: 0, padding:0}}>
-          {product[key].sort((a, b)=>ecomp(a.name, b.name)).map((feature, index) => <Feature key={index} feature={feature}/>)}
-        </ul>
+      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <Feature key={i} feature={x} />)}</ul> : null
     case 'fees':
-      return !!product[key] && product[key].length > 0 &&
-        <ul style={{margin: 0, padding:0}}>
-          {product[key].filter(fee => fee).sort((a, b)=>ecomp(a.name, b.name)).map((fee, index) => <Fee key={index} fee={fee}/>)}
-        </ul>
+      return val?.length > 0 ? <ul style={listStyle}>{val.filter(Boolean).sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <Fee key={i} fee={x} />)}</ul> : null
     case 'cardArt':
-      return !!product[key] && product[key].length > 0 &&
-        <ul style={{margin: 0, padding:0}}>
-          {product[key].map((cardArt, index) => <CardArt key={index} cardArt={cardArt}/>)}
-        </ul>
+      return val?.length > 0 ? <ul style={listStyle}>{val.map((x, i) => <CardArt key={i} cardArt={x} />)}</ul> : null
     default:
-      return ''
+      return null
   }
 }
 
-const ComparisonPanel = (props) => {
-  const {dataSources, products} = props
+const BankingComparisonPanel = ({ dataSources, products }) => {
   const classes = useStyles()
+
+  if (!products || products.length === 0) return null
+
+  const colWidth = `${85 / products.length}%`
+
   return (
-    !!products && products.length > 0 &&
     <Accordion defaultExpanded className={classes.panel}>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon/>}
-        aria-controls='panel1c-content'
-      >
+      <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="comparison-content">
         <div className={classes.heading}>
-          <CompareArrowsIcon/><Typography style={{paddingLeft: 8}}>Product Comparison</Typography>
+          <Typography style={{ fontWeight: 600, fontSize: '0.95rem' }}>Product Comparison</Typography>
+          <span style={{ background: '#eff6ff', color: '#2563eb', fontSize: '0.72rem', fontWeight: 700, padding: '2px 8px', borderRadius: 10 }}>
+            {products.length} products
+          </span>
         </div>
       </AccordionSummary>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell width='16%'/>
-            {products.map((productData, index) =>
-              <TableCell key={index} className={classes.headCell} width={`${90/products.length}%`}>
-                {dataSources[productData.dataSourceIdx].name} - {productData.product.name}
-              </TableCell>)}
-          </TableRow>
-        </TableHead>
-      </Table>
-      <Table className={classes.table}>
-        <TableBody className={classes.dataContainer}>
-          {productDataKeys.map(dataKey => (
-            <TableRow key={dataKey.key} className={classes.table}>
-              <TableCell component='th' scope='row' align='right' className={classes.dataCell} width='16%'>
-                {dataKey.label}
-              </TableCell>
-              {products.map((productData, index) =>
-                <TableCell key={index} className={classes.dataCell} width={`${90/products.length}%`}>
-                  {render(productData.product, dataKey.key)}
-                </TableCell>
-              )}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <div className={classes.wrapper}>
+        <table className={classes.table}>
+          <thead>
+            <tr>
+              <th className={`${classes.cornerCell} ${classes.stickyHead}`} />
+              {products.map((pd, i) => (
+                <th key={i} className={`${classes.productHeader} ${classes.stickyHead}`} style={{ width: colWidth }}>
+                  <div className={classes.sourceName}>{dataSources[pd.dataSourceIdx]?.name}</div>
+                  <div className={classes.productName}>{pd.product.name}</div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {productDataKeys.map((dataKey, rowIdx) => {
+              const cells = products.map(pd => render(pd.product, dataKey.key))
+              const hasAny = cells.some(c => c !== null && c !== undefined && c !== false)
+              if (!hasAny) return null
+              return (
+                <tr key={dataKey.key} style={{ background: rowIdx % 2 === 0 ? '#fff' : '#f8fafc' }}>
+                  <td className={classes.labelCell} style={{ background: rowIdx % 2 === 0 ? '#f8fafc' : '#f1f5f9' }}>
+                    {dataKey.label}
+                  </td>
+                  {cells.map((cell, i) => (
+                    <td key={i} className={`${classes.dataCell} ${!cell ? classes.emptyCell : ''}`}>
+                      {cell || '—'}
+                    </td>
+                  ))}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
     </Accordion>
   )
 }
 
 const mapStateToProps = state => ({
   dataSources: state.dataSources,
-  products: state.bankingComparison
+  products: state.bankingComparison,
 })
 
-export default connect(mapStateToProps)(ComparisonPanel)
+export default connect(mapStateToProps)(BankingComparisonPanel)

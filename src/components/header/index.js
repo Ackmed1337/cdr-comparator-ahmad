@@ -1,49 +1,44 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core'
 import logo from './CDS-logo.png'
-import Typography from '@material-ui/core/Typography'
-
-const useStyles = makeStyles(theme => ({
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 16,
-    padding: '20px 0 16px',
-    borderBottom: '1px solid #e0e0e0',
-    marginBottom: 12,
-  },
-  logo: {
-    width: 52,
-    height: 52,
-    objectFit: 'contain',
-  },
-  title: {
-    fontSize: theme.typography.pxToRem(26),
-    fontWeight: 600,
-    color: '#1a1a2e',
-    letterSpacing: '-0.3px',
-  },
-  badge: {
-    fontSize: theme.typography.pxToRem(11),
-    fontWeight: 500,
-    color: '#fff',
-    backgroundColor: theme.palette.primary.main,
-    borderRadius: 4,
-    padding: '2px 8px',
-    marginLeft: 8,
-    verticalAlign: 'middle',
-  },
-}))
 
 export default function Header({ title }) {
-  const classes = useStyles()
   return (
-    <div className={classes.header}>
-      <img src={logo} alt="CDS logo" className={classes.logo} />
-      <Typography className={classes.title}>
-        {title}
-        <span className={classes.badge}>demo</span>
-      </Typography>
+    <div style={{
+      background: '#0f172a',
+      padding: '0 24px',
+      height: 60,
+      display: 'flex',
+      alignItems: 'center',
+      gap: 14,
+      marginBottom: 20,
+    }}>
+      <img
+        src={logo}
+        alt="CDS logo"
+        style={{ height: 34, width: 34, objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.85 }}
+      />
+      <div>
+        <div style={{ color: '#f1f5f9', fontWeight: 700, fontSize: '1.05rem', letterSpacing: '-0.2px', lineHeight: 1.2 }}>
+          {title}
+        </div>
+        <div style={{ color: '#475569', fontSize: '0.7rem', letterSpacing: '0.4px', textTransform: 'uppercase', fontWeight: 500, marginTop: 1 }}>
+          CDR Banking API Explorer
+        </div>
+      </div>
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{
+          background: '#1e3a8a',
+          color: '#93c5fd',
+          fontSize: '0.68rem',
+          fontWeight: 700,
+          padding: '3px 10px',
+          borderRadius: 20,
+          letterSpacing: '0.6px',
+          textTransform: 'uppercase',
+        }}>
+          Demo
+        </span>
+      </div>
     </div>
   )
 }

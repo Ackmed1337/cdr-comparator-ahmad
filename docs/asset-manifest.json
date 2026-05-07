@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/product-comparator-demo-Ahmad-s-Version-/static/css/main.55cfc66d.chunk.css",
-    "main.js": "/product-comparator-demo-Ahmad-s-Version-/static/js/main.76ca36b8.chunk.js",
-    "main.js.map": "/product-comparator-demo-Ahmad-s-Version-/static/js/main.76ca36b8.chunk.js.map",
-    "runtime-main.js": "/product-comparator-demo-Ahmad-s-Version-/static/js/runtime-main.949b4b5a.js",
-    "runtime-main.js.map": "/product-comparator-demo-Ahmad-s-Version-/static/js/runtime-main.949b4b5a.js.map",
-    "static/js/2.59838d00.chunk.js": "/product-comparator-demo-Ahmad-s-Version-/static/js/2.59838d00.chunk.js",
-    "static/js/2.59838d00.chunk.js.map": "/product-comparator-demo-Ahmad-s-Version-/static/js/2.59838d00.chunk.js.map",
-    "index.html": "/product-comparator-demo-Ahmad-s-Version-/index.html",
-    "static/css/main.55cfc66d.chunk.css.map": "/product-comparator-demo-Ahmad-s-Version-/static/css/main.55cfc66d.chunk.css.map",
-    "static/js/2.59838d00.chunk.js.LICENSE.txt": "/product-comparator-demo-Ahmad-s-Version-/static/js/2.59838d00.chunk.js.LICENSE.txt"
+    "main.css": "/cdr-comparator-ahmad/static/css/main.8737c73d.chunk.css",
+    "main.js": "/cdr-comparator-ahmad/static/js/main.3801bd14.chunk.js",
+    "main.js.map": "/cdr-comparator-ahmad/static/js/main.3801bd14.chunk.js.map",
+    "runtime-main.js": "/cdr-comparator-ahmad/static/js/runtime-main.514bbcd1.js",
+    "runtime-main.js.map": "/cdr-comparator-ahmad/static/js/runtime-main.514bbcd1.js.map",
+    "static/js/2.53912064.chunk.js": "/cdr-comparator-ahmad/static/js/2.53912064.chunk.js",
+    "static/js/2.53912064.chunk.js.map": "/cdr-comparator-ahmad/static/js/2.53912064.chunk.js.map",
+    "index.html": "/cdr-comparator-ahmad/index.html",
+    "static/css/main.8737c73d.chunk.css.map": "/cdr-comparator-ahmad/static/css/main.8737c73d.chunk.css.map",
+    "static/js/2.53912064.chunk.js.LICENSE.txt": "/cdr-comparator-ahmad/static/js/2.53912064.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.949b4b5a.js",
-    "static/js/2.59838d00.chunk.js",
-    "static/css/main.55cfc66d.chunk.css",
-    "static/js/main.76ca36b8.chunk.js"
+    "static/js/runtime-main.514bbcd1.js",
+    "static/js/2.53912064.chunk.js",
+    "static/css/main.8737c73d.chunk.css",
+    "static/js/main.3801bd14.chunk.js"
   ]
 }
