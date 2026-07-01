@@ -99,22 +99,22 @@ class BankingProductList extends React.Component {
     return (
       <div className="max-h-[420px] overflow-auto pr-1">
         {progress === START_RETRIEVE_PRODUCT_LIST && (
-          <div className="py-3 mb-6">
-            <div className="w-full h-2 bg-slate-700/50 rounded-full mb-2 overflow-hidden">
-              <div className="h-full bg-blue-500 w-full"></div>
+          <div className="py-4 mb-6 px-1 animate-fadeIn">
+            <div className="w-full h-2 bg-slate-700/50 rounded-full mb-2 overflow-hidden shadow-sm">
+              <div className="h-full bg-gradient-to-r from-blue-500 to-blue-400 w-full rounded-full animate-pulse"></div>
             </div>
-            <span className="text-xs text-slate-400">Fetching product list...</span>
+            <span className="text-xs text-slate-400 font-medium">Fetching product list...</span>
           </div>
         )}
         {!!totalRecords && processed < totalRecords && (
-          <div className="py-1 pb-2 mb-6">
-            <div className="w-full h-2 bg-slate-700/50 rounded-full mb-1.5 overflow-hidden">
+          <div className="py-3 pb-3 mb-6 px-1 animate-fadeIn">
+            <div className="w-full h-2 bg-slate-700/50 rounded-full mb-1.5 overflow-hidden shadow-sm">
               <div
-                className="h-full bg-blue-500 transition-all duration-300"
+                className="h-full bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-500 ease-out rounded-full"
                 style={{ width: `${pct}%` }}
               ></div>
             </div>
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-slate-400 font-medium">
               Loading details {processed} / {totalRecords}
             </span>
           </div>
@@ -122,13 +122,13 @@ class BankingProductList extends React.Component {
         {done && products && (
           <>
             {categories.length > 1 && (
-              <div className="flex gap-2 flex-wrap mb-6">
+              <div className="flex gap-3 flex-wrap mb-6 px-1 animate-fadeIn">
                 <button
                   onClick={this.handleResetCategory}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 ${
                     activeCategory === null
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-slate-800 border border-slate-700 text-slate-400 hover:border-slate-600'
+                      ? 'bg-blue-600 text-white shadow-lg hover:shadow-xl hover:bg-blue-700'
+                      : 'bg-slate-800/50 border border-slate-700 text-slate-300 hover:border-slate-600 hover:bg-slate-800'
                   }`}
                 >
                   All
@@ -137,10 +137,10 @@ class BankingProductList extends React.Component {
                   <button
                     key={cat}
                     onClick={() => this.handleToggleCategory(cat)}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
+                    className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 ${
                       activeCategory === cat
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-slate-800 border border-slate-700 text-slate-400 hover:border-slate-600'
+                        ? 'bg-blue-600 text-white shadow-lg hover:shadow-xl hover:bg-blue-700'
+                        : 'bg-slate-800/50 border border-slate-700 text-slate-300 hover:border-slate-600 hover:bg-slate-800'
                     }`}
                   >
                     {translateProductCategory(cat)}
@@ -148,23 +148,28 @@ class BankingProductList extends React.Component {
                 ))}
               </div>
             )}
-            <ProductSearch
-              products={Object.values(filtered).flat()}
-              onFilter={this.handleProductSearchFilter}
-            />
-            <FeatureFilter onFilterChange={this.handleFeatureFilterChange} />
-            <div className="relative mb-6">
+            <div className="px-1 mb-6 animate-fadeIn">
+              <ProductSearch
+                products={Object.values(filtered).flat()}
+                onFilter={this.handleProductSearchFilter}
+              />
+            </div>
+            <div className="px-1 mb-6 animate-fadeIn">
+              <FeatureFilter onFilterChange={this.handleFeatureFilterChange} />
+            </div>
+            <div className="relative mb-6 px-1 animate-fadeIn">
               <input
                 type="text"
                 placeholder="Filter products..."
                 value={inputValue}
                 onChange={this.handleSearchChange}
-                className="w-full px-3 py-2 pr-8 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-200"
+                className="w-full px-4 py-2 pr-10 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 hover:border-slate-600 transition-all duration-200 shadow-md focus:shadow-lg"
               />
               {inputValue && (
                 <button
                   onClick={() => this.setState({ inputValue: '', search: '' })}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-none border-none cursor-pointer text-slate-500 hover:text-slate-300 text-lg leading-none p-1 transition-colors duration-200"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-none border-none cursor-pointer text-slate-400 hover:text-slate-200 text-lg leading-none p-1 transition-all duration-200 hover:scale-110 active:scale-95"
+                  title="Clear search"
                 >
                   ✕
                 </button>
@@ -173,15 +178,20 @@ class BankingProductList extends React.Component {
           </>
         )}
         {done && Object.keys(filtered).sort().map((cat, i) => (
-          <ProductCategory key={i} category={cat} products={filtered[cat]} dataSourceIndex={dataSourceIndex} />
+          <div key={i} className="px-1 animate-fadeIn" style={{ animationDelay: `${i * 30}ms` }}>
+            <ProductCategory category={cat} products={filtered[cat]} dataSourceIndex={dataSourceIndex} />
+          </div>
         ))}
         {done && products && Object.keys(filtered).length === 0 && (
-          <div className="py-3 text-sm text-slate-400 text-center">
+          <div className="py-8 text-sm text-slate-400 text-center animate-fadeIn">
+            <svg className="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
             {search.trim() ? `No products matching "${search}"` : 'No products found.'}
           </div>
         )}
         {done && (search.trim() || activeCategory) && totalFiltered > 0 && (
-          <div className="text-xs text-slate-400 py-1 px-0.5">
+          <div className="text-xs text-slate-400 py-2 px-1 mt-2 border-t border-slate-700/50 animate-fadeIn">
             {totalFiltered} result{totalFiltered !== 1 ? 's' : ''}
           </div>
         )}

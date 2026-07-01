@@ -3,20 +3,26 @@ import Product from './Product'
 import { translateProductCategory } from '../../../utils/dict'
 
 const ProductCategory = ({ category, products, dataSourceIndex }) => (
-  <div className="mb-3">
-    <div className="flex items-center gap-2 px-3 py-1 bg-slate-800/30 border-l-2 border-blue-500 rounded mb-1">
-      <span className="text-xs uppercase tracking-widest font-bold text-slate-400">
+  <div className="mb-4 last:mb-0">
+    <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-slate-800/50 to-slate-800/30 border-l-2 border-blue-500 rounded-lg mb-3 shadow-md hover:shadow-lg hover:from-slate-800/60 hover:to-slate-800/40 transition-all duration-200">
+      <span className="text-xs uppercase tracking-widest font-bold text-slate-300">
         {translateProductCategory(category)}
       </span>
-      <span className="text-blue-300 bg-blue-900/30 rounded-full text-xs font-bold px-2 py-0.5">
+      <span className="ml-auto text-blue-300 bg-blue-900/40 hover:bg-blue-900/60 border border-blue-500/30 hover:border-blue-500/50 rounded-full text-xs font-bold px-3 py-1 transition-all duration-200 cursor-default">
         {products.length}
       </span>
     </div>
-    {products
-      .slice()
-      .sort((a, b) => a.name < b.name ? -1 : 1)
-      .map(product => <Product key={product.productId} product={product} dataSourceIndex={dataSourceIndex} />)
-    }
+    <div className="space-y-2">
+      {products
+        .slice()
+        .sort((a, b) => a.name < b.name ? -1 : 1)
+        .map(product => (
+          <div key={product.productId} className="animate-fadeIn">
+            <Product product={product} dataSourceIndex={dataSourceIndex} />
+          </div>
+        ))
+      }
+    </div>
   </div>
 )
 

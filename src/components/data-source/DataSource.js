@@ -1,11 +1,4 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Checkbox from '@material-ui/core/Checkbox'
-import TextField from '@material-ui/core/TextField'
-import IconButton from '@material-ui/core/IconButton'
-import DoneOutlineIcon from '@material-ui/icons/DoneOutline'
-import DeleteIcon from '@material-ui/icons/Delete'
-import Tooltip from '@material-ui/core/Tooltip'
 import { connect } from 'react-redux'
 import isUrl, { normalise } from '../../utils/url'
 import {
@@ -26,43 +19,6 @@ import {
   START_RETRIEVE_PRODUCT_LIST,
 } from '../../store/banking/data'
 
-const useStyles = makeStyles(() => ({
-  '@keyframes pulse': {
-    '0%, 100%': { opacity: 1 },
-    '50%': { opacity: 0.25 },
-  },
-  row: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    padding: '6px 0',
-    borderBottom: '1px solid #f1f5f9',
-    '&:last-child': { borderBottom: 'none' },
-  },
-  field: { flex: 1 },
-  error: {
-    fontSize: '0.72rem',
-    color: '#dc2626',
-    marginTop: 2,
-    marginLeft: 2,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: '50%',
-    flexShrink: 0,
-    cursor: 'help',
-  },
-  dotLoading: {
-    width: 8,
-    height: 8,
-    borderRadius: '50%',
-    flexShrink: 0,
-    cursor: 'help',
-    animation: '$pulse 1.2s ease-in-out infinite',
-  },
-}))
-
 const getStatus = (dataSource, index, banking) => {
   if (!dataSource.enabled || dataSource.unsaved) return null
   const d = banking[index] || {}
@@ -81,7 +37,6 @@ const getStatus = (dataSource, index, banking) => {
 }
 
 const DataSource = (props) => {
-  const classes = useStyles()
   const { dataSource, index, vHeaders, banking } = props
   const [error, setError] = React.useState('')
 
@@ -134,72 +89,88 @@ const DataSource = (props) => {
 
   return (
     <div>
-      <div className={classes.row} onClick={stop}>
-        <Checkbox
+      <div className="flex items-center gap-3 px-4 py-3 bg-slate-900 border-b border-slate-700 hover:bg-slate-900/80 transition-colors duration-200" onClick={stop}>
+        <input
+          type="checkbox"
           checked={dataSource.enabled}
           onChange={change('enabled')}
-          color="primary"
-          size="small"
-          style={{ padding: 4, flexShrink: 0 }}
+          className="w-4 h-4 accent-blue-500 cursor-pointer flex-shrink-0 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-all duration-200"
         />
-        <div className={classes.field} style={{ flex: '0 0 22%' }}>
-          <TextField
-            error={!dataSource.name.trim().length}
+        <div className="flex-shrink-0 w-[22%]">
+          <input
+            type="text"
             value={dataSource.name}
             onChange={change('name')}
             placeholder="e.g. Acme Bank"
-            size="small"
-            fullWidth
-            inputProps={{ style: { fontSize: '0.82rem', padding: '6px 8px' } }}
+            className={`w-full px-3 py-2 bg-slate-800 border rounded text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+              !dataSource.name.trim().length ? 'border-red-500/50' : 'border-slate-700 hover:border-slate-600'
+            }`}
           />
         </div>
-        <div className={classes.field} style={{ flex: '0 0 34%' }}>
-          <TextField
-            error={!isUrl(dataSource.url)}
+        <div className="flex-shrink-0 w-[34%]">
+          <input
+            type="text"
             value={dataSource.url}
             onChange={change('url')}
             placeholder="https://data.holder"
-            size="small"
-            fullWidth
-            inputProps={{ style: { fontSize: '0.82rem', padding: '6px 8px' } }}
+            className={`w-full px-3 py-2 bg-slate-800 border rounded text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+              !isUrl(dataSource.url) ? 'border-red-500/50' : 'border-slate-700 hover:border-slate-600'
+            }`}
           />
         </div>
-        <div className={classes.field} style={{ flex: '0 0 28%' }}>
-          <TextField
-            error={!!dataSource.icon && !isUrl(dataSource.icon)}
+        <div className="flex-shrink-0 w-[28%]">
+          <input
+            type="text"
             value={dataSource.icon || ''}
             onChange={change('icon')}
             placeholder="https://...icon.png"
-            size="small"
-            fullWidth
-            inputProps={{ style: { fontSize: '0.82rem', padding: '6px 8px' } }}
+            className={`w-full px-3 py-2 bg-slate-800 border rounded text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+              !!dataSource.icon && !isUrl(dataSource.icon) ? 'border-red-500/50' : 'border-slate-700 hover:border-slate-600'
+            }`}
           />
         </div>
-        <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div className="flex-shrink-0 flex items-center gap-2">
           {status && (
-            <Tooltip title={status.label}>
-              <div
-                className={status.loading ? classes.dotLoading : classes.dot}
-                style={{ background: status.color }}
-              />
-            </Tooltip>
+            <div
+              className={`flex-shrink-0 rounded-full cursor-help transition-all duration-200 ${status.loading ? 'animate-pulse' : ''}`}
+              style={{
+                width: '8px',
+                height: '8px',
+                background: status.color,
+                boxShadow: `0 0 8px ${status.color}`,
+              }}
+              title={status.label}
+            />
           )}
           {dataSource.unsaved ? (
-            <Tooltip title="Save">
-              <IconButton size="small" onClick={save}>
-                <DoneOutlineIcon fontSize="small" color={valid() ? 'primary' : 'disabled'} />
-              </IconButton>
-            </Tooltip>
+            <button
+              onClick={save}
+              className={`px-3 py-1.5 rounded text-sm font-semibold flex items-center gap-2 transition-all duration-200 active:scale-95 ${
+                valid()
+                  ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl'
+                  : 'bg-slate-700 text-slate-400 cursor-not-allowed'
+              }`}
+              title="Save"
+              disabled={!valid()}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </button>
           ) : (
-            <Tooltip title="Remove">
-              <IconButton size="small" onClick={del}>
-                <DeleteIcon fontSize="small" color="error" />
-              </IconButton>
-            </Tooltip>
+            <button
+              onClick={del}
+              className="px-3 py-1.5 rounded text-sm font-semibold bg-red-600/20 hover:bg-red-600/30 text-red-400 hover:text-red-300 border border-red-600/30 hover:border-red-600/50 transition-all duration-200 active:scale-95 flex items-center gap-2"
+              title="Remove"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
           )}
         </div>
       </div>
-      {error && <div className={classes.error}>{error}</div>}
+      {error && <div className="px-4 py-2 text-xs text-red-400 bg-red-900/20 border-b border-red-600/30">{error}</div>}
     </div>
   )
 }
