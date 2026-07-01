@@ -26,6 +26,8 @@ import RateChart from './RateChart'
 import ComparisonStats from './ComparisonStats'
 import LoanCalculator from '../tools/LoanCalculator'
 import SavingsCalculator from '../tools/SavingsCalculator'
+import FeatureMatrix from './FeatureMatrix'
+import { generatePDFComparison } from '../../utils/export'
 
 const useStyles = makeStyles(theme => ({
   panel: { backgroundColor: '#fff' },
@@ -316,6 +318,7 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
         {products.some(p => p.product.depositRates?.length) && (
           <SavingsCalculator products={products.map(p => p.product)} />
         )}
+        <FeatureMatrix products={products} dataSources={dataSources} />
 
         <table className={`${classes.table} ${classes.desktopTable}`}>
           <thead>
@@ -378,7 +381,7 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
         </div>
       </div>
       <Divider />
-      <AccordionActions style={{ padding: '8px 16px', justifyContent: 'space-between', alignItems: 'center' }}>
+      <AccordionActions style={{ padding: '8px 16px', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: '0.72rem', color: '#64748b' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <span style={{ display: 'inline-block', width: 10, height: 10, borderRadius: 2, background: '#f0fdf4', border: '1.5px solid #16a34a' }} />
@@ -389,11 +392,18 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
             Worst rate
           </span>
         </div>
-        <Tooltip title="Export as CSV">
-          <Fab size="small" color="primary" onClick={handleDownload}>
-            <GetAppIcon style={{ fontSize: 18 }} />
-          </Fab>
-        </Tooltip>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <Tooltip title="Download as HTML">
+            <Fab size="small" color="default" onClick={() => generatePDFComparison(products, dataSources, 'html')} style={{ background: '#dbeafe' }}>
+              <GetAppIcon style={{ fontSize: 16, color: '#2563eb' }} />
+            </Fab>
+          </Tooltip>
+          <Tooltip title="Export as CSV">
+            <Fab size="small" color="primary" onClick={handleDownload}>
+              <GetAppIcon style={{ fontSize: 18 }} />
+            </Fab>
+          </Tooltip>
+        </div>
       </AccordionActions>
     </Accordion>
   )
