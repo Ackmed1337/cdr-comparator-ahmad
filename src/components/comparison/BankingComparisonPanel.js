@@ -42,8 +42,54 @@ const useStyles = makeStyles(theme => ({
     maxHeight: 640,
     borderRadius: 8,
     border: '1px solid #e2e8f0',
+    [theme.breakpoints.down('sm')]: {
+      maxHeight: 'none',
+      overflow: 'visible',
+    }
   },
   table: { width: '100%', borderCollapse: 'separate', borderSpacing: 0 },
+  mobileCards: {
+    display: 'none',
+    [theme.breakpoints.down('sm')]: {
+      display: 'block',
+    }
+  },
+  desktopTable: {
+    display: 'table',
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    }
+  },
+  mobileCard: {
+    marginBottom: 12,
+    padding: 12,
+    border: '1px solid #e2e8f0',
+    borderRadius: 8,
+    backgroundColor: '#f8fafc',
+  },
+  mobileCardTitle: {
+    fontWeight: 700,
+    fontSize: '0.9rem',
+    marginBottom: 8,
+    color: '#1e293b',
+  },
+  mobileCardRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '4px 0',
+    fontSize: '0.75rem',
+    borderBottom: '1px solid #e2e8f0',
+  },
+  mobileCardLabel: {
+    fontWeight: 600,
+    color: '#64748b',
+    flex: '0 0 40%',
+  },
+  mobileCardValue: {
+    color: '#374151',
+    flex: 1,
+    paddingLeft: 8,
+  },
   labelCell: {
     background: '#f8fafc',
     fontWeight: 600,
@@ -249,7 +295,7 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
         </div>
       </AccordionSummary>
       <div className={classes.wrapper}>
-        <table className={classes.table}>
+        <table className={`${classes.table} ${classes.desktopTable}`}>
           <thead>
             <tr>
               <th className={`${classes.cornerCell} ${classes.stickyHead}`} />
@@ -288,6 +334,26 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
             ))}
           </tbody>
         </table>
+
+        <div className={classes.mobileCards}>
+          {products.map((pd, prodIdx) => (
+            <div key={prodIdx} className={classes.mobileCard}>
+              <div className={classes.mobileCardTitle}>
+                {dataSources[pd.dataSourceIdx]?.name} — {pd.product.name}
+              </div>
+              {rowData.map(({ dataKey, cells }) => {
+                const cell = cells[prodIdx]
+                if (!cell) return null
+                return (
+                  <div key={dataKey.key} className={classes.mobileCardRow}>
+                    <div className={classes.mobileCardLabel}>{dataKey.label}:</div>
+                    <div className={classes.mobileCardValue}>{cell}</div>
+                  </div>
+                )
+              })}
+            </div>
+          ))}
+        </div>
       </div>
       <Divider />
       <AccordionActions style={{ padding: '8px 16px', justifyContent: 'space-between', alignItems: 'center' }}>
