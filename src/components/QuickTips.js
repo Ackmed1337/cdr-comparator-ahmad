@@ -1,24 +1,26 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button'
+import Accordion from '@material-ui/core/Accordion'
+import AccordionSummary from '@material-ui/core/AccordionSummary'
+import AccordionDetails from '@material-ui/core/AccordionDetails'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 const useStyles = makeStyles(theme => ({
   root: {
     marginBottom: 16,
-    backgroundColor: '#fef3c7',
-    border: '1px solid #fcd34d',
+    backgroundColor: 'transparent',
+    border: 'none',
+    boxShadow: 'none',
   },
-  title: {
+  heading: {
     fontSize: '0.9rem',
     fontWeight: 700,
-    marginBottom: 12,
-    color: '#92400e',
+    color: '#f59e0b',
   },
-  tips: {
+  details: {
     display: 'grid',
     gap: 8,
+    padding: '12px 16px 16px',
   },
   tip: {
     padding: 10,
@@ -30,39 +32,38 @@ const useStyles = makeStyles(theme => ({
     color: '#78350f',
     lineHeight: 1.5,
   },
-  icon: {
-    marginRight: 6,
-  }
 }))
 
 const QuickTips = () => {
   const classes = useStyles()
 
   const tips = [
-    '💡 Use Quick Filters (High Rates, No Fees, Digital Wallet) to instantly narrow down products',
-    '🔍 Search product names to quickly find specific products',
-    '📊 Compare 2-4 products side-by-side using the checkboxes',
-    '📈 Use calculators to see real dollar impact of rate differences',
-    '✨ Check the Feature Matrix to see which products have the features you need',
-    '🔗 Click the share button to send comparisons to friends or save for later',
-    '🌙 Toggle dark mode in the header for comfortable reading',
-    '📥 Export comparisons as HTML, CSV, or text for easy sharing',
+    'Use Quick Filters (High Rates, No Fees, Digital Wallet) to instantly narrow down products',
+    'Search product names to quickly find specific products',
+    'Compare 2-4 products side-by-side using the checkboxes',
+    'Use calculators to see real dollar impact of rate differences',
+    'Check the Feature Matrix to see which products have the features you need',
+    'Click the share button to send comparisons to friends or save for later',
+    'Toggle dark mode in the header for comfortable reading',
+    'Export comparisons as HTML, CSV, or text for easy sharing',
   ]
 
   return (
-    <Card className={classes.root}>
-      <CardContent style={{ paddingBottom: 12 }}>
-        <div className={classes.title}>🎯 Quick Tips</div>
-        <div className={classes.tips}>
+    <Accordion className={classes.root} defaultExpanded={false}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <div className={classes.heading}>Quick Tips</div>
+      </AccordionSummary>
+      <AccordionDetails style={{ flexDirection: 'column', width: '100%' }}>
+        <div className={classes.details}>
           {tips.map((tip, idx) => (
             <div key={idx} className={classes.tip}>
               {tip}
             </div>
           ))}
         </div>
-      </CardContent>
-    </Card>
+      </AccordionDetails>
+    </Accordion>
   )
 }
 
-export default React.memo(QuickTips)
+export default QuickTips

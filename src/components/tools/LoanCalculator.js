@@ -79,7 +79,7 @@ const LoanCalculator = ({ products, dataSources }) => {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <div className={classes.title}>💰 Loan Repayment Calculator</div>
+        <div className={classes.title}>Loan Repayment Calculator</div>
 
         <div className={classes.inputGroup}>
           <TextField

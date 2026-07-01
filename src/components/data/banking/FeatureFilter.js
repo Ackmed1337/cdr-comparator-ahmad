@@ -69,7 +69,7 @@ const FeatureFilter = ({ onFilterChange }) => {
     <Accordion defaultExpanded={false} className={classes.root}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <div className={classes.heading}>
-          🔍 Filter by Features {selectedFeatures.length > 0 && `(${selectedFeatures.length})`}
+          Filter by Features {selectedFeatures.length > 0 && `(${selectedFeatures.length})`}
         </div>
       </AccordionSummary>
       <div style={{ padding: '12px' }}>

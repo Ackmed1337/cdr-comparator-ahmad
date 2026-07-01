@@ -89,7 +89,7 @@ const FeatureMatrix = ({ products, dataSources }) => {
   return (
     <Card className={classes.root}>
       <CardContent style={{ padding: '16px 12px' }}>
-        <div className={classes.title}>✨ Feature Matrix</div>
+        <div className={classes.title}>Feature Matrix</div>
         <div className={classes.matrix}>
           <table className={classes.table}>
             <thead>

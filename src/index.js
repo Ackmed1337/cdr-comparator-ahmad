@@ -56,6 +56,11 @@ const lightTheme = createMuiTheme({
         letterSpacing: '0.25px',
       },
     },
+    MuiCard: {
+      root: {
+        backgroundColor: '#ffffff',
+      },
+    },
   },
 })
 
@@ -107,6 +112,11 @@ const darkTheme = createMuiTheme({
         fontWeight: 600,
         fontSize: '0.875rem',
         letterSpacing: '0.25px',
+      },
+    },
+    MuiCard: {
+      root: {
+        backgroundColor: '#1e293b',
       },
     },
   },

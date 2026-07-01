@@ -78,7 +78,7 @@ const SavingsCalculator = ({ products }) => {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <div className={classes.title}>📈 Savings Interest Calculator</div>
+        <div className={classes.title}>Savings Interest Calculator</div>
 
         <div className={classes.inputGroup}>
           <TextField
