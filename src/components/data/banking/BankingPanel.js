@@ -16,22 +16,22 @@ const BankingPanel = (props) => {
   const canCompare = selCount >= 2 && selCount <= 4
 
   return (
-    <div className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden shadow-xl">
+    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden shadow-xl">
       {/* Panel Header/Accordion Summary */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between px-6 py-4 bg-slate-800 hover:bg-slate-700 transition-colors border-b border-slate-700"
+        className="w-full flex items-center justify-between px-6 py-4 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border-b border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3">
-          <h2 className="text-base font-semibold text-slate-100">Banking Products</h2>
+          <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Banking Products</h2>
           {savedDataSourcesCount > 0 && (
-            <span className="bg-blue-900 text-blue-200 text-xs font-bold px-2 py-1 rounded-full">
+            <span className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 text-xs font-bold px-2 py-1 rounded-full">
               {savedDataSourcesCount} source{savedDataSourcesCount !== 1 ? 's' : ''}
             </span>
           )}
         </div>
         <svg
-          className={`w-6 h-6 text-slate-400 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+          className={`w-6 h-6 text-slate-500 dark:text-slate-400 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -49,9 +49,9 @@ const BankingPanel = (props) => {
                 isBankingDataSource(ds) && (
                   <div key={index} className="flex flex-col">
                     {/* Data Source Header */}
-                    <div className="flex items-center gap-3 p-3 mb-4 bg-slate-900 border-l-4 border-blue-500 rounded-lg border border-slate-700">
-                      {ds.icon && <img src={ds.icon} alt="" className="w-7 h-7 object-contain flex-shrink-0" />}
-                      <span className="text-sm font-bold text-slate-100">{ds.name}</span>
+                    <div className="flex items-center gap-3 p-3 mb-4 bg-slate-50 dark:bg-slate-900 border-l-4 border-blue-500 rounded-lg border border-slate-200 dark:border-slate-700">
+                      {ds.icon && <img src={ds.icon} alt="" className="w-7 h-7 object-contain flex-shrink-0" onError={e => { e.target.style.display = 'none' }} />}
+                      <span className="text-sm font-bold text-slate-900 dark:text-slate-100">{ds.name}</span>
                     </div>
                     {/* Product List */}
                     <div className="flex-1">
@@ -62,7 +62,7 @@ const BankingPanel = (props) => {
               )}
             </div>
           ) : (
-            <div className="py-8 px-6 text-center text-slate-400 text-sm">
+            <div className="py-8 px-6 text-center text-slate-500 dark:text-slate-400 text-sm">
               Add a data source above to load banking products.
             </div>
           )}
@@ -70,11 +70,11 @@ const BankingPanel = (props) => {
       )}
 
       {/* Panel Footer/Actions */}
-      <div className="border-t border-slate-700 bg-slate-800 px-6 py-4">
+      <div className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {selCount > 0 && (
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-slate-500 dark:text-slate-400">
                 {selCount} product{selCount !== 1 ? 's' : ''} selected
                 {selCount > 4 && <span className="text-red-500 ml-1">(max 4)</span>}
               </span>
@@ -88,7 +88,7 @@ const BankingPanel = (props) => {
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
               canCompare
                 ? 'bg-blue-500 hover:bg-blue-600 text-white shadow-lg hover:shadow-blue-500/50 cursor-pointer'
-                : 'bg-slate-600 text-slate-400 cursor-not-allowed'
+                : 'bg-slate-300 dark:bg-slate-600 text-slate-500 dark:text-slate-400 cursor-not-allowed'
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -20,10 +20,10 @@ const LendingRate = (props) => {
     additionalInfoUri
   } = props.lendingRate
   return (
-    <li className="bg-slate-800/30 p-2 rounded border-l-2 border-red-500 mb-1">
-      <div className="text-base font-bold text-red-400">{(rate * 100).toFixed(2)}%</div>
+    <li className="bg-slate-100/30 dark:bg-slate-800/30 p-2 rounded border-l-2 border-red-500 mb-1">
+      <div className="text-base font-bold text-red-600 dark:text-red-400">{(rate * 100).toFixed(2)}%</div>
       {!!comparisonRate && <div className="text-xs text-slate-500">Comparison rate: {(comparisonRate * 100).toFixed(2)}%</div>}
-      <div className="text-xs font-semibold text-slate-400">
+      <div className="text-xs font-semibold text-slate-500 dark:text-slate-400">
         {translateLendingRateType(lendingRateType)}
         {
           (lendingRateType === 'FIXED' || lendingRateType === 'INTRODUCTORY') && !!additionalValue &&
@@ -58,8 +58,8 @@ const LendingRate = (props) => {
           </ul>
         </div>
       }
-      {!!additionalInfo && <div className="text-xs text-slate-400">{additionalInfo}</div>}
-      {!!additionalInfoUri && <div><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer' className="text-xs text-red-400 hover:text-red-300">More info</a></div>}
+      {!!additionalInfo && <div className="text-xs text-slate-500 dark:text-slate-400">{additionalInfo}</div>}
+      {!!additionalInfoUri && <div><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer' className="text-xs text-red-600 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300">More info</a></div>}
     </li>
   )
 }

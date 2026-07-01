@@ -17,7 +17,7 @@ const Field = ({ label, value }) => {
   if (!value && value !== 0 && value !== false) return null
   return (
     <div className="mb-2">
-      <span className="text-slate-400 font-medium mr-4">{label}:</span>
+      <span className="text-slate-500 dark:text-slate-400 font-medium mr-4">{label}:</span>
       {value}
     </div>
   )
@@ -25,8 +25,8 @@ const Field = ({ label, value }) => {
 
 const Section = ({ title, children }) => {
   return (
-    <div className="mt-8 pt-6 border-t border-slate-700">
-      <div className="text-xs font-bold text-indigo-400 uppercase tracking-wide mb-2">{title}</div>
+    <div className="mt-8 pt-6 border-t border-slate-300 dark:border-slate-700">
+      <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide mb-2">{title}</div>
       <ul className="m-0 pl-4">{children}</ul>
     </div>
   )
@@ -54,7 +54,7 @@ const Product = (props) => {
   }
 
   return (
-    <div className="flex items-start gap-4 mb-4 p-4 bg-slate-800 border-l-4 border-blue-500 rounded-lg shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
+    <div className="flex items-start gap-4 mb-4 p-4 bg-slate-100 dark:bg-slate-800 border-l-4 border-blue-500 rounded-lg shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
       {/* Modern Toggle Checkbox */}
       <div className="flex-shrink-0 mt-1">
         <label className="relative inline-flex items-center cursor-pointer">
@@ -64,7 +64,7 @@ const Product = (props) => {
             onChange={toggle}
             className="sr-only peer"
           />
-          <div className="w-11 h-6 bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+          <div className="w-11 h-6 bg-slate-300 dark:bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
         </label>
       </div>
 
@@ -74,8 +74,8 @@ const Product = (props) => {
         <button
           onClick={() => setExpanded(!expanded)}
           className={`w-full flex items-center justify-between py-2 text-left font-semibold text-sm transition-colors duration-200 ${
-            selected ? 'text-blue-300' : 'text-slate-100'
-          } hover:text-blue-300`}
+            selected ? 'text-blue-700 dark:text-blue-300' : 'text-slate-900 dark:text-slate-100'
+          } hover:text-blue-500 dark:hover:text-blue-300`}
         >
           <span className="line-height-1.4">{product.name}</span>
           <svg
@@ -90,19 +90,19 @@ const Product = (props) => {
 
         {/* Body Content */}
         {expanded && (
-          <div className="mt-4 pl-0 text-slate-300 text-sm leading-relaxed space-y-2">
+          <div className="mt-4 pl-0 text-slate-700 dark:text-slate-300 text-sm leading-relaxed space-y-2">
             {product.description && (
-              <div className="text-slate-400 mb-3 text-xs leading-normal">
+              <div className="text-slate-500 dark:text-slate-400 mb-3 text-xs leading-normal">
                 {product.description}
               </div>
             )}
             <Field label="Brand" value={product.brand} />
             <Field label="Last updated" value={
-              <span className="text-slate-300">
+              <span className="text-slate-700 dark:text-slate-300">
                 <DateTime rfc3339={product.lastUpdated} /> &nbsp;
                 <button
                   onClick={downloadJSON}
-                  className="text-blue-400 hover:text-blue-300 text-xs font-semibold underline cursor-pointer bg-transparent border-none p-0"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 text-xs font-semibold underline cursor-pointer bg-transparent border-none p-0"
                 >
                   JSON
                 </button>
@@ -117,15 +117,15 @@ const Product = (props) => {
                   href={product.applicationUri}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 font-semibold text-sm"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-semibold text-sm"
                 >
                   Apply here →
                 </a>
               </div>
             )}
             {product.additionalInformation && (
-              <div className="mt-8 pt-6 border-t border-slate-700">
-                <div className="text-xs font-bold text-indigo-400 uppercase tracking-wide mb-2">Additional Info</div>
+              <div className="mt-8 pt-6 border-t border-slate-300 dark:border-slate-700">
+                <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide mb-2">Additional Info</div>
                 <AdditionalInfo additionalInfo={product.additionalInformation} />
               </div>
             )}

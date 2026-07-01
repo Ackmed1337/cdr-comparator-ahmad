@@ -1,6 +1,5 @@
 export const generatePDFComparison = (products, dataSources, format = 'html') => {
   const timestamp = new Date().toLocaleString()
-  const productNames = products.map(p => `${dataSources[p.dataSourceIdx]?.name} - ${p.product.name}`).join(' vs ')
 
   if (format === 'html') {
     const html = generateHTMLReport(products, dataSources, timestamp)

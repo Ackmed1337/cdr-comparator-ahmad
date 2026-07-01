@@ -5,7 +5,6 @@ export const SAVE_DATA_SOURCE = 'SAVE_DATA_SOURCE'
 export const DELETE_DATA_SOURCE = 'DELETE_DATA_SOURCE'
 export const MODIFY_DATA_SOURCE_NAME = 'MODIFY_DATA_SOURCE_NAME'
 export const MODIFY_DATA_SOURCE_URL = 'MODIFY_DATA_SOURCE_URL'
-export const MODIFY_DATA_SOURCE_ENERGY_PRD_URL = 'MODIFY_DATA_SOURCE_ENERGY_PRD_URL'
 export const MODIFY_DATA_SOURCE_ICON = 'MODIFY_DATA_SOURCE_ICON'
 export const ENABLE_DATA_SOURCE = 'ENABLE_DATA_SOURCE'
 
@@ -117,14 +116,6 @@ export function modifyDataSourceName(index, payload) {
 export function modifyDataSourceUrl(index, payload) {
   return {
     type: MODIFY_DATA_SOURCE_URL,
-    index: index,
-    payload: payload
-  }
-}
-
-export function modifyDataSourceEnergyPrdUrl(index, payload) {
-  return {
-    type: MODIFY_DATA_SOURCE_ENERGY_PRD_URL,
     index: index,
     payload: payload
   }

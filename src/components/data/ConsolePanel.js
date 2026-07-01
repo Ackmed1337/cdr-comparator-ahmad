@@ -9,20 +9,20 @@ const ConsolePanel = (props) => {
   const [isExpanded, setIsExpanded] = React.useState(false)
 
   return (
-    <div className="bg-slate-800 border border-slate-700 rounded">
+    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center gap-3 px-4 py-3 bg-slate-900 hover:bg-slate-800 border-l-4 border-blue-500 transition-all duration-200"
+        className="w-full flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border-l-4 border-blue-500 transition-all duration-200"
       >
-        <span style={{ fontSize: 16 }} className="text-slate-400">{'>'}_</span>
-        <span className="font-semibold text-sm text-slate-300">Console</span>
+        <span style={{ fontSize: 16 }} className="text-slate-500 dark:text-slate-400">{'>'}_</span>
+        <span className="font-semibold text-sm text-slate-700 dark:text-slate-300">Console</span>
         {props.conout.actions.length > 0 && (
-          <span className="ml-2 px-2 py-1 text-xs font-bold text-slate-300 bg-slate-700 rounded-full">
+          <span className="ml-2 px-2 py-1 text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-200 dark:bg-slate-700 rounded-full">
             {props.conout.actions.length}
           </span>
         )}
         <svg
-          className={`ml-auto w-5 h-5 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+          className={`ml-auto w-5 h-5 text-slate-500 dark:text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -33,17 +33,17 @@ const ConsolePanel = (props) => {
 
       {isExpanded && (
         <div className="transition-all duration-300">
-          <div className="max-h-72 overflow-y-auto bg-slate-950 border-t border-slate-700 p-4 font-mono text-xs text-slate-400" style={{ fontFamily: "'Fira Code', 'JetBrains Mono', 'Courier New', monospace", lineHeight: 1.8 }}>
+          <div className="max-h-72 overflow-y-auto bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-700 p-4 font-mono text-xs text-slate-600 dark:text-slate-400" style={{ fontFamily: "'Fira Code', 'JetBrains Mono', 'Courier New', monospace", lineHeight: 1.8 }}>
             {props.conout.actions.length === 0 && (
-              <span className="text-slate-500">No output yet. Load some data sources to see API calls.</span>
+              <span className="text-slate-400 dark:text-slate-500">No output yet. Load some data sources to see API calls.</span>
             )}
             {props.conout.actions.slice(-100).map((msg, i) => (
-              <div key={i} className="flex gap-3 border-b border-slate-800 py-1 last:border-b-0">
-                <span className="text-slate-600 flex-shrink-0">{moment(msg.timestamp).format('HH:mm:ss.SSS')}</span>
+              <div key={i} className="flex gap-3 border-b border-slate-200 dark:border-slate-800 py-1 last:border-b-0">
+                <span className="text-slate-400 dark:text-slate-600 flex-shrink-0">{moment(msg.timestamp).format('HH:mm:ss.SSS')}</span>
                 <div className="flex-1">
                   {msg.payload.html
-                    ? <span className={msg.payload.lvl === 'error' ? 'text-red-500' : 'text-slate-400'} dangerouslySetInnerHTML={{ __html: msg.payload.html }} />
-                    : <span className={msg.payload.lvl === 'error' ? 'text-red-500' : 'text-slate-400'}>{msg.payload.txt}</span>
+                    ? <span className={msg.payload.lvl === 'error' ? 'text-red-500' : 'text-slate-600 dark:text-slate-400'} dangerouslySetInnerHTML={{ __html: msg.payload.html }} />
+                    : <span className={msg.payload.lvl === 'error' ? 'text-red-500' : 'text-slate-600 dark:text-slate-400'}>{msg.payload.txt}</span>
                   }
                   {msg.payload.obj && <TreeView data={msg.payload.obj} />}
                 </div>
@@ -51,7 +51,7 @@ const ConsolePanel = (props) => {
             ))}
           </div>
 
-          <div className="border-t border-slate-700 bg-slate-800 p-3 flex justify-end">
+          <div className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-3 flex justify-end">
             <button
               onClick={props.cleanConout}
               title="Clear console"

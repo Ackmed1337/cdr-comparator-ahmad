@@ -162,24 +162,24 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
   const colWidth = `${85 / products.length}%`
 
   return (
-    <div className="mb-4 bg-slate-900 border border-slate-800 rounded-lg overflow-hidden">
+    <div className="mb-4 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg overflow-hidden">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full px-4 py-3 bg-slate-900 hover:bg-slate-800 border-l-4 border-blue-500 transition-all flex items-center justify-between"
+        className="w-full px-4 py-3 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border-l-4 border-blue-500 transition-all flex items-center justify-between"
       >
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-sm text-blue-400">Product Comparison</span>
-          <span className="bg-blue-900/50 text-blue-300 text-xs font-bold px-2 py-0.5 rounded-full">
+          <span className="font-semibold text-sm text-blue-600 dark:text-blue-400">Product Comparison</span>
+          <span className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-bold px-2 py-0.5 rounded-full">
             {products.length} products
           </span>
         </div>
-        <svg className={`w-5 h-5 text-blue-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className={`w-5 h-5 text-blue-600 dark:text-blue-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
         </svg>
       </button>
 
       {isExpanded && (
-        <div className="w-11/12 mx-auto my-5 overflow-auto max-h-160 rounded-lg border border-slate-700 bg-slate-950">
+        <div className="w-11/12 mx-auto my-5 overflow-auto max-h-160 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-950">
         <ComparisonStats products={products} />
         <RateChart products={products} dataSources={dataSources} />
 
@@ -194,27 +194,27 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
         <table className="w-full border-collapse border-spacing-0 hidden md:table">
           <thead>
             <tr>
-              <th className="sticky top-0 z-40 bg-gradient-to-r from-slate-900 to-slate-800 border-t-2 border-blue-500 text-left text-xs font-bold text-slate-300 p-3 px-3.5 border-r-2 border-slate-700 w-1/6 min-w-32" />
+              <th className="sticky top-0 z-40 bg-gradient-to-r from-white to-slate-100 dark:from-slate-900 dark:to-slate-800 border-t-2 border-blue-500 text-left text-xs font-bold text-slate-700 dark:text-slate-300 p-3 px-3.5 border-r-2 border-slate-300 dark:border-slate-700 w-1/6 min-w-32" />
               {products.map((pd, i) => (
-                <th key={i} className="sticky top-0 z-40 bg-gradient-to-r from-slate-900 to-slate-800 border-t-2 border-blue-500 px-3.5 py-3 border-r border-slate-700 last:border-r-0 text-center" style={{ width: colWidth }}>
-                  <div className="text-xs font-bold text-indigo-400">{dataSources[pd.dataSourceIdx]?.name}</div>
-                  <div className="font-bold text-slate-100 text-sm">{pd.product.name}</div>
+                <th key={i} className="sticky top-0 z-40 bg-gradient-to-r from-white to-slate-100 dark:from-slate-900 dark:to-slate-800 border-t-2 border-blue-500 px-3.5 py-3 border-r border-slate-300 dark:border-slate-700 last:border-r-0 text-center" style={{ width: colWidth }}>
+                  <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{dataSources[pd.dataSourceIdx]?.name}</div>
+                  <div className="font-bold text-slate-900 dark:text-slate-100 text-sm">{pd.product.name}</div>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {rowData.map(({ dataKey, cells, highlight }, rowIdx) => (
-              <tr key={dataKey.key} className={`transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/20 ${rowIdx % 2 === 0 ? 'bg-slate-900' : 'bg-slate-800'}`}>
-                <td className={`text-left font-bold text-slate-300 text-xs px-3.5 py-3 border-r-2 border-slate-700 sticky left-0 z-10 w-1/6 min-w-32 ${rowIdx % 2 === 0 ? 'bg-slate-900' : 'bg-slate-800'}`}>
+              <tr key={dataKey.key} className={`transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/20 ${rowIdx % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-100 dark:bg-slate-800'}`}>
+                <td className={`text-left font-bold text-slate-700 dark:text-slate-300 text-xs px-3.5 py-3 border-r-2 border-slate-300 dark:border-slate-700 sticky left-0 z-10 w-1/6 min-w-32 ${rowIdx % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-100 dark:bg-slate-800'}`}>
                   {dataKey.label}
                 </td>
                 {cells.map((cell, i) => {
                   const isBest = highlight?.bestIdx === i
                   const isWorst = highlight?.worstIdx === i
-                  const bgColor = isBest ? 'bg-green-900/40 border-l-4 border-t-4 border-green-500 text-green-300' :
-                                 isWorst ? 'bg-red-900/40 border-l-4 border-t-4 border-red-500 text-red-300' :
-                                 'text-slate-300 border-r border-slate-700 last:border-r-0'
+                  const bgColor = isBest ? 'bg-green-100 dark:bg-green-900/40 border-l-4 border-t-4 border-green-500 text-green-700 dark:text-green-300' :
+                                 isWorst ? 'bg-red-100 dark:bg-red-900/40 border-l-4 border-t-4 border-red-500 text-red-700 dark:text-red-300' :
+                                 'text-slate-700 dark:text-slate-300 border-r border-slate-300 dark:border-slate-700 last:border-r-0'
                   return (
                     <td
                       key={i}
@@ -231,17 +231,17 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
 
         <div className="md:hidden px-2 py-4">
           {products.map((pd, prodIdx) => (
-            <div key={prodIdx} className="mb-4 p-3 border border-slate-600 rounded-lg bg-slate-900 break-inside-avoid">
-              <div className="font-bold text-sm text-slate-100 mb-3 pb-2 border-b-2 border-slate-700">
+            <div key={prodIdx} className="mb-4 p-3 border border-slate-400 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 break-inside-avoid">
+              <div className="font-bold text-sm text-slate-900 dark:text-slate-100 mb-3 pb-2 border-b-2 border-slate-300 dark:border-slate-700">
                 {dataSources[pd.dataSourceIdx]?.name} — {pd.product.name}
               </div>
               {rowData.map(({ dataKey, cells }) => {
                 const cell = cells[prodIdx]
                 if (!cell) return null
                 return (
-                  <div key={dataKey.key} className="grid grid-cols-[45%_1fr] gap-2 py-2 px-0 text-xs border-b border-slate-700 last:border-b-0">
-                    <div className="font-semibold text-slate-400 break-words">{dataKey.label}:</div>
-                    <div className="text-slate-300 text-right break-words">{cell}</div>
+                  <div key={dataKey.key} className="grid grid-cols-[45%_1fr] gap-2 py-2 px-0 text-xs border-b border-slate-300 dark:border-slate-700 last:border-b-0">
+                    <div className="font-semibold text-slate-500 dark:text-slate-400 break-words">{dataKey.label}:</div>
+                    <div className="text-slate-700 dark:text-slate-300 text-right break-words">{cell}</div>
                   </div>
                 )
               })}
@@ -251,8 +251,8 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
       </div>
       )}
 
-      <div className="px-4 py-2 flex justify-between items-center flex-wrap gap-2 border-t border-slate-700 bg-slate-900">
-        <div className="flex gap-3 items-center text-xs text-slate-400">
+      <div className="px-4 py-2 flex justify-between items-center flex-wrap gap-2 border-t border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900">
+        <div className="flex gap-3 items-center text-xs text-slate-500 dark:text-slate-400">
           <span className="flex items-center gap-1">
             <span className="inline-block w-2.5 h-2.5 rounded-sm bg-green-900/50 border border-green-500" />
             Best rate

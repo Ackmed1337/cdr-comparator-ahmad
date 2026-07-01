@@ -21,27 +21,27 @@ const FeatureMatrix = ({ products, dataSources }) => {
   if (allFeatures.length === 0) return null
 
   return (
-    <div className="mb-4 rounded-lg overflow-hidden border border-slate-700">
-      <div className="p-4 bg-slate-900 border-b border-slate-700">
-        <h3 className="text-sm font-bold text-slate-300">Feature Matrix</h3>
+    <div className="mb-4 rounded-lg overflow-hidden border border-slate-300 dark:border-slate-700">
+      <div className="p-4 bg-white dark:bg-slate-900 border-b border-slate-300 dark:border-slate-700">
+        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300">Feature Matrix</h3>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-xs">
           <thead>
-            <tr className="bg-gradient-to-r from-slate-900 to-slate-800 border-b-2 border-blue-500 sticky top-0 z-10">
-              <th className="px-3 py-2 text-left font-bold text-slate-300 bg-slate-900 min-w-[120px] sticky left-0 z-20 border-r border-slate-700">
+            <tr className="bg-gradient-to-r from-white to-slate-100 dark:from-slate-900 dark:to-slate-800 border-b-2 border-blue-500 sticky top-0 z-10">
+              <th className="px-3 py-2 text-left font-bold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 min-w-[120px] sticky left-0 z-20 border-r border-slate-300 dark:border-slate-700">
                 Feature
               </th>
               {products.map((pd, idx) => (
                 <th
                   key={idx}
-                  className="px-3 py-2 text-center font-bold text-slate-300 min-w-[100px] border-r border-slate-700 last:border-r-0"
+                  className="px-3 py-2 text-center font-bold text-slate-700 dark:text-slate-300 min-w-[100px] border-r border-slate-300 dark:border-slate-700 last:border-r-0"
                 >
-                  <div className="text-xs text-indigo-400 font-medium">
+                  <div className="text-xs text-indigo-600 dark:text-indigo-400 font-medium">
                     {dataSources[pd.dataSourceIdx]?.name && dataSources[pd.dataSourceIdx].name}
                   </div>
-                  <div className="text-xs text-slate-300">{pd.product.name}</div>
+                  <div className="text-xs text-slate-700 dark:text-slate-300">{pd.product.name}</div>
                 </th>
               ))}
             </tr>
@@ -50,17 +50,17 @@ const FeatureMatrix = ({ products, dataSources }) => {
             {allFeatures.map((featureType, rowIdx) => (
               <tr
                 key={featureType}
-                className={`border-b border-slate-700 transition-colors duration-200 hover:bg-blue-500/5 ${
-                  rowIdx % 2 === 0 ? 'bg-slate-900' : 'bg-slate-800'
+                className={`border-b border-slate-300 dark:border-slate-700 transition-colors duration-200 hover:bg-blue-500/5 ${
+                  rowIdx % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-100 dark:bg-slate-800'
                 }`}
               >
-                <td className="px-3 py-2 font-bold text-slate-300 bg-slate-900 sticky left-0 z-10 border-r border-slate-700 min-w-[120px]">
+                <td className="px-3 py-2 font-bold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 sticky left-0 z-10 border-r border-slate-300 dark:border-slate-700 min-w-[120px]">
                   {translateFeatureType(featureType)}
                 </td>
                 {products.map((pd, idx) => (
                   <td
                     key={idx}
-                    className="px-3 py-2 text-center border-r border-slate-700 last:border-r-0 min-w-[100px]"
+                    className="px-3 py-2 text-center border-r border-slate-300 dark:border-slate-700 last:border-r-0 min-w-[100px]"
                   >
                     {hasFeature(pd.product, featureType) ? (
                       <span className="text-lg font-bold text-emerald-500">✓</span>

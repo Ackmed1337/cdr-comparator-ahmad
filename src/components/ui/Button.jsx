@@ -11,10 +11,10 @@ export const Button = ({
 
   const variants = {
     primary: 'bg-blue-500 text-white hover:bg-blue-600 active:scale-95',
-    secondary: 'bg-slate-800 text-slate-100 border border-slate-700 hover:bg-slate-700',
-    ghost: 'text-slate-300 hover:bg-slate-800 hover:text-slate-100',
-    danger: 'bg-red-500/10 text-red-300 border border-red-800/50 hover:bg-red-500/20',
-    success: 'bg-green-500/10 text-green-300 border border-green-800/50 hover:bg-green-500/20',
+    secondary: 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700',
+    ghost: 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100',
+    danger: 'bg-red-500/10 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-800/50 hover:bg-red-500/20',
+    success: 'bg-green-500/10 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-800/50 hover:bg-green-500/20',
   }
 
   const sizes = {

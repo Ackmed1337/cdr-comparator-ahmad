@@ -32,20 +32,20 @@ const DiscoveryInfo = (props) => {
   }
 
   return (
-    <div className="bg-slate-900 border-l-4 border-blue-500 mb-4">
+    <div className="bg-white dark:bg-slate-900 border-l-4 border-blue-500 mb-4">
       {/* Header */}
       <div
-        className="bg-slate-900 border-l-4 border-blue-500 p-4 cursor-pointer hover:bg-slate-800/50 transition-colors"
+        className="bg-white dark:bg-slate-900 border-l-4 border-blue-500 p-4 cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors"
         onClick={() => setExpanded(!expanded)}
       >
         <div className="flex items-center gap-3">
-          <h3 className="text-sm font-bold text-slate-300">Status & Outages</h3>
+          <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300">Status & Outages</h3>
           {savedDataSourcesCount > 0 && (
-            <span className="bg-blue-900/40 text-blue-300 text-xs font-bold px-2 py-1 rounded-full">
+            <span className="bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold px-2 py-1 rounded-full">
               {savedDataSourcesCount} source{savedDataSourcesCount !== 1 ? 's' : ''}
             </span>
           )}
-          <span className={`ml-auto text-slate-400 transition-transform ${expanded ? 'rotate-180' : ''}`}>
+          <span className={`ml-auto text-slate-500 dark:text-slate-400 transition-transform ${expanded ? 'rotate-180' : ''}`}>
             ▼
           </span>
         </div>
@@ -53,7 +53,7 @@ const DiscoveryInfo = (props) => {
 
       {/* Content */}
       {expanded && (
-        <div className="bg-slate-800 p-4 text-slate-300 text-sm border-t border-slate-700">
+        <div className="bg-slate-100 dark:bg-slate-800 p-4 text-slate-700 dark:text-slate-300 text-sm border-t border-slate-300 dark:border-slate-700">
           {savedDataSourcesCount > 0 ? (
             <div className="flex flex-wrap gap-3">
               {dataSources.map((ds, i) => {
@@ -61,10 +61,10 @@ const DiscoveryInfo = (props) => {
                 if (!data || ds.unsaved || !ds.enabled || ds.deleted) return null
                 return (
                   <div key={i} className={`${colWidth(savedDataSourcesCount)} min-w-xs`}>
-                    <div className="bg-slate-800/80 border border-slate-700 rounded-lg p-3">
-                      <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-700">
-                        {ds.icon && <img src={ds.icon} alt="" className="w-7 h-7 object-contain flex-shrink-0" />}
-                        <span className="text-xs font-bold text-slate-300">{ds.name}</span>
+                    <div className="bg-slate-100/80 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-lg p-3">
+                      <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-300 dark:border-slate-700">
+                        {ds.icon && <img src={ds.icon} alt="" className="w-7 h-7 object-contain flex-shrink-0" onError={e => { e.target.style.display = 'none' }} />}
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{ds.name}</span>
                       </div>
                       <StatusOutages statusDetails={data.statusDetails} outagesDetails={data.outagesDetails} />
                     </div>
@@ -73,7 +73,7 @@ const DiscoveryInfo = (props) => {
               })}
             </div>
           ) : (
-            <div className="py-6 px-5 text-center text-slate-400">
+            <div className="py-6 px-5 text-center text-slate-500 dark:text-slate-400">
               Add a data source above to check status.
             </div>
           )}
@@ -81,7 +81,7 @@ const DiscoveryInfo = (props) => {
       )}
 
       {/* Footer with Refresh Button */}
-      <div className="bg-slate-800/50 border-t border-slate-700 px-4 py-3 flex justify-center">
+      <div className="bg-slate-100/50 dark:bg-slate-800/50 border-t border-slate-300 dark:border-slate-700 px-4 py-3 flex justify-center">
         <button
           onClick={refresh}
           className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2 transition-colors"

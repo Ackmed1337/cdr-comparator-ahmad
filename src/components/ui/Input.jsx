@@ -16,20 +16,20 @@ export const Input = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
           {label}
         </label>
       )}
       <input
-        className={`w-full bg-slate-800 border rounded-lg text-slate-100 placeholder-slate-500 transition-all duration-200 focus:outline-none focus:ring-2 ${
+        className={`w-full bg-slate-100 dark:bg-slate-800 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 transition-all duration-200 focus:outline-none focus:ring-2 ${
           error
             ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20'
-            : 'border-slate-700 focus:border-blue-500 focus:ring-blue-500/20'
+            : 'border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-500/20'
         } ${sizes[size]} ${className}`}
         {...props}
       />
       {error && (
-        <p className="text-red-400 text-xs mt-1">{error}</p>
+        <p className="text-red-600 dark:text-red-400 text-xs mt-1">{error}</p>
       )}
     </div>
   )

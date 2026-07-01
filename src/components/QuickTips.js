@@ -15,14 +15,14 @@ const QuickTips = () => {
   ]
 
   return (
-    <div className="bg-slate-800 border border-slate-700 rounded mb-4">
+    <div className="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded mb-4">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center gap-3 px-4 py-3 bg-slate-900 hover:bg-slate-800 border-l-4 border-blue-500 transition-all duration-200"
+        className="w-full flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border-l-4 border-blue-500 transition-all duration-200"
       >
-        <span className="text-sm font-semibold text-blue-400">Quick Tips</span>
+        <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">Quick Tips</span>
         <svg
-          className={`ml-auto w-5 h-5 text-blue-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+          className={`ml-auto w-5 h-5 text-blue-600 dark:text-blue-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -32,10 +32,10 @@ const QuickTips = () => {
       </button>
 
       {isExpanded && (
-        <div className="bg-slate-800 p-4 transition-all duration-300">
+        <div className="bg-slate-100 dark:bg-slate-800 p-4 transition-all duration-300">
           <div className="grid gap-3">
             {tips.map((tip, idx) => (
-              <div key={idx} className="bg-slate-900 border-l-4 border-blue-500 p-3 text-xs text-slate-300 rounded-r transition-all duration-200 hover:bg-slate-800">
+              <div key={idx} className="bg-white dark:bg-slate-900 border-l-4 border-blue-500 p-3 text-xs text-slate-700 dark:text-slate-300 rounded-r transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-800">
                 {tip}
               </div>
             ))}

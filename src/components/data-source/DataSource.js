@@ -8,7 +8,6 @@ import {
   modifyDataSourceName,
   modifyDataSourceIcon,
   modifyDataSourceUrl,
-  modifyDataSourceEnergyPrdUrl,
 } from '../../store/data-source'
 import { clearSelection } from '../../store/banking/selection'
 import {
@@ -89,7 +88,7 @@ const DataSource = (props) => {
 
   return (
     <div>
-      <div className="flex items-center gap-3 px-4 py-3 bg-slate-900 border-b border-slate-700 hover:bg-slate-900/80 transition-colors duration-200" onClick={stop}>
+      <div className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900/80 transition-colors duration-200" onClick={stop}>
         <input
           type="checkbox"
           checked={dataSource.enabled}
@@ -102,8 +101,8 @@ const DataSource = (props) => {
             value={dataSource.name}
             onChange={change('name')}
             placeholder="e.g. Acme Bank"
-            className={`w-full px-3 py-2 bg-slate-800 border rounded text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-              !dataSource.name.trim().length ? 'border-red-500/50' : 'border-slate-700 hover:border-slate-600'
+            className={`w-full px-3 py-2 bg-slate-100 dark:bg-slate-800 border rounded text-sm text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+              !dataSource.name.trim().length ? 'border-red-500/50' : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600'
             }`}
           />
         </div>
@@ -113,8 +112,8 @@ const DataSource = (props) => {
             value={dataSource.url}
             onChange={change('url')}
             placeholder="https://data.holder"
-            className={`w-full px-3 py-2 bg-slate-800 border rounded text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-              !isUrl(dataSource.url) ? 'border-red-500/50' : 'border-slate-700 hover:border-slate-600'
+            className={`w-full px-3 py-2 bg-slate-100 dark:bg-slate-800 border rounded text-sm text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+              !isUrl(dataSource.url) ? 'border-red-500/50' : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600'
             }`}
           />
         </div>
@@ -124,8 +123,8 @@ const DataSource = (props) => {
             value={dataSource.icon || ''}
             onChange={change('icon')}
             placeholder="https://...icon.png"
-            className={`w-full px-3 py-2 bg-slate-800 border rounded text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-              !!dataSource.icon && !isUrl(dataSource.icon) ? 'border-red-500/50' : 'border-slate-700 hover:border-slate-600'
+            className={`w-full px-3 py-2 bg-slate-100 dark:bg-slate-800 border rounded text-sm text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+              !!dataSource.icon && !isUrl(dataSource.icon) ? 'border-red-500/50' : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600'
             }`}
           />
         </div>
@@ -148,7 +147,7 @@ const DataSource = (props) => {
               className={`px-3 py-1.5 rounded text-sm font-semibold flex items-center gap-2 transition-all duration-200 active:scale-95 ${
                 valid()
                   ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl'
-                  : 'bg-slate-700 text-slate-400 cursor-not-allowed'
+                  : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'
               }`}
               title="Save"
               disabled={!valid()}
@@ -160,7 +159,7 @@ const DataSource = (props) => {
           ) : (
             <button
               onClick={del}
-              className="px-3 py-1.5 rounded text-sm font-semibold bg-red-600/20 hover:bg-red-600/30 text-red-400 hover:text-red-300 border border-red-600/30 hover:border-red-600/50 transition-all duration-200 active:scale-95 flex items-center gap-2"
+              className="px-3 py-1.5 rounded text-sm font-semibold bg-red-600/20 hover:bg-red-600/30 text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 border border-red-300 hover:border-red-400 dark:border-red-600/30 dark:hover:border-red-600/50 transition-all duration-200 active:scale-95 flex items-center gap-2"
               title="Remove"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,7 +169,7 @@ const DataSource = (props) => {
           )}
         </div>
       </div>
-      {error && <div className="px-4 py-2 text-xs text-red-400 bg-red-900/20 border-b border-red-600/30">{error}</div>}
+      {error && <div className="px-4 py-2 text-xs text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/20 border-b border-red-300 dark:border-red-600/30">{error}</div>}
     </div>
   )
 }
@@ -186,7 +185,6 @@ const mapDispatchToProps = {
   enableDataSource,
   modifyDataSourceName,
   modifyDataSourceUrl,
-  modifyDataSourceEnergyPrdUrl,
   modifyDataSourceIcon,
   clearSelection,
   startRetrieveProductList,

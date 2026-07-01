@@ -37,13 +37,13 @@ const Constraint = (props) => {
   const {constraintType, additionalInfo, additionalValue, additionalInfoUri} = props.constraint
   const formattedAdditionalValue = formatAdditionalValue(constraintType, additionalValue)
   return (
-    <li className="bg-slate-800/30 p-2 rounded border-l-2 border-indigo-500 mb-1">
-      <div className="text-xs font-semibold text-slate-300">
+    <li className="bg-slate-100/30 dark:bg-slate-800/30 p-2 rounded border-l-2 border-indigo-500 mb-1">
+      <div className="text-xs font-semibold text-slate-700 dark:text-slate-300">
         {translateConstraintType(constraintType)}
-        {!!formattedAdditionalValue && <span className="text-slate-400"> - {formattedAdditionalValue}</span>}
+        {!!formattedAdditionalValue && <span className="text-slate-500 dark:text-slate-400"> - {formattedAdditionalValue}</span>}
       </div>
-      {!!additionalInfo && <div className="text-xs text-slate-400 mt-1">{additionalInfo}</div>}
-      {!!additionalInfoUri && <div className="mt-1"><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer' className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">More info</a></div>}
+      {!!additionalInfo && <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">{additionalInfo}</div>}
+      {!!additionalInfoUri && <div className="mt-1"><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer' className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors">More info</a></div>}
     </li>
   )
 }

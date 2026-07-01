@@ -45,15 +45,15 @@ const DataSourcePanel = (props) => {
   }
 
   return (
-    <div className="bg-slate-800 border border-slate-700 rounded">
+    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center gap-3 px-4 py-3 bg-slate-900 hover:bg-slate-800 border-l-4 border-blue-500 transition-all duration-200"
+        className="w-full flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border-l-4 border-blue-500 transition-all duration-200"
       >
         <AccountBalanceIcon style={{ fontSize: 20 }} />
-        <span className="font-bold text-slate-300 text-sm uppercase tracking-wider">Data Sources</span>
+        <span className="font-bold text-slate-700 dark:text-slate-300 text-sm uppercase tracking-wider">Data Sources</span>
         <svg
-          className={`ml-auto w-5 h-5 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+          className={`ml-auto w-5 h-5 text-slate-500 dark:text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -64,10 +64,10 @@ const DataSourcePanel = (props) => {
 
       {isExpanded && (
         <div className="transition-all duration-300">
-          <div className="max-h-72 overflow-y-auto bg-slate-800">
+          <div className="max-h-72 overflow-y-auto bg-white dark:bg-slate-800">
             {dataSources.length > 0 && (
               <div>
-                <div className="flex gap-2 px-9 py-2 text-xs font-semibold text-slate-400 uppercase tracking-widest border-b border-slate-700 sticky top-0 bg-slate-800 z-10">
+                <div className="flex gap-2 px-9 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800 z-10">
                   <div className="flex-0 w-[22%]">Name</div>
                   <div className="flex-0 w-[34%]">API base URL</div>
                   <div className="flex-0 w-[28%]">Icon URL</div>
@@ -77,7 +77,7 @@ const DataSourcePanel = (props) => {
             )}
           </div>
 
-          <div className="border-t border-slate-700 bg-slate-800 p-4">
+          <div className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4">
             <div className="flex items-center gap-4">
               <button
                 onClick={syncDataSources}
@@ -92,11 +92,11 @@ const DataSourcePanel = (props) => {
                   <div className="flex items-center justify-center gap-4">
                     <div>
                       <TextField value={xMinV} label="x-min-v" InputProps={{ readOnly: true }} size="small" />
-                      <div className="text-xs text-slate-400 mt-1">Min version</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Min version</div>
                     </div>
                     <div>
                       <TextField value={xV === '999' ? 'Auto' : xV} label="x-v" InputProps={{ readOnly: true }} size="small" />
-                      <div className="text-xs text-slate-400 mt-1">{xV === '999' ? 'Auto-negotiates best version' : 'Preferred version'}</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">{xV === '999' ? 'Auto-negotiates best version' : 'Preferred version'}</div>
                     </div>
                     <button
                       onClick={setVersionsEditable}
@@ -117,7 +117,7 @@ const DataSourcePanel = (props) => {
                         onInputChange={(_, v) => { xMinV = v }}
                         style={{ width: 120 }}
                       />
-                      <div className="text-xs text-slate-400 mt-1">Min version</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Min version</div>
                     </div>
                     <div style={{ display: 'inline-block' }}>
                       <Autocomplete
@@ -129,7 +129,7 @@ const DataSourcePanel = (props) => {
                         onInputChange={(_, v) => { xV = v === 'Auto (999)' ? '999' : v }}
                         style={{ width: 120 }}
                       />
-                      <div className="text-xs text-slate-400 mt-1">999 = auto</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">999 = auto</div>
                     </div>
                     <button
                       onClick={applyVersions}

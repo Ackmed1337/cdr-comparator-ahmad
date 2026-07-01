@@ -100,21 +100,21 @@ class BankingProductList extends React.Component {
       <div className="pb-2">
         {progress === START_RETRIEVE_PRODUCT_LIST && (
           <div className="py-4 mb-6 px-1 animate-fadeIn">
-            <div className="w-full h-2 bg-slate-700/50 rounded-full mb-2 overflow-hidden shadow-sm">
+            <div className="w-full h-2 bg-slate-300/50 dark:bg-slate-700/50 rounded-full mb-2 overflow-hidden shadow-sm">
               <div className="h-full bg-gradient-to-r from-blue-500 to-blue-400 w-full rounded-full animate-pulse"></div>
             </div>
-            <span className="text-xs text-slate-400 font-medium">Fetching product list...</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Fetching product list...</span>
           </div>
         )}
         {!!totalRecords && processed < totalRecords && (
           <div className="py-3 pb-3 mb-6 px-1 animate-fadeIn">
-            <div className="w-full h-2 bg-slate-700/50 rounded-full mb-1.5 overflow-hidden shadow-sm">
+            <div className="w-full h-2 bg-slate-300/50 dark:bg-slate-700/50 rounded-full mb-1.5 overflow-hidden shadow-sm">
               <div
                 className="h-full bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-500 ease-out rounded-full"
                 style={{ width: `${pct}%` }}
               ></div>
             </div>
-            <span className="text-xs text-slate-400 font-medium">
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
               Loading details {processed} / {totalRecords}
             </span>
           </div>
@@ -128,7 +128,7 @@ class BankingProductList extends React.Component {
                   className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 ${
                     activeCategory === null
                       ? 'bg-blue-600 text-white shadow-lg hover:shadow-xl hover:bg-blue-700'
-                      : 'bg-slate-800/50 border border-slate-700 text-slate-300 hover:border-slate-600 hover:bg-slate-800'
+                      : 'bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-800'
                   }`}
                 >
                   All
@@ -140,7 +140,7 @@ class BankingProductList extends React.Component {
                     className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 ${
                       activeCategory === cat
                         ? 'bg-blue-600 text-white shadow-lg hover:shadow-xl hover:bg-blue-700'
-                        : 'bg-slate-800/50 border border-slate-700 text-slate-300 hover:border-slate-600 hover:bg-slate-800'
+                        : 'bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-800'
                     }`}
                   >
                     {translateProductCategory(cat)}
@@ -163,12 +163,12 @@ class BankingProductList extends React.Component {
                 placeholder="Filter products..."
                 value={inputValue}
                 onChange={this.handleSearchChange}
-                className="w-full px-4 py-2 pr-10 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 hover:border-slate-600 transition-all duration-200 shadow-md focus:shadow-lg"
+                className="w-full px-4 py-2 pr-10 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 hover:border-slate-400 dark:hover:border-slate-600 transition-all duration-200 shadow-md focus:shadow-lg"
               />
               {inputValue && (
                 <button
                   onClick={() => this.setState({ inputValue: '', search: '' })}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-none border-none cursor-pointer text-slate-400 hover:text-slate-200 text-lg leading-none p-1 transition-all duration-200 hover:scale-110 active:scale-95"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-none border-none cursor-pointer text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-lg leading-none p-1 transition-all duration-200 hover:scale-110 active:scale-95"
                   title="Clear search"
                 >
                   ✕
@@ -183,7 +183,7 @@ class BankingProductList extends React.Component {
           </div>
         ))}
         {done && products && Object.keys(filtered).length === 0 && (
-          <div className="py-8 text-sm text-slate-400 text-center animate-fadeIn">
+          <div className="py-8 text-sm text-slate-500 dark:text-slate-400 text-center animate-fadeIn">
             <svg className="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -191,7 +191,7 @@ class BankingProductList extends React.Component {
           </div>
         )}
         {done && (search.trim() || activeCategory) && totalFiltered > 0 && (
-          <div className="text-xs text-slate-400 py-2 px-1 mt-2 border-t border-slate-700/50 animate-fadeIn">
+          <div className="text-xs text-slate-500 dark:text-slate-400 py-2 px-1 mt-2 border-t border-slate-300/50 dark:border-slate-700/50 animate-fadeIn">
             {totalFiltered} result{totalFiltered !== 1 ? 's' : ''}
           </div>
         )}

@@ -16,8 +16,8 @@ const LoanCalculator = ({ products, dataSources }) => {
   const totalInterest = monthlyPayment * numPayments - loanAmount
 
   return (
-    <div className="mb-4 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 border border-slate-700 rounded-lg p-5 transition-all duration-300">
-      <div className="text-lg font-bold text-blue-400 mb-4">Loan Repayment Calculator</div>
+    <div className="mb-4 bg-gradient-to-b from-white via-slate-100 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-5 transition-all duration-300">
+      <div className="text-lg font-bold text-blue-600 dark:text-blue-400 mb-4">Loan Repayment Calculator</div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">
         <div>
@@ -61,7 +61,7 @@ const LoanCalculator = ({ products, dataSources }) => {
       </div>
 
       <div className="mb-4">
-        <div className="text-sm font-semibold text-slate-300 mb-2">
+        <div className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
           Interest Rate: {(rate * 100).toFixed(2)}%
         </div>
         <Slider
@@ -76,21 +76,21 @@ const LoanCalculator = ({ products, dataSources }) => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 hover:border-blue-500/50 transition-colors duration-200">
-          <div className="text-xs font-semibold text-slate-400 mb-1">Monthly Payment</div>
-          <div className="text-xl font-bold text-blue-400">${monthlyPayment.toFixed(0)}</div>
+        <div className="bg-slate-100/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-lg p-4 hover:border-blue-500/50 transition-colors duration-200">
+          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Monthly Payment</div>
+          <div className="text-xl font-bold text-blue-600 dark:text-blue-400">${monthlyPayment.toFixed(0)}</div>
         </div>
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 hover:border-blue-500/50 transition-colors duration-200">
-          <div className="text-xs font-semibold text-slate-400 mb-1">Total Interest</div>
-          <div className="text-xl font-bold text-blue-400">${totalInterest.toFixed(0)}</div>
+        <div className="bg-slate-100/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-lg p-4 hover:border-blue-500/50 transition-colors duration-200">
+          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Total Interest</div>
+          <div className="text-xl font-bold text-blue-600 dark:text-blue-400">${totalInterest.toFixed(0)}</div>
         </div>
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 hover:border-blue-500/50 transition-colors duration-200">
-          <div className="text-xs font-semibold text-slate-400 mb-1">Total Repaid</div>
-          <div className="text-xl font-bold text-blue-400">${(loanAmount + totalInterest).toFixed(0)}</div>
+        <div className="bg-slate-100/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-lg p-4 hover:border-blue-500/50 transition-colors duration-200">
+          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Total Repaid</div>
+          <div className="text-xl font-bold text-blue-600 dark:text-blue-400">${(loanAmount + totalInterest).toFixed(0)}</div>
         </div>
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 hover:border-blue-500/50 transition-colors duration-200">
-          <div className="text-xs font-semibold text-slate-400 mb-1">Interest Rate</div>
-          <div className="text-xl font-bold text-blue-400">{(rate * 100).toFixed(2)}%</div>
+        <div className="bg-slate-100/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-lg p-4 hover:border-blue-500/50 transition-colors duration-200">
+          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Interest Rate</div>
+          <div className="text-xl font-bold text-blue-600 dark:text-blue-400">{(rate * 100).toFixed(2)}%</div>
         </div>
       </div>
     </div>
