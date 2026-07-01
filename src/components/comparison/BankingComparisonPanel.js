@@ -54,6 +54,7 @@ const useStyles = makeStyles(theme => ({
     display: 'none',
     [theme.breakpoints.down('sm')]: {
       display: 'block',
+      padding: '0 8px',
     }
   },
   desktopTable: {
@@ -63,34 +64,41 @@ const useStyles = makeStyles(theme => ({
     }
   },
   mobileCard: {
-    marginBottom: 12,
-    padding: 12,
-    border: '1px solid #e2e8f0',
-    borderRadius: 8,
+    marginBottom: 16,
+    padding: '12px',
+    border: '1px solid #cbd5e1',
+    borderRadius: 6,
     backgroundColor: '#f8fafc',
+    pageBreakInside: 'avoid',
   },
   mobileCardTitle: {
     fontWeight: 700,
-    fontSize: '0.9rem',
-    marginBottom: 8,
+    fontSize: '0.95rem',
+    marginBottom: 12,
     color: '#1e293b',
+    paddingBottom: 8,
+    borderBottom: '2px solid #e2e8f0',
   },
   mobileCardRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '4px 0',
-    fontSize: '0.75rem',
+    display: 'grid',
+    gridTemplateColumns: '45% 1fr',
+    gap: 8,
+    padding: '8px 0',
+    fontSize: '0.8rem',
     borderBottom: '1px solid #e2e8f0',
+    '&:last-child': {
+      borderBottom: 'none',
+    }
   },
   mobileCardLabel: {
     fontWeight: 600,
     color: '#64748b',
-    flex: '0 0 40%',
+    wordBreak: 'break-word',
   },
   mobileCardValue: {
     color: '#374151',
-    flex: 1,
-    paddingLeft: 8,
+    textAlign: 'right',
+    wordBreak: 'break-word',
   },
   labelCell: {
     background: '#f8fafc',

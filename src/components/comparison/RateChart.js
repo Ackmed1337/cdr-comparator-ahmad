@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react'
 import { makeStyles } from '@material-ui/core'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   chart: {
-    padding: '16px 0',
+    padding: '12px 0',
     display: 'flex',
     flexDirection: 'column',
     gap: 16,
@@ -20,9 +20,13 @@ const useStyles = makeStyles({
   },
   bars: {
     display: 'flex',
-    gap: 8,
+    gap: 6,
     alignItems: 'flex-end',
-    height: 100,
+    height: 80,
+    [theme.breakpoints.down('sm')]: {
+      height: 60,
+      gap: 4,
+    }
   },
   bar: {
     flex: 1,
@@ -30,6 +34,7 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    minWidth: 0,
   },
   barFill: {
     width: '100%',
@@ -38,21 +43,29 @@ const useStyles = makeStyles({
     minHeight: 4,
   },
   barLabel: {
-    fontSize: '0.7rem',
+    fontSize: '0.65rem',
     fontWeight: 600,
     color: '#64748b',
-    marginTop: 6,
+    marginTop: 4,
     textAlign: 'center',
     wordBreak: 'break-word',
     maxWidth: '100%',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.6rem',
+      marginTop: 2,
+    }
   },
   barValue: {
-    fontSize: '0.75rem',
+    fontSize: '0.7rem',
     color: '#374151',
     fontWeight: 700,
     marginTop: 2,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.65rem',
+      marginTop: 1,
+    }
   },
-})
+}))
 
 const RateChart = ({ products, dataSources }) => {
   const classes = useStyles()

@@ -1,33 +1,46 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   stats: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
     gap: 8,
     marginBottom: 12,
     padding: '0 0 12px 0',
     borderBottom: '1px solid #e2e8f0',
+    [theme.breakpoints.down('sm')]: {
+      gap: 6,
+      marginBottom: 10,
+      paddingBottom: 10,
+    }
   },
   stat: {
-    padding: '8px 12px',
+    padding: '8px 10px',
     background: '#f0fdf4',
     border: '1px solid #bbf7d0',
     borderRadius: 6,
-    fontSize: '0.75rem',
+    fontSize: '0.7rem',
+    [theme.breakpoints.down('sm')]: {
+      padding: '6px 8px',
+      fontSize: '0.65rem',
+    }
   },
   statLabel: {
     color: '#6b7280',
     fontWeight: 600,
     marginBottom: 2,
+    fontSize: '0.65rem',
   },
   statValue: {
     color: '#059669',
     fontWeight: 700,
-    fontSize: '1rem',
+    fontSize: '0.95rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.85rem',
+    }
   },
-})
+}))
 
 const ComparisonStats = ({ products }) => {
   const classes = useStyles()
