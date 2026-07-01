@@ -1,33 +1,20 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core'
-
-const useStyles = makeStyles(() => ({
-  sectionTitle: {
-    fontStyle: 'italic'
-  },
-  sectionContent: {
-    marginTop: 0,
-    marginBottom: 0,
-    paddingLeft: 20
-  }
-}))
 
 const EnergyPlanGreenPowerCharge = ({greenPowerCharge}) => {
-  const classes = useStyles()
   const {displayName, description, scheme, type, tiers} = greenPowerCharge
   return (
-    <li>
-      <div>Display Name: <span>{displayName}</span></div>
+    <li className="bg-slate-800/30 p-2 rounded border-l-2 border-lime-500 mb-1">
+      <div className="text-sm text-slate-200 mb-2">Display Name: <span className="text-slate-100 font-medium">{displayName}</span></div>
       {description && (
-        <div>Description: <span>{description}</span></div>
+        <div className="text-sm text-slate-200 mb-2">Description: <span className="text-slate-100">{description}</span></div>
       )}
-      <div>Scheme: <span>{scheme}</span></div>
-      <div>Type: <span>{type}</span></div>
+      <div className="text-sm text-slate-200 mb-2">Scheme: <span className="text-slate-100">{scheme}</span></div>
+      <div className="text-sm text-slate-200 mb-2">Type: <span className="text-slate-100">{type}</span></div>
       <>
-        <div className={classes.sectionTitle}>Tiers:</div>
-        <ul className={classes.sectionContent}>
+        <div className="text-sm text-slate-200 italic mb-1">Tiers:</div>
+        <ul className="mt-0 mb-0 pl-5">
         {tiers.map(({percentGreen, rate, amount}, index) => (
-          <li key={index}>
+          <li key={index} className="text-xs text-slate-300 mb-1">
             {percentGreen && (
               <div>Percent Green: <span>{(percentGreen * 100).toFixed(2)}%</span></div>
             )}

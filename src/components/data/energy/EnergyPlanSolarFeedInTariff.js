@@ -1,71 +1,58 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core'
 import Rate from './Rate'
 import Duration from '../Duration'
 
-const useStyles = makeStyles(() => ({
-  sectionTitle: {
-    fontStyle: 'italic'
-  },
-  sectionContent: {
-    marginTop: 0,
-    marginBottom: 0,
-    paddingLeft: 20
-  }
-}))
-
 const EnergyPlanSolarFeedInTariff = ({solarFeedInTariff}) => {
-  const classes = useStyles()
   const {displayName, description, startTime, endTime, scheme, payerType, tariffUType, singleTariff, timeVaryingTariffs} = solarFeedInTariff
   return (
-    <li>
-      <div>Display Name: <span>{displayName}</span></div>
+    <li className="bg-slate-800/30 p-2 rounded border-l-2 border-yellow-500 mb-1">
+      <div className="text-sm text-slate-200 mb-2">Display Name: <span className="text-slate-100 font-medium">{displayName}</span></div>
       {description && (
-        <div>Description: <span>{description}</span></div>
+        <div className="text-sm text-slate-200 mb-2">Description: <span className="text-slate-100">{description}</span></div>
       )}
       {startTime && (
-        <div>Start Time: <span>{startTime}</span></div>
+        <div className="text-sm text-slate-200 mb-2">Start Time: <span className="text-slate-100">{startTime}</span></div>
       )}
       {endTime && (
-        <div>End Time: <span>{endTime}</span></div>
+        <div className="text-sm text-slate-200 mb-2">End Time: <span className="text-slate-100">{endTime}</span></div>
       )}
-      <div>Scheme: <span>{scheme}</span></div>
-      <div>Payer Type: <span>{payerType}</span></div>
-      <div>Tariff Type: <span>{tariffUType}</span></div>
+      <div className="text-sm text-slate-200 mb-2">Scheme: <span className="text-slate-100">{scheme}</span></div>
+      <div className="text-sm text-slate-200 mb-2">Payer Type: <span className="text-slate-100">{payerType}</span></div>
+      <div className="text-sm text-slate-200 mb-2">Tariff Type: <span className="text-slate-100">{tariffUType}</span></div>
       {singleTariff && (
-        <div>
-          <div className={classes.sectionTitle}>Single Tariff:</div>
-          <div>Rates:</div>
-            <ul className={classes.sectionContent}>
+        <div className="mb-2">
+          <div className="text-sm text-slate-200 italic mb-1">Single Tariff:</div>
+          <div className="text-sm text-slate-200 mb-1">Rates:</div>
+            <ul className="mt-0 mb-1 pl-5">
               {singleTariff.rates.map((rate, index) => <Rate key={index} rate={rate} />)}
             </ul>
-            <div>Period: <Duration value={singleTariff.period || 'P1Y'} /></div>
+            <div className="text-sm text-slate-200">Period: <Duration value={singleTariff.period || 'P1Y'} /></div>
         </div>
       )}
       {timeVaryingTariffs && (
         <>
-          <div className={classes.sectionTitle}>Time Varying Tariffs:</div>
-          <ul className={classes.sectionContent}>
+          <div className="text-sm text-slate-200 italic mb-1">Time Varying Tariffs:</div>
+          <ul className="mt-0 mb-0 pl-5">
             {timeVaryingTariffs.map(({type, displayName, rates, period, timeVariations}, index) => (
-            <li key={index}>
+            <li key={index} className="bg-slate-700/30 p-1 rounded mb-1">
               {type && (
-                <div>Type: <span>{type}</span></div>
+                <div className="text-xs text-slate-200">Type: <span className="text-slate-100">{type}</span></div>
               )}
-              <div>Display Name: <span>{displayName}</span></div>
+              <div className="text-xs text-slate-200">Display Name: <span className="text-slate-100">{displayName}</span></div>
               {rates && (
                 <>
-                  <div className={classes.sectionTitle}>Rates:</div>
-                  <ul className={classes.sectionContent}>
+                  <div className="text-xs text-slate-200 italic mb-1">Rates:</div>
+                  <ul className="mt-0 mb-1 pl-3">
                     {rates.map((rate, index) => <Rate key={index} rate={rate} />)}
                   </ul>
                 </>
               )}
-            <div>Period: <Duration value={period || 'P1Y'} /></div>
+            <div className="text-xs text-slate-200 mb-1">Period: <Duration value={period || 'P1Y'} /></div>
               <>
-                <div className={classes.sectionTitle}>Time Variations:</div>
-                <ul className={classes.sectionContent}>
+                <div className="text-xs text-slate-200 italic mb-1">Time Variations:</div>
+                <ul className="mt-0 mb-0 pl-3">
                   {timeVariations.map(({days, startTime, endTime}, index) => (
-                  <li key={index}>
+                  <li key={index} className="text-xs text-slate-300">
                     <div>Days: <span>{days.join(', ')}</span></div>
                     {startTime && (
                       <div>Start Time: <span>{startTime}</span></div>

@@ -1,42 +1,29 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core'
 import Rate from './Rate'
 import Duration from '../Duration'
 
-const useStyles = makeStyles(() => ({
-  sectionTitle: {
-    fontStyle: 'italic'
-  },
-  sectionContent: {
-    marginTop: 0,
-    marginBottom: 0,
-    paddingLeft: 20
-  }
-}))
-
 const TimeOfUseRate = ({timeOfUseRate}) => {
-  const classes = useStyles()
   const {displayName, description, dailySupplyCharge, rates, period, timeOfUse, type} = timeOfUseRate
   return (
-    <li>
-      <div>Display Name: <span>{displayName}</span></div>
+    <li className="bg-slate-800/30 p-2 rounded border-l-2 border-blue-500 mb-1">
+      <div className="text-sm text-slate-200 mb-2">Display Name: <span className="text-slate-100 font-medium">{displayName}</span></div>
       {description && (
-        <div>Description: <span>{description}</span></div>
+        <div className="text-sm text-slate-200 mb-2">Description: <span className="text-slate-100">{description}</span></div>
       )}
       {dailySupplyCharge && (
-        <div>Daily Supply Charge: <span>${dailySupplyCharge} (exclusive of GST)</span></div>
+        <div className="text-sm text-slate-200 mb-2">Daily Supply Charge: <span className="text-slate-100">${dailySupplyCharge} (exclusive of GST)</span></div>
       )}
-      <div>
-        <div className={classes.sectionTitle}>Rates:</div>
-        <ul className={classes.sectionContent}>
+      <div className="mb-2">
+        <div className="text-sm text-slate-200 italic mb-1">Rates:</div>
+        <ul className="mt-0 mb-0 pl-5">
           {rates.map((rate, index) => <Rate key={index} rate={rate} />)}
         </ul>
       </div>
-      <div>Period: <Duration value={period || 'P1Y'} /></div>
-      <div className={classes.sectionTitle}>Time Of Use:</div>
-      <ul className={classes.sectionContent}>
+      <div className="text-sm text-slate-200 mb-2">Period: <Duration value={period || 'P1Y'} /></div>
+      <div className="text-sm text-slate-200 italic mb-1">Time Of Use:</div>
+      <ul className="mt-0 mb-0 pl-5">
         {timeOfUse.map(({days, startTime, endTime, additionalInfo, additionalInfoUri}, index) => (
-          <li key={index}>
+          <li key={index} className="text-xs text-slate-400">
             {days && (
               <div>Days: <span>{days.join(', ')}</span></div>
             )}
@@ -50,12 +37,12 @@ const TimeOfUseRate = ({timeOfUseRate}) => {
               <div>Additional Info: <span>{additionalInfo}</span></div>
             )}
             {additionalInfoUri && (
-              <div><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer'>More info</a></div>
+              <div><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer' className="text-blue-400 hover:text-blue-300">More info</a></div>
             )}
           </li>
         ))}
       </ul>
-      <div>Type: <span>{type}</span></div>
+      <div className="text-sm text-slate-200 mt-2">Type: <span className="text-slate-100">{type}</span></div>
     </li>
   )
 }

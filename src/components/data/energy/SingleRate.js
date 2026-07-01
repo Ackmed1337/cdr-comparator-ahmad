@@ -1,37 +1,27 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core'
 import Rate from './Rate'
 import Duration from '../Duration'
 
-const useStyles = makeStyles(() => ({
-  sectionContent: {
-    marginTop: 0,
-    marginBottom: 0,
-    paddingLeft: 20
-  }
-}))
-
 const SingleRate = ({singleRate}) => {
-  const classes = useStyles()
   const {displayName, description, dailySupplyCharge, generalUnitPrice, rates, period} = singleRate
   return (
-    <>
-      <div>Display Name: <span>{displayName}</span></div>
+    <div className="bg-slate-800/30 p-2 rounded border-l-2 border-green-500 mb-1">
+      <div className="text-sm text-slate-200 mb-2">Display Name: <span className="text-slate-100 font-medium">{displayName}</span></div>
       {description && (
-        <div>Description: <span>{description}</span></div>
+        <div className="text-sm text-slate-200 mb-2">Description: <span className="text-slate-100">{description}</span></div>
       )}
       {dailySupplyCharge && (
-        <div>Daily Supply Charge: <span>${dailySupplyCharge} (exclusive of GST)</span></div>
+        <div className="text-sm text-slate-200 mb-2">Daily Supply Charge: <span className="text-slate-100">${dailySupplyCharge} (exclusive of GST)</span></div>
       )}
       {generalUnitPrice && (
-        <div>General Unit Price: <span>${generalUnitPrice} (exclusive of GST)</span></div>
+        <div className="text-sm text-slate-200 mb-2">General Unit Price: <span className="text-slate-100">${generalUnitPrice} (exclusive of GST)</span></div>
       )}
-        <div>Rates:</div>
-        <ul className={classes.sectionContent}>
-          {rates.map((rate, index) => <Rate key={index} rate={rate} />)}
-        </ul>
-        <div>Period: <Duration value={period || 'P1Y'} /></div>
-    </>
+      <div className="text-sm text-slate-200 mb-1">Rates:</div>
+      <ul className="mt-0 mb-0 pl-5">
+        {rates.map((rate, index) => <Rate key={index} rate={rate} />)}
+      </ul>
+      <div className="text-sm text-slate-200 mt-2">Period: <Duration value={period || 'P1Y'} /></div>
+    </div>
   )
 }
 

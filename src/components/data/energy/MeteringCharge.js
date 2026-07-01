@@ -4,17 +4,17 @@ import Duration from '../Duration'
 const MeteringCharge = ({meteringCharge}) => {
   const {displayName, description, minimumValue, maximumValue, period} = meteringCharge
   return (
-    <li>
-      <div>Display Name: <span>{displayName}</span></div>
+    <li className="bg-slate-800/30 p-2 rounded border-l-2 border-orange-500 mb-1">
+      <div className="text-sm text-slate-200 mb-2">Display Name: <span className="text-slate-100 font-medium">{displayName}</span></div>
       {description && (
-        <div>Description: <span>{description}</span></div>
+        <div className="text-sm text-slate-200 mb-2">Description: <span className="text-slate-100">{description}</span></div>
       )}
-      <div>Minimum Value: <span>{minimumValue}</span></div>
+      <div className="text-sm text-slate-200 mb-2">Minimum Value: <span className="text-slate-100">{minimumValue}</span></div>
       {maximumValue && (
-        <div>Maximum Value: <span>{maximumValue}</span></div>
+        <div className="text-sm text-slate-200 mb-2">Maximum Value: <span className="text-slate-100">{maximumValue}</span></div>
       )}
       {period && (
-        <div>Period: <Duration value={period} /></div>
+        <div className="text-sm text-slate-200">Period: <Duration value={period} /></div>
       )}
     </li>
   )
