@@ -19,7 +19,8 @@ const pillBase = {
 }
 
 class BankingProductList extends React.Component {
-  state = { search: '', activeCategory: null }
+  state = { inputValue: '', search: '', activeCategory: null }
+  _debounceTimer = null
 
   componentDidMount() {
     const { dataSourceIndex, dataSource, versionInfo } = this.props
@@ -28,9 +29,28 @@ class BankingProductList extends React.Component {
     this.props.retrieveProductList(dataSourceIndex, base, base + '/banking/products', versionInfo.xV, versionInfo.xMinV)
   }
 
+  componentWillUnmount() {
+    clearTimeout(this._debounceTimer)
+  }
+
+  handleResetCategory = () => this.setState({ activeCategory: null })
+
+  handleToggleCategory = (cat) => {
+    this.setState(prev => ({ activeCategory: prev.activeCategory === cat ? null : cat }))
+  }
+
+  handleSearchChange = (e) => {
+    const value = e.target.value
+    this.setState({ inputValue: value })
+    clearTimeout(this._debounceTimer)
+    this._debounceTimer = setTimeout(() => {
+      this.setState({ search: value })
+    }, 250)
+  }
+
   render() {
     const { dataSourceIndex } = this.props
-    const { search, activeCategory } = this.state
+    const { search, inputValue, activeCategory } = this.state
     const data = this.props.productList[dataSourceIndex] || {}
     const { progress, totalRecords, detailRecords = 0, failedDetailRecords = 0, products, productDetails } = data
     const processed = detailRecords + failedDetailRecords
@@ -88,7 +108,7 @@ class BankingProductList extends React.Component {
             {categories.length > 1 && (
               <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 6 }}>
                 <button
-                  onClick={() => this.setState({ activeCategory: null })}
+                  onClick={this.handleResetCategory}
                   style={{
                     ...pillBase,
                     background: activeCategory === null ? '#2563eb' : '#f1f5f9',
@@ -100,7 +120,7 @@ class BankingProductList extends React.Component {
                 {categories.map(cat => (
                   <button
                     key={cat}
-                    onClick={() => this.setState(prev => ({ activeCategory: prev.activeCategory === cat ? null : cat }))}
+                    onClick={() => this.handleToggleCategory(cat)}
                     style={{
                       ...pillBase,
                       background: activeCategory === cat ? '#2563eb' : '#f1f5f9',
@@ -116,8 +136,8 @@ class BankingProductList extends React.Component {
               <input
                 type="text"
                 placeholder="Filter products..."
-                value={search}
-                onChange={e => this.setState({ search: e.target.value })}
+                value={inputValue}
+                onChange={this.handleSearchChange}
                 style={{
                   width: '100%',
                   padding: '6px 28px 6px 10px',
@@ -131,9 +151,9 @@ class BankingProductList extends React.Component {
                   background: '#fff',
                 }}
               />
-              {search && (
+              {inputValue && (
                 <button
-                  onClick={() => this.setState({ search: '' })}
+                  onClick={() => this.setState({ inputValue: '', search: '' })}
                   style={{
                     position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)',
                     background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8',

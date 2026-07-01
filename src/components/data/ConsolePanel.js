@@ -71,7 +71,7 @@ const ConsolePanel = (props) => {
         {props.conout.actions.length === 0 && (
           <span style={{ color: '#334155' }}>No output yet. Load some data sources to see API calls.</span>
         )}
-        {props.conout.actions.map((msg, i) => (
+        {props.conout.actions.slice(-100).map((msg, i) => (
           <div key={i} className={classes.entry}>
             <span className={classes.ts}>{moment(msg.timestamp).format('HH:mm:ss.SSS')}</span>
             {msg.payload.html
