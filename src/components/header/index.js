@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import logo from './CDS-logo.png'
+import { ThemeContext } from '../../index'
+import IconButton from '@material-ui/core/IconButton'
+import Brightness4Icon from '@material-ui/icons/Brightness4'
+import Brightness7Icon from '@material-ui/icons/Brightness7'
 
 export default function Header({ title }) {
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext)
+
   return (
     <div style={{
-      background: '#0f172a',
+      background: darkMode ? '#0f172a' : '#0f172a',
       padding: '0 24px',
       height: 60,
       display: 'flex',
@@ -39,6 +45,14 @@ export default function Header({ title }) {
         }}>
           Demo
         </span>
+        <IconButton
+          size="small"
+          onClick={toggleDarkMode}
+          style={{ color: '#93c5fd' }}
+          title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {darkMode ? <Brightness7Icon style={{ fontSize: 20 }} /> : <Brightness4Icon style={{ fontSize: 20 }} />}
+        </IconButton>
       </div>
     </div>
   )
