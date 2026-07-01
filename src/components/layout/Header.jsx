@@ -1,8 +1,7 @@
 import React, { useContext } from 'react'
-import logo from './CDS-logo.png'
+import logo from '../header/CDS-logo.png'
 import { ThemeContext } from '../../index'
 import { Button } from '../ui/Button'
-import { Sun, Moon } from 'lucide-react'
 
 export default function Header({ title }) {
   const { darkMode, toggleDarkMode } = useContext(ThemeContext)
@@ -45,11 +44,7 @@ export default function Header({ title }) {
             className="!px-2"
             title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            {darkMode ? (
-              <Sun size={20} className="text-slate-300" />
-            ) : (
-              <Moon size={20} className="text-slate-300" />
-            )}
+            {darkMode ? '☀️' : '🌙'}
           </Button>
         </div>
       </div>
