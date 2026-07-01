@@ -28,6 +28,8 @@ import LoanCalculator from '../tools/LoanCalculator'
 import SavingsCalculator from '../tools/SavingsCalculator'
 import FeatureMatrix from './FeatureMatrix'
 import { generatePDFComparison } from '../../utils/export'
+import { encodeComparisonURL, copyToClipboard } from '../../utils/share'
+import ShareIcon from '@material-ui/icons/Share'
 
 const useStyles = makeStyles(theme => ({
   panel: { backgroundColor: '#fff' },
@@ -294,6 +296,12 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
     URL.revokeObjectURL(url)
   }, [products, dataSources])
 
+  const handleShare = useCallback(async () => {
+    const url = encodeComparisonURL(products)
+    await copyToClipboard(url)
+    alert('Comparison link copied to clipboard! Share this link with anyone to show them your comparison.')
+  }, [products])
+
   if (!products || products.length === 0) return null
 
   const colWidth = `${85 / products.length}%`
@@ -393,6 +401,11 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
           </span>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
+          <Tooltip title="Share this comparison">
+            <Fab size="small" color="default" onClick={handleShare} style={{ background: '#fef08a' }}>
+              <ShareIcon style={{ fontSize: 16, color: '#b8860b' }} />
+            </Fab>
+          </Tooltip>
           <Tooltip title="Download as HTML">
             <Fab size="small" color="default" onClick={() => generatePDFComparison(products, dataSources, 'html')} style={{ background: '#dbeafe' }}>
               <GetAppIcon style={{ fontSize: 16, color: '#2563eb' }} />
