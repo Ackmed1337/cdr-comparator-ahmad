@@ -24,6 +24,8 @@ import Fee from '../data/banking/Fee'
 import CardArt from '../data/banking/CardArt'
 import RateChart from './RateChart'
 import ComparisonStats from './ComparisonStats'
+import LoanCalculator from '../tools/LoanCalculator'
+import SavingsCalculator from '../tools/SavingsCalculator'
 
 const useStyles = makeStyles(theme => ({
   panel: { backgroundColor: '#fff' },
@@ -307,6 +309,13 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
       <div className={classes.wrapper}>
         <ComparisonStats products={products} />
         <RateChart products={products} dataSources={dataSources} />
+
+        {products.some(p => p.product.lendingRates?.length) && (
+          <LoanCalculator products={products.map(p => p.product)} dataSources={dataSources} />
+        )}
+        {products.some(p => p.product.depositRates?.length) && (
+          <SavingsCalculator products={products.map(p => p.product)} />
+        )}
 
         <table className={`${classes.table} ${classes.desktopTable}`}>
           <thead>
