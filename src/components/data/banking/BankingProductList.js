@@ -60,7 +60,7 @@ class BankingProductList extends React.Component {
 
   render() {
     const { dataSourceIndex } = this.props
-    const { search, inputValue, activeCategory } = this.state
+    const { search, inputValue, activeCategory, filteredProducts } = this.state
     const data = this.props.productList[dataSourceIndex] || {}
     const { progress, totalRecords, detailRecords = 0, failedDetailRecords = 0, products, productDetails } = data
     const processed = detailRecords + failedDetailRecords
@@ -84,7 +84,8 @@ class BankingProductList extends React.Component {
 
     const categories = Object.keys(byCategory).sort()
 
-    const filtered = {}
+    // First filter by category and search
+    let filtered = {}
     if (done) {
       const q = search.trim().toLowerCase()
       Object.entries(byCategory).forEach(([cat, prods]) => {
@@ -92,6 +93,17 @@ class BankingProductList extends React.Component {
         const matched = q ? prods.filter(p => p.name?.toLowerCase().includes(q)) : prods
         if (matched.length) filtered[cat] = matched
       })
+    }
+
+    // Then apply ProductSearch filters if active
+    if (filteredProducts && filteredProducts.length > 0) {
+      const filteredIds = new Set(filteredProducts.map(p => p.productId))
+      const result = {}
+      Object.entries(filtered).forEach(([cat, prods]) => {
+        const matched = prods.filter(p => filteredIds.has(p.productId))
+        if (matched.length) result[cat] = matched
+      })
+      filtered = result
     }
 
     const totalFiltered = Object.values(filtered).reduce((s, a) => s + a.length, 0)
