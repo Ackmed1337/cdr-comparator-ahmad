@@ -2,39 +2,28 @@ import React from 'react'
 import RateCondition from './RateCondition'
 import RateSubTier from './RateSubTier'
 import {translateRateApplicationMethod, translateUnitOfMeasure} from '../../../utils/dict'
-import {makeStyles} from '@material-ui/core'
-
-const useStyles = makeStyles(() => ({
-  sectionTitle: {
-    fontStyle: 'italic'
-  },
-  sectionContent: {
-    paddingLeft: 20
-  }
-}))
 
 const RateTier = (props) => {
-  const classes = useStyles()
   const {name, unitOfMeasure, minimumValue, maximumValue, rateApplicationMethod, applicabilityConditions, subTier,
     additionalInfo, additionalInfoUri} = props.tier
   return (
-    <li>
-      <div>{name}</div>
-      <div>Minimum {minimumValue} {translateUnitOfMeasure(unitOfMeasure)}</div>
-      {!!maximumValue && <div>Maximum {maximumValue} {translateUnitOfMeasure(unitOfMeasure)}</div>}
-      {!!rateApplicationMethod && <div>Applied on {translateRateApplicationMethod(rateApplicationMethod)}</div>}
+    <li className="bg-slate-800/30 p-2 rounded border-l-2 border-violet-500 mb-1">
+      <div className="text-xs font-semibold text-slate-300">{name}</div>
+      <div className="text-xs text-slate-400">Minimum {minimumValue} {translateUnitOfMeasure(unitOfMeasure)}</div>
+      {!!maximumValue && <div className="text-xs text-slate-400">Maximum {maximumValue} {translateUnitOfMeasure(unitOfMeasure)}</div>}
+      {!!rateApplicationMethod && <div className="text-xs text-slate-400">Applied on {translateRateApplicationMethod(rateApplicationMethod)}</div>}
       {!!applicabilityConditions && <RateCondition rateCondition={applicabilityConditions}/>}
       {
         !!subTier &&
         <div>
-          <div className={classes.sectionTitle}>Sub Tier: </div>
-          <div className={classes.sectionContent}>
+          <div className="text-xs font-semibold text-slate-300 italic">Sub Tier: </div>
+          <div className="pl-5">
             <RateSubTier subTier={subTier}/>
           </div>
         </div>
       }
-      {!!additionalInfo && <div>{additionalInfo}</div>}
-      {!!additionalInfoUri && <div><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer'>More info</a></div>}
+      {!!additionalInfo && <div className="text-xs text-slate-400">{additionalInfo}</div>}
+      {!!additionalInfoUri && <div className="text-xs text-slate-400"><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer'>More info</a></div>}
     </li>
   )
 }

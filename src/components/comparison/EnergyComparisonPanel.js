@@ -1,17 +1,5 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {makeStyles} from '@material-ui/core/styles'
-import Accordion from '@material-ui/core/Accordion'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import CompareArrowsIcon from '@material-ui/icons/CompareArrows'
-import Typography from '@material-ui/core/Typography'
-import {fade} from '@material-ui/core/styles/colorManipulator'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
 import {format} from '../../utils/datetime'
 import AdditionalInfo from '../data/energy/AdditionalInfo'
 import Type from '../data/energy/Type'
@@ -22,48 +10,8 @@ import CustomerType from '../data/energy/CustomerType'
 import MeteringCharge from '../data/energy/MeteringCharge'
 import PlanContract from '../data/energy/PlanContract'
 
-const useStyles = makeStyles(theme => ({
-  panel: {
-    backgroundColor: fade('#fff', 0.9)
-  },
-  heading: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    fontSize: theme.typography.pxToRem(20),
-  },
-  table: {
-    width:'95%',
-    marginLeft: 'auto',
-    marginRight: 'auto'
-  },
-  headerContainer: {
-    width: '100%',
-    display: 'table'
-  },
-  dataContainer: {
-    height: 600,
-    width: '100%',
-    overflow: 'auto',
-    display: 'block'
-  },
-  headCell: {
-    color: fade('#000', 0.9),
-    fontWeight: 700,
-    fontSize: '0.8rem'
-  },
-  dataCell: {
-    verticalAlign: 'top'
-  },
-  ul: {
-    margin: 0,
-    padding:0
-  }
-}))
-
 const EnergyComparisonPanel = (props) => {
   const {dataSources, planSelections} = props
-  const classes = useStyles()
   const planDataKeys = [
     {key: 'displayName', label: 'Display Name'},
     {key: 'description', label: 'Description'},
@@ -108,7 +56,7 @@ const EnergyComparisonPanel = (props) => {
         return !!plan[key] && <Geography geography={plan[key]} />
       case 'meteringCharges':
         return !!plan[key] &&
-          <ul className={classes.ul}>
+          <ul className="m-0 p-0">
             {plan[key].map((meteringCharge, index) => <MeteringCharge meteringCharge={meteringCharge} key={index} />)}
           </ul>
       case 'gasContract':
@@ -118,46 +66,89 @@ const EnergyComparisonPanel = (props) => {
         return ''
     }
   }
-    
+
+  if (!planSelections || planSelections.length === 0) return null
+
+  const colWidth = `${85 / planSelections.length}%`
+
   return (
-    !!planSelections && planSelections.length > 0 &&
-    <Accordion defaultExpanded className={classes.panel}>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon/>}
-        aria-controls='panel1c-content'
-      >
-        <div className={classes.heading}>
-          <CompareArrowsIcon/><Typography style={{paddingLeft: 8}}>Energy Comparison</Typography>
+    <div className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden shadow-xl">
+      {/* Header */}
+      <div className="px-6 py-4 bg-slate-800 border-b border-slate-700">
+        <div className="flex items-center gap-3">
+          <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4" />
+          </svg>
+          <h2 className="text-base font-semibold text-slate-100">Energy Comparison</h2>
+          <span className="bg-blue-900 text-blue-200 text-xs font-bold px-2 py-1 rounded-full">
+            {planSelections.length} plans
+          </span>
         </div>
-      </AccordionSummary>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell width='16%'/>
-            {planSelections.map((selection, index) =>
-              <TableCell key={index} className={classes.headCell} width={`${90/planSelections.length}%`}>
-                {dataSources[selection.dataSourceIdx].name} - {selection.plan.displayName}
-              </TableCell>)}
-          </TableRow>
-        </TableHead>
-      </Table>
-      <Table className={classes.table}>
-        <TableBody className={classes.dataContainer}>
-          {planDataKeys.map(dataKey => (
-            <TableRow key={dataKey.key} className={classes.table}>
-              <TableCell component='th' scope='row' align='right' className={classes.dataCell} width='16%'>
-                {dataKey.label}
-              </TableCell>
+      </div>
+
+      {/* Comparison Table */}
+      <div className="w-11/12 mx-auto my-4 overflow-auto max-h-160 rounded-lg border border-slate-700 bg-slate-950">
+        {/* Desktop Table */}
+        <table className="w-full border-collapse border-spacing-0 hidden md:table">
+          <thead>
+            <tr>
+              <th className="sticky top-0 z-40 bg-gradient-to-r from-slate-900 to-slate-800 border-b-2 border-blue-500 text-left text-xs font-bold text-slate-300 p-3 px-3.5 border-r border-slate-700 w-1/6 min-w-32" />
               {planSelections.map((selection, index) =>
-                <TableCell key={index} className={classes.dataCell} width={`${90/planSelections.length}%`}>
-                  {render(selection.plan, dataKey.key)}
-                </TableCell>
+                <th key={index} className="sticky top-0 z-40 bg-gradient-to-r from-slate-900 to-slate-800 border-b-2 border-blue-500 px-3.5 py-3 border-r border-slate-700 last:border-r-0 text-center" style={{ width: colWidth }}>
+                  <div className="text-xs font-bold text-indigo-400">{dataSources[selection.dataSourceIdx].name}</div>
+                  <div className="font-bold text-slate-100 text-sm">{selection.plan.displayName}</div>
+                </th>
               )}
-            </TableRow>
+            </tr>
+          </thead>
+          <tbody>
+            {planDataKeys.map((dataKey, rowIdx) => (
+              <tr key={dataKey.key} className={`transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/20 ${rowIdx % 2 === 0 ? 'bg-slate-900' : 'bg-slate-800'}`}>
+                <td className={`text-left font-bold text-slate-300 text-xs px-3.5 py-3 border-r border-slate-700 sticky left-0 z-10 w-1/6 min-w-32 ${rowIdx % 2 === 0 ? 'bg-slate-900' : 'bg-slate-800'}`}>
+                  {dataKey.label}
+                </td>
+                {planSelections.map((selection, index) =>
+                  <td
+                    key={index}
+                    className={`text-center text-sm p-3 px-3.5 transition-colors duration-200 text-slate-300 border-r border-slate-700 last:border-r-0 ${!render(selection.plan, dataKey.key) ? 'opacity-50' : ''}`}
+                  >
+                    {render(selection.plan, dataKey.key) || '—'}
+                  </td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Mobile View */}
+        <div className="md:hidden px-2 py-4">
+          {planSelections.map((selection, prodIdx) => (
+            <div key={prodIdx} className="mb-4 p-3 border border-slate-600 rounded-lg bg-slate-900 break-inside-avoid">
+              <div className="font-bold text-sm text-slate-100 mb-3 pb-2 border-b-2 border-slate-700">
+                {dataSources[selection.dataSourceIdx].name} — {selection.plan.displayName}
+              </div>
+              {planDataKeys.map((dataKey) => {
+                const cell = render(selection.plan, dataKey.key)
+                if (!cell) return null
+                return (
+                  <div key={dataKey.key} className="grid grid-cols-[45%_1fr] gap-2 py-2 px-0 text-xs border-b border-slate-700 last:border-b-0">
+                    <div className="font-semibold text-slate-400 break-words">{dataKey.label}:</div>
+                    <div className="text-slate-300 text-right break-words">{cell}</div>
+                  </div>
+                )
+              })}
+            </div>
           ))}
-        </TableBody>
-      </Table>
-    </Accordion>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="px-4 py-3 border-t border-slate-700 bg-slate-800">
+        <div className="text-xs text-slate-400 text-center">
+          Displaying {planSelections.length} energy plan{planSelections.length !== 1 ? 's' : ''} for comparison
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -165,5 +156,7 @@ const mapStateToProps = state => ({
   dataSources: state.dataSources,
   planSelections: state.energyComparison
 })
+
+export default connect(mapStateToProps)(EnergyComparisonPanel)
 
 export default connect(mapStateToProps)(EnergyComparisonPanel)

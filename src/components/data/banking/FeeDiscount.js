@@ -1,23 +1,10 @@
 import React from 'react'
 import DiscountEligibility from './DiscountEligibility'
-import {makeStyles} from '@material-ui/core'
 import {translateDiscountType} from '../../../utils/dict'
 import Duration from '../Duration'
 import ecomp from '../../../utils/enum-comp'
 
-const useStyles = makeStyles(() => ({
-  sectionTitle: {
-    fontStyle: 'italic'
-  },
-  sectionContent: {
-    marginTop: 0,
-    marginBottom: 0,
-    paddingLeft: 20
-  }
-}))
-
 const FeeDiscount = (props) => {
-  const classes = useStyles()
   const {
     description,
     discountType,
@@ -32,13 +19,13 @@ const FeeDiscount = (props) => {
     eligibility
   } = props.discount
   return (
-    <li>
-      {!!amount && <div>${amount}</div>}
-      {!!balanceRate && <div>Balance rate: {(balanceRate * 100).toFixed(2)}%</div>}
-      {!!transactionRate && <div>Transaction rate: {(transactionRate * 100).toFixed(2)}%</div>}
-      {!!accruedRate && <div>Accrued rate: {(accruedRate * 100).toFixed(2)}%</div>}
-      {!!feeRate && <div>Fee rate: {(feeRate * 100).toFixed(2)}%</div>}
-      <div>
+    <li className="bg-slate-800/30 p-2 rounded border-l-2 border-yellow-500 mb-1">
+      {!!amount && <div className="text-xs text-slate-400">${amount}</div>}
+      {!!balanceRate && <div className="text-xs text-slate-400">Balance rate: {(balanceRate * 100).toFixed(2)}%</div>}
+      {!!transactionRate && <div className="text-xs text-slate-400">Transaction rate: {(transactionRate * 100).toFixed(2)}%</div>}
+      {!!accruedRate && <div className="text-xs text-slate-400">Accrued rate: {(accruedRate * 100).toFixed(2)}%</div>}
+      {!!feeRate && <div className="text-xs text-slate-400">Fee rate: {(feeRate * 100).toFixed(2)}%</div>}
+      <div className="text-xs text-slate-400">
         Discount Type - {translateDiscountType(discountType)}
         {
           (discountType === 'BALANCE' ||
@@ -51,15 +38,15 @@ const FeeDiscount = (props) => {
           <span> - <Duration prefix="every" value={additionalValue}/></span>
         }
       </div>
-      <div>{description}</div>
-      {discountType === 'ELIGIBILITY_ONLY' && additionalValue && <div>{additionalValue}</div>}
-      {!!additionalInfo && <div>{additionalInfo}</div>}
-      {!!additionalInfoUri && <div><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer'>More info</a></div>}
+      <div className="text-xs text-slate-400">{description}</div>
+      {discountType === 'ELIGIBILITY_ONLY' && additionalValue && <div className="text-xs text-slate-400">{additionalValue}</div>}
+      {!!additionalInfo && <div className="text-xs text-slate-400">{additionalInfo}</div>}
+      {!!additionalInfoUri && <div className="text-xs text-slate-400"><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer'>More info</a></div>}
       {
         !!eligibility && eligibility.length > 0 &&
         <div>
-          <div className={classes.sectionTitle}>Discount Eligibilities</div>
-          <ul className={classes.sectionContent}>
+          <div className="text-xs text-slate-400 italic">Discount Eligibilities</div>
+          <ul className="pl-5">
             {eligibility.sort((a, b)=>ecomp(a.discountEligibilityType, b.discountEligibilityType)).map(
               (discountEligibility, index) => <DiscountEligibility key={index} eligibility={discountEligibility}/>)}
           </ul>
