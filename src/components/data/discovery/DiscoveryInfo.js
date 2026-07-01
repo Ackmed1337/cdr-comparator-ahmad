@@ -1,65 +1,11 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Accordion from '@material-ui/core/Accordion'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
-import AccordionActions from '@material-ui/core/AccordionActions'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
-import RefreshIcon from '@material-ui/icons/Refresh'
-import Fab from '@material-ui/core/Fab'
-import Tooltip from '@material-ui/core/Tooltip'
-import Grid from '@material-ui/core/Grid'
 import StatusOutages from './StatusOutages'
 import { connect } from 'react-redux'
 import { normalise } from '../../../utils/url'
 import { retrieveStatus, retrieveOutages } from '../../../store/discovery'
 
-const useStyles = makeStyles(theme => ({
-  panel: { backgroundColor: '#fff' },
-  heading: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: 600,
-    color: '#1e293b',
-  },
-  details: {
-    maxWidth: '98%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginBottom: 16,
-  },
-  container: {
-    marginLeft: theme.typography.pxToRem(8),
-    marginRight: theme.typography.pxToRem(8),
-  },
-  sourceCard: {
-    background: '#f8fafc',
-    border: '1px solid #e2e8f0',
-    borderRadius: 8,
-    padding: '12px 14px',
-  },
-  sourceHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 10,
-    marginBottom: 10,
-    paddingBottom: 10,
-    borderBottom: '1px solid #e2e8f0',
-  },
-  sourceIcon: { width: 28, height: 28, objectFit: 'contain' },
-  sourceName: {
-    fontSize: theme.typography.pxToRem(13),
-    fontWeight: 700,
-    color: '#1e293b',
-  },
-}))
-
 const DiscoveryInfo = (props) => {
   const { dataSources, savedDataSourcesCount } = props
-  const classes = useStyles()
   const [expanded, setExpanded] = React.useState(true)
 
   const refresh = () => {
@@ -78,60 +24,75 @@ const DiscoveryInfo = (props) => {
     // eslint-disable-next-line
   }, [props.dataSources])
 
-  const colWidth = (count, min) => Math.max(12 / count, min)
+  const colWidth = (count) => {
+    if (count === 1) return 'w-full'
+    if (count === 2) return 'w-1/2'
+    if (count === 3) return 'w-1/3'
+    return 'w-1/4'
+  }
 
   return (
-    <Accordion defaultExpanded className={classes.panel} expanded={expanded} onChange={(_, v) => setExpanded(v)}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="discovery-content">
-        <div className={classes.heading}>
-          <Typography style={{ fontWeight: 600, fontSize: '0.95rem' }}>Status &amp; Outages</Typography>
+    <div className="bg-slate-900 border-l-4 border-blue-500 mb-4">
+      {/* Header */}
+      <div
+        className="bg-slate-900 border-l-4 border-blue-500 p-4 cursor-pointer hover:bg-slate-800/50 transition-colors"
+        onClick={() => setExpanded(!expanded)}
+      >
+        <div className="flex items-center gap-3">
+          <h3 className="text-sm font-bold text-slate-300">Status & Outages</h3>
           {savedDataSourcesCount > 0 && (
-            <span style={{ background: '#eff6ff', color: '#2563eb', fontSize: '0.72rem', fontWeight: 700, padding: '2px 8px', borderRadius: 10 }}>
+            <span className="bg-blue-900/40 text-blue-300 text-xs font-bold px-2 py-1 rounded-full">
               {savedDataSourcesCount} source{savedDataSourcesCount !== 1 ? 's' : ''}
             </span>
           )}
+          <span className={`ml-auto text-slate-400 transition-transform ${expanded ? 'rotate-180' : ''}`}>
+            ▼
+          </span>
         </div>
-      </AccordionSummary>
-      <div className={classes.details}>
-        {savedDataSourcesCount > 0 ? (
-          <Grid container alignItems="flex-start" spacing={2} className={classes.container}>
-            {dataSources.map((ds, i) => {
-              const data = props.data[i]
-              if (!data || ds.unsaved || !ds.enabled || ds.deleted) return null
-              return (
-                <Grid item key={i}
-                  xs={colWidth(savedDataSourcesCount, 12)}
-                  sm={colWidth(savedDataSourcesCount, 12)}
-                  md={colWidth(savedDataSourcesCount, 6)}
-                  lg={colWidth(savedDataSourcesCount, 4)}
-                  xl={colWidth(savedDataSourcesCount, 3)}
-                >
-                  <div className={classes.sourceCard}>
-                    <div className={classes.sourceHeader}>
-                      {ds.icon && <img src={ds.icon} alt="" className={classes.sourceIcon} />}
-                      <span className={classes.sourceName}>{ds.name}</span>
-                    </div>
-                    <StatusOutages statusDetails={data.statusDetails} outagesDetails={data.outagesDetails} />
-                  </div>
-                </Grid>
-              )
-            })}
-          </Grid>
-        ) : (
-          <div style={{ padding: '24px 20px', color: '#94a3b8', fontSize: '0.875rem', textAlign: 'center' }}>
-            Add a data source above to check status.
-          </div>
-        )}
       </div>
-      <Divider />
-      <AccordionActions>
-        <Tooltip title="Refresh status">
-          <Fab size="small" color="primary" onClick={refresh} style={{ margin: 8 }}>
-            <RefreshIcon style={{ fontSize: 18 }} />
-          </Fab>
-        </Tooltip>
-      </AccordionActions>
-    </Accordion>
+
+      {/* Content */}
+      {expanded && (
+        <div className="bg-slate-800 p-4 text-slate-300 text-sm border-t border-slate-700">
+          {savedDataSourcesCount > 0 ? (
+            <div className="flex flex-wrap gap-3">
+              {dataSources.map((ds, i) => {
+                const data = props.data[i]
+                if (!data || ds.unsaved || !ds.enabled || ds.deleted) return null
+                return (
+                  <div key={i} className={`${colWidth(savedDataSourcesCount)} min-w-xs`}>
+                    <div className="bg-slate-800/80 border border-slate-700 rounded-lg p-3">
+                      <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-700">
+                        {ds.icon && <img src={ds.icon} alt="" className="w-7 h-7 object-contain flex-shrink-0" />}
+                        <span className="text-xs font-bold text-slate-300">{ds.name}</span>
+                      </div>
+                      <StatusOutages statusDetails={data.statusDetails} outagesDetails={data.outagesDetails} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="py-6 px-5 text-center text-slate-400">
+              Add a data source above to check status.
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Footer with Refresh Button */}
+      <div className="bg-slate-800/50 border-t border-slate-700 px-4 py-3 flex justify-center">
+        <button
+          onClick={refresh}
+          className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2 transition-colors"
+          title="Refresh status"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+      </div>
+    </div>
   )
 }
 

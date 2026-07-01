@@ -1,73 +1,7 @@
 import React, { useMemo } from 'react'
-import { makeStyles } from '@material-ui/core'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
 import { translateFeatureType } from '../../utils/dict'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    marginBottom: 16,
-    borderRadius: 6,
-    overflow: 'hidden',
-  },
-  title: {
-    fontSize: '0.9rem',
-    fontWeight: 700,
-    marginBottom: 16,
-    color: '#1e293b',
-  },
-  matrix: {
-    overflowX: 'auto',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    fontSize: '0.75rem',
-  },
-  featureName: {
-    padding: '8px 12px',
-    textAlign: 'left',
-    fontWeight: 600,
-    color: '#475569',
-    backgroundColor: '#f1f5f9',
-    borderRight: '1px solid #e2e8f0',
-    borderBottom: '1px solid #e2e8f0',
-    minWidth: 120,
-    position: 'sticky',
-    left: 0,
-    zIndex: 1,
-  },
-  productName: {
-    padding: '8px 12px',
-    textAlign: 'center',
-    fontWeight: 700,
-    color: '#1e293b',
-    backgroundColor: '#f8fafc',
-    borderRight: '1px solid #e2e8f0',
-    borderBottom: '1px solid #e2e8f0',
-    minWidth: 100,
-  },
-  cell: {
-    padding: '8px 12px',
-    textAlign: 'center',
-    borderRight: '1px solid #e2e8f0',
-    borderBottom: '1px solid #e2e8f0',
-    minWidth: 100,
-  },
-  checkmark: {
-    fontSize: '1.2rem',
-    color: '#10b981',
-    fontWeight: 700,
-  },
-  cross: {
-    fontSize: '1rem',
-    color: '#d1d5db',
-  },
-}))
-
 const FeatureMatrix = ({ products, dataSources }) => {
-  const classes = useStyles()
-
   const allFeatures = useMemo(() => {
     const features = new Map()
     products.forEach(pd => {
@@ -87,54 +21,60 @@ const FeatureMatrix = ({ products, dataSources }) => {
   if (allFeatures.length === 0) return null
 
   return (
-    <Card className={classes.root}>
-      <CardContent style={{ padding: '16px 12px' }}>
-        <div className={classes.title}>Feature Matrix</div>
-        <div className={classes.matrix}>
-          <table className={classes.table}>
-            <thead>
-              <tr>
-                <th className={classes.featureName}>Feature</th>
+    <div className="mb-4 rounded-lg overflow-hidden border border-slate-700">
+      <div className="p-4 bg-slate-900 border-b border-slate-700">
+        <h3 className="text-sm font-bold text-slate-300">Feature Matrix</h3>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-xs">
+          <thead>
+            <tr className="bg-gradient-to-r from-slate-900 to-slate-800 border-b-2 border-blue-500 sticky top-0 z-10">
+              <th className="px-3 py-2 text-left font-bold text-slate-300 bg-slate-900 min-w-[120px] sticky left-0 z-20 border-r border-slate-700">
+                Feature
+              </th>
+              {products.map((pd, idx) => (
+                <th
+                  key={idx}
+                  className="px-3 py-2 text-center font-bold text-slate-300 min-w-[100px] border-r border-slate-700 last:border-r-0"
+                >
+                  <div className="text-xs text-indigo-400 font-medium">
+                    {dataSources[pd.dataSourceIdx]?.name && dataSources[pd.dataSourceIdx].name}
+                  </div>
+                  <div className="text-xs text-slate-300">{pd.product.name}</div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {allFeatures.map((featureType, rowIdx) => (
+              <tr
+                key={featureType}
+                className={`border-b border-slate-700 transition-colors duration-200 hover:bg-blue-500/5 ${
+                  rowIdx % 2 === 0 ? 'bg-slate-900' : 'bg-slate-800'
+                }`}
+              >
+                <td className="px-3 py-2 font-bold text-slate-300 bg-slate-900 sticky left-0 z-10 border-r border-slate-700 min-w-[120px]">
+                  {translateFeatureType(featureType)}
+                </td>
                 {products.map((pd, idx) => (
-                  <th key={idx} className={classes.productName}>
-                    {dataSources[pd.dataSourceIdx]?.name && (
-                      <div style={{ fontSize: '0.65rem', color: '#6366f1' }}>
-                        {dataSources[pd.dataSourceIdx].name}
-                      </div>
+                  <td
+                    key={idx}
+                    className="px-3 py-2 text-center border-r border-slate-700 last:border-r-0 min-w-[100px]"
+                  >
+                    {hasFeature(pd.product, featureType) ? (
+                      <span className="text-lg font-bold text-emerald-500">✓</span>
+                    ) : (
+                      <span className="text-base text-slate-500">—</span>
                     )}
-                    <div style={{ fontSize: '0.75rem' }}>{pd.product.name}</div>
-                  </th>
+                  </td>
                 ))}
               </tr>
-            </thead>
-            <tbody>
-              {allFeatures.map(featureType => (
-                <tr key={featureType}>
-                  <td className={classes.featureName}>
-                    {translateFeatureType(featureType)}
-                  </td>
-                  {products.map((pd, idx) => (
-                    <td
-                      key={idx}
-                      className={classes.cell}
-                      style={{
-                        backgroundColor: hasFeature(pd.product, featureType) ? '#f0fdf4' : '#fafafa',
-                      }}
-                    >
-                      {hasFeature(pd.product, featureType) ? (
-                        <span className={classes.checkmark}>✓</span>
-                      ) : (
-                        <span className={classes.cross}>—</span>
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </CardContent>
-    </Card>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   )
 }
 

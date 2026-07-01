@@ -2,43 +2,13 @@ import React from 'react'
 import Product from './Product'
 import { translateProductCategory } from '../../../utils/dict'
 
-const containerStyle = { marginBottom: 10 }
-
-const headerStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-  padding: '5px 10px',
-  background: '#eff6ff',
-  borderLeft: '3px solid #2563eb',
-  borderRadius: '0 6px 6px 0',
-  marginBottom: 4,
-}
-
-const titleStyle = {
-  fontSize: '0.75rem',
-  fontWeight: 700,
-  color: '#1d4ed8',
-  textTransform: 'uppercase',
-  letterSpacing: '0.5px',
-}
-
-const badgeStyle = {
-  background: '#2563eb',
-  color: '#fff',
-  borderRadius: 20,
-  padding: '1px 8px',
-  fontSize: '0.68rem',
-  fontWeight: 700,
-}
-
 const ProductCategory = ({ category, products, dataSourceIndex }) => (
-  <div style={containerStyle}>
-    <div style={headerStyle}>
-      <span style={titleStyle}>
+  <div className="mb-3">
+    <div className="flex items-center gap-2 px-3 py-1 bg-blue-900/30 border-l-2 border-blue-500 rounded mb-1">
+      <span className="text-xs uppercase tracking-widest font-bold text-slate-400">
         {translateProductCategory(category)}
       </span>
-      <span style={badgeStyle}>
+      <span className="text-blue-300 bg-blue-900/30 rounded-full text-xs font-bold px-2 py-0.5">
         {products.length}
       </span>
     </div>

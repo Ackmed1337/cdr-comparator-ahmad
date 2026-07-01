@@ -1,15 +1,11 @@
 import React, { useMemo, useCallback } from 'react'
 import { connect } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionActions from '@material-ui/core/AccordionActions'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import GetAppIcon from '@material-ui/icons/GetApp'
-import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
-import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
 import { productDataKeys } from '../../utils/dict'
 import { format } from '../../utils/datetime'
 import AdditionalInfo from '../data/banking/AdditionalInfo'
@@ -30,140 +26,6 @@ import FeatureMatrix from './FeatureMatrix'
 import { generatePDFComparison } from '../../utils/export'
 import { encodeComparisonURL, copyToClipboard } from '../../utils/share'
 import ShareIcon from '@material-ui/icons/Share'
-
-const useStyles = makeStyles(theme => ({
-  panel: { backgroundColor: '#fff' },
-  heading: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: 600,
-    color: '#1e293b',
-  },
-  wrapper: {
-    width: '97%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginBottom: 20,
-    overflow: 'auto',
-    maxHeight: 640,
-    borderRadius: 8,
-    border: '1px solid #e2e8f0',
-    [theme.breakpoints.down('sm')]: {
-      maxHeight: 'none',
-      overflow: 'visible',
-    }
-  },
-  table: { width: '100%', borderCollapse: 'separate', borderSpacing: 0 },
-  mobileCards: {
-    display: 'none',
-    [theme.breakpoints.down('sm')]: {
-      display: 'block',
-      padding: '0 8px',
-    }
-  },
-  desktopTable: {
-    display: 'table',
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
-    }
-  },
-  mobileCard: {
-    marginBottom: 16,
-    padding: '12px',
-    border: '1px solid #cbd5e1',
-    borderRadius: 6,
-    backgroundColor: '#f8fafc',
-    pageBreakInside: 'avoid',
-  },
-  mobileCardTitle: {
-    fontWeight: 700,
-    fontSize: '0.95rem',
-    marginBottom: 12,
-    color: '#1e293b',
-    paddingBottom: 8,
-    borderBottom: '2px solid #e2e8f0',
-  },
-  mobileCardRow: {
-    display: 'grid',
-    gridTemplateColumns: '45% 1fr',
-    gap: 8,
-    padding: '8px 0',
-    fontSize: '0.8rem',
-    borderBottom: '1px solid #e2e8f0',
-    '&:last-child': {
-      borderBottom: 'none',
-    }
-  },
-  mobileCardLabel: {
-    fontWeight: 600,
-    color: '#64748b',
-    wordBreak: 'break-word',
-  },
-  mobileCardValue: {
-    color: '#374151',
-    textAlign: 'right',
-    wordBreak: 'break-word',
-  },
-  labelCell: {
-    background: '#f8fafc',
-    fontWeight: 600,
-    color: '#64748b',
-    fontSize: '0.78rem',
-    width: '15%',
-    minWidth: 130,
-    textAlign: 'right',
-    verticalAlign: 'top',
-    padding: '10px 14px',
-    borderRight: '2px solid #e2e8f0',
-    position: 'sticky',
-    left: 0,
-    zIndex: 1,
-  },
-  dataCell: {
-    verticalAlign: 'top',
-    fontSize: '0.8rem',
-    padding: '10px 14px',
-    color: '#374151',
-    borderRight: '1px solid #f1f5f9',
-    '&:last-child': { borderRight: 'none' },
-  },
-  emptyCell: { color: '#d1d5db' },
-  bestCell: {
-    background: '#bbf7d0 !important',
-    borderTop: '3px solid #16a34a',
-    borderLeft: '3px solid #16a34a',
-  },
-  worstCell: {
-    background: '#fecaca !important',
-    borderTop: '3px solid #dc2626',
-    borderLeft: '3px solid #dc2626',
-  },
-  stickyHead: {
-    position: 'sticky',
-    top: 0,
-    zIndex: 3,
-    background: '#fff',
-    boxShadow: '0 1px 0 #e2e8f0',
-  },
-  productHeader: {
-    padding: '12px 14px',
-    borderRight: '1px solid #f1f5f9',
-    '&:last-child': { borderRight: 'none' },
-  },
-  productName: { fontWeight: 700, color: '#1e293b', fontSize: '0.85rem' },
-  sourceName: { fontSize: '0.72rem', color: '#6366f1', fontWeight: 600, marginBottom: 2 },
-  cornerCell: {
-    background: '#f8fafc',
-    position: 'sticky',
-    left: 0,
-    zIndex: 4,
-    borderRight: '2px solid #e2e8f0',
-    width: '15%',
-    minWidth: 130,
-  },
-}))
 
 const listStyle = { margin: 0, padding: '0 0 0 16px' }
 
@@ -262,8 +124,6 @@ const toText = (product, key) => {
 }
 
 const BankingComparisonPanel = ({ dataSources, products }) => {
-  const classes = useStyles()
-
   const rowData = useMemo(() => {
     if (!products || products.length === 0) return []
     return productDataKeys.map(dataKey => {
@@ -307,16 +167,16 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
   const colWidth = `${85 / products.length}%`
 
   return (
-    <Accordion defaultExpanded className={classes.panel}>
+    <Accordion defaultExpanded style={{ backgroundColor: '#ffffff' }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="comparison-content">
-        <div className={classes.heading}>
-          <Typography style={{ fontWeight: 600, fontSize: '0.95rem' }}>Product Comparison</Typography>
-          <span style={{ background: '#eff6ff', color: '#2563eb', fontSize: '0.72rem', fontWeight: 700, padding: '2px 8px', borderRadius: 10 }}>
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-sm text-slate-900">Product Comparison</span>
+          <span className="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-0.5 rounded-full">
             {products.length} products
           </span>
         </div>
       </AccordionSummary>
-      <div className={classes.wrapper}>
+      <div className="w-11/12 mx-auto mb-5 overflow-auto max-h-160 rounded-lg border border-slate-300 bg-slate-950">
         <ComparisonStats products={products} />
         <RateChart products={products} dataSources={dataSources} />
 
@@ -328,36 +188,34 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
         )}
         <FeatureMatrix products={products} dataSources={dataSources} />
 
-        <table className={`${classes.table} ${classes.desktopTable}`}>
+        <table className="w-full border-collapse border-spacing-0 hidden md:table">
           <thead>
             <tr>
-              <th className={`${classes.cornerCell} ${classes.stickyHead}`} />
+              <th className="sticky top-0 z-40 bg-gradient-to-r from-slate-900 to-slate-800 border-t-2 border-blue-500 text-left text-xs font-bold text-slate-300 p-3 px-3.5 border-r-2 border-slate-700 w-1/6 min-w-32" />
               {products.map((pd, i) => (
-                <th key={i} className={`${classes.productHeader} ${classes.stickyHead}`} style={{ width: colWidth }}>
-                  <div className={classes.sourceName}>{dataSources[pd.dataSourceIdx]?.name}</div>
-                  <div className={classes.productName}>{pd.product.name}</div>
+                <th key={i} className="sticky top-0 z-40 bg-gradient-to-r from-slate-900 to-slate-800 border-t-2 border-blue-500 px-3.5 py-3 border-r border-slate-700 last:border-r-0 text-center" style={{ width: colWidth }}>
+                  <div className="text-xs font-bold text-indigo-400">{dataSources[pd.dataSourceIdx]?.name}</div>
+                  <div className="font-bold text-slate-100 text-sm">{pd.product.name}</div>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {rowData.map(({ dataKey, cells, highlight }, rowIdx) => (
-              <tr key={dataKey.key} style={{ background: rowIdx % 2 === 0 ? '#fff' : '#f8fafc' }}>
-                <td className={classes.labelCell} style={{ background: rowIdx % 2 === 0 ? '#f8fafc' : '#f1f5f9' }}>
+              <tr key={dataKey.key} className={`transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/20 ${rowIdx % 2 === 0 ? 'bg-slate-900' : 'bg-slate-800'}`}>
+                <td className={`text-left font-bold text-slate-300 text-xs px-3.5 py-3 border-r-2 border-slate-700 sticky left-0 z-10 w-1/6 min-w-32 ${rowIdx % 2 === 0 ? 'bg-slate-900' : 'bg-slate-800'}`}>
                   {dataKey.label}
                 </td>
                 {cells.map((cell, i) => {
                   const isBest = highlight?.bestIdx === i
                   const isWorst = highlight?.worstIdx === i
+                  const bgColor = isBest ? 'bg-green-900/40 border-l-4 border-t-4 border-green-500 text-green-300' :
+                                 isWorst ? 'bg-red-900/40 border-l-4 border-t-4 border-red-500 text-red-300' :
+                                 'text-slate-300 border-r border-slate-700 last:border-r-0'
                   return (
                     <td
                       key={i}
-                      className={[
-                        classes.dataCell,
-                        !cell ? classes.emptyCell : '',
-                        isBest ? classes.bestCell : '',
-                        isWorst ? classes.worstCell : '',
-                      ].join(' ')}
+                      className={`text-center text-sm p-3 px-3.5 transition-colors duration-200 ${bgColor} ${!cell ? 'opacity-50' : ''}`}
                     >
                       {cell || '—'}
                     </td>
@@ -368,19 +226,19 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
           </tbody>
         </table>
 
-        <div className={classes.mobileCards}>
+        <div className="md:hidden px-2 py-4">
           {products.map((pd, prodIdx) => (
-            <div key={prodIdx} className={classes.mobileCard}>
-              <div className={classes.mobileCardTitle}>
+            <div key={prodIdx} className="mb-4 p-3 border border-slate-600 rounded-lg bg-slate-900 break-inside-avoid">
+              <div className="font-bold text-sm text-slate-100 mb-3 pb-2 border-b-2 border-slate-700">
                 {dataSources[pd.dataSourceIdx]?.name} — {pd.product.name}
               </div>
               {rowData.map(({ dataKey, cells }) => {
                 const cell = cells[prodIdx]
                 if (!cell) return null
                 return (
-                  <div key={dataKey.key} className={classes.mobileCardRow}>
-                    <div className={classes.mobileCardLabel}>{dataKey.label}:</div>
-                    <div className={classes.mobileCardValue}>{cell}</div>
+                  <div key={dataKey.key} className="grid grid-cols-[45%_1fr] gap-2 py-2 px-0 text-xs border-b border-slate-700 last:border-b-0">
+                    <div className="font-semibold text-slate-400 break-words">{dataKey.label}:</div>
+                    <div className="text-slate-300 text-right break-words">{cell}</div>
                   </div>
                 )
               })}
@@ -388,33 +246,41 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
           ))}
         </div>
       </div>
-      <Divider />
-      <AccordionActions style={{ padding: '8px 16px', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: '0.72rem', color: '#64748b' }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <span style={{ display: 'inline-block', width: 10, height: 10, borderRadius: 2, background: '#f0fdf4', border: '1.5px solid #16a34a' }} />
+      <AccordionActions className="px-4 py-2 flex justify-between items-center flex-wrap gap-2 border-t border-slate-300">
+        <div className="flex gap-3 items-center text-xs text-slate-500">
+          <span className="flex items-center gap-1">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-green-50 border border-green-500" />
             Best rate
           </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <span style={{ display: 'inline-block', width: 10, height: 10, borderRadius: 2, background: '#fef2f2', border: '1.5px solid #dc2626' }} />
+          <span className="flex items-center gap-1">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-red-50 border border-red-500" />
             Worst rate
           </span>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div className="flex gap-2">
           <Tooltip title="Share this comparison">
-            <Fab size="small" color="default" onClick={handleShare} style={{ background: '#fef08a' }}>
-              <ShareIcon style={{ fontSize: 16, color: '#b8860b' }} />
-            </Fab>
+            <button
+              onClick={handleShare}
+              className="p-2 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-700 transition-colors duration-200 hover:shadow-lg"
+            >
+              <ShareIcon style={{ fontSize: 16 }} />
+            </button>
           </Tooltip>
           <Tooltip title="Download as HTML">
-            <Fab size="small" color="default" onClick={() => generatePDFComparison(products, dataSources, 'html')} style={{ background: '#dbeafe' }}>
-              <GetAppIcon style={{ fontSize: 16, color: '#2563eb' }} />
-            </Fab>
+            <button
+              onClick={() => generatePDFComparison(products, dataSources, 'html')}
+              className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 transition-colors duration-200 hover:shadow-lg"
+            >
+              <GetAppIcon style={{ fontSize: 16 }} />
+            </button>
           </Tooltip>
           <Tooltip title="Export as CSV">
-            <Fab size="small" color="primary" onClick={handleDownload}>
-              <GetAppIcon style={{ fontSize: 18 }} />
-            </Fab>
+            <button
+              onClick={handleDownload}
+              className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200 hover:shadow-lg"
+            >
+              <GetAppIcon style={{ fontSize: 16 }} />
+            </button>
           </Tooltip>
         </div>
       </AccordionActions>

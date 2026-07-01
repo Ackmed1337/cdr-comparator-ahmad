@@ -1,96 +1,68 @@
 import React from 'react'
-import Accordion from '@material-ui/core/Accordion'
-import AccordionActions from '@material-ui/core/AccordionActions'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
-import Tooltip from '@material-ui/core/Tooltip'
-import Fab from '@material-ui/core/Fab'
 import DeleteIcon from '@material-ui/icons/Delete'
-
 import { connect } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
 import moment from 'moment'
 import { cleanConout } from '../../store/conout/actions'
 import _ from 'lodash'
 
-const useStyles = makeStyles(theme => ({
-  panel: { backgroundColor: '#fff' },
-  heading: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: 600,
-    color: '#1e293b',
-  },
-  icon: { color: '#64748b', fontSize: '1.1rem' },
-  terminal: {
-    background: '#f8fafc',
-    maxHeight: 300,
-    overflow: 'auto',
-    padding: '10px 16px',
-    fontFamily: "'Fira Code', 'JetBrains Mono', 'Courier New', monospace",
-    fontSize: 12,
-    lineHeight: 1.8,
-    borderTop: '1px solid #e2e8f0',
-    borderBottom: '1px solid #e2e8f0',
-  },
-  entry: {
-    display: 'flex',
-    gap: 10,
-    borderBottom: '1px solid #f1f5f9',
-    padding: '2px 0',
-    '&:last-child': { borderBottom: 'none' },
-  },
-  ts: { color: '#94a3b8', flexShrink: 0, fontSize: 11, paddingTop: 1 },
-  normal: { color: '#475569' },
-  error: { color: '#dc2626' },
-  actions: { padding: '8px 16px' },
-}))
-
 const ConsolePanel = (props) => {
-  const classes = useStyles()
-  const [expanded, setExpanded] = React.useState(false)
+  const [isExpanded, setIsExpanded] = React.useState(false)
 
   return (
-    <Accordion className={classes.panel} expanded={expanded} onChange={(_, v) => setExpanded(v)}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="console-content">
-        <div className={classes.heading}>
-          <span style={{ fontSize: 16 }}>{'>'}_</span>
-          <Typography style={{ fontWeight: 600, fontSize: '0.9rem' }}>Console</Typography>
-          {props.conout.actions.length > 0 && (
-            <span style={{ background: '#f1f5f9', color: '#64748b', fontSize: '0.7rem', fontWeight: 700, padding: '1px 7px', borderRadius: 10 }}>
-              {props.conout.actions.length}
-            </span>
-          )}
-        </div>
-      </AccordionSummary>
-      <div className={classes.terminal}>
-        {props.conout.actions.length === 0 && (
-          <span style={{ color: '#334155' }}>No output yet. Load some data sources to see API calls.</span>
+    <div className="bg-slate-800 border border-slate-700 rounded">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full flex items-center gap-3 px-4 py-3 bg-slate-900 hover:bg-slate-800 border-l-4 border-blue-500 transition-all duration-200"
+      >
+        <span style={{ fontSize: 16 }} className="text-slate-400">{'>'}_</span>
+        <span className="font-semibold text-sm text-slate-300">Console</span>
+        {props.conout.actions.length > 0 && (
+          <span className="ml-2 px-2 py-1 text-xs font-bold text-slate-300 bg-slate-700 rounded-full">
+            {props.conout.actions.length}
+          </span>
         )}
-        {props.conout.actions.slice(-100).map((msg, i) => (
-          <div key={i} className={classes.entry}>
-            <span className={classes.ts}>{moment(msg.timestamp).format('HH:mm:ss.SSS')}</span>
-            {msg.payload.html
-              ? <span className={msg.payload.lvl === 'error' ? classes.error : classes.normal} dangerouslySetInnerHTML={{ __html: msg.payload.html }} />
-              : <span className={msg.payload.lvl === 'error' ? classes.error : classes.normal}>{msg.payload.txt}</span>
-            }
-            {msg.payload.obj && <TreeView data={msg.payload.obj} />}
+        <svg
+          className={`ml-auto w-5 h-5 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </button>
+
+      {isExpanded && (
+        <div className="transition-all duration-300">
+          <div className="max-h-72 overflow-y-auto bg-slate-950 border-t border-slate-700 p-4 font-mono text-xs text-slate-400" style={{ fontFamily: "'Fira Code', 'JetBrains Mono', 'Courier New', monospace", lineHeight: 1.8 }}>
+            {props.conout.actions.length === 0 && (
+              <span className="text-slate-500">No output yet. Load some data sources to see API calls.</span>
+            )}
+            {props.conout.actions.slice(-100).map((msg, i) => (
+              <div key={i} className="flex gap-3 border-b border-slate-800 py-1 last:border-b-0">
+                <span className="text-slate-600 flex-shrink-0">{moment(msg.timestamp).format('HH:mm:ss.SSS')}</span>
+                <div className="flex-1">
+                  {msg.payload.html
+                    ? <span className={msg.payload.lvl === 'error' ? 'text-red-500' : 'text-slate-400'} dangerouslySetInnerHTML={{ __html: msg.payload.html }} />
+                    : <span className={msg.payload.lvl === 'error' ? 'text-red-500' : 'text-slate-400'}>{msg.payload.txt}</span>
+                  }
+                  {msg.payload.obj && <TreeView data={msg.payload.obj} />}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <Divider />
-      <AccordionActions className={classes.actions}>
-        <Tooltip title="Clear console">
-          <Fab size="small" color="secondary" onClick={props.cleanConout}>
-            <DeleteIcon style={{ fontSize: 18 }} />
-          </Fab>
-        </Tooltip>
-      </AccordionActions>
-    </Accordion>
+
+          <div className="border-t border-slate-700 bg-slate-800 p-3 flex justify-end">
+            <button
+              onClick={props.cleanConout}
+              title="Clear console"
+              className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200"
+            >
+              <DeleteIcon style={{ fontSize: 18 }} />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -107,7 +79,7 @@ const TreeView = ({ data, toggled = false, name = null, isLast = true, isChildEl
           <>&nbsp;&nbsp;</>
         </>
       )}
-      {name && <strong style={{ color: '#2563eb' }}>{name}: </strong>}
+      {name && <strong style={{ color: '#60a5fa' }}>{name}: </strong>}
       {plain
         ? (data ? String(data) : data === null ? 'null' : data)
         : (
@@ -118,7 +90,7 @@ const TreeView = ({ data, toggled = false, name = null, isLast = true, isChildEl
               typeof data[v] === 'object'
                 ? <TreeView key={`${name}-${v}-${i}`} data={data[v]} isLast={i === a.length - 1} name={isArray ? null : v} isChildElement isParentToggled={isParentToggled && isToggled} />
                 : <p key={`${name}-${v}-${i}`} className={`tree-element${isToggled ? '' : ' collapsed'}`}>
-                    {!isArray && <strong style={{ color: '#2563eb' }}>{v}: </strong>}
+                    {!isArray && <strong style={{ color: '#60a5fa' }}>{v}: </strong>}
                     <Print val={data[v]} />
                     {i !== a.length - 1 ? ',' : ''}
                   </p>
@@ -134,7 +106,7 @@ const TreeView = ({ data, toggled = false, name = null, isLast = true, isChildEl
 
 const Print = ({ val }) => {
   const q = typeof val === 'string' ? '"' : ''
-  const color = typeof val === 'string' ? '#16a34a' : typeof val === 'number' ? '#d97706' : '#dc2626'
+  const color = typeof val === 'string' ? '#4ade80' : typeof val === 'number' ? '#fbbf24' : '#ef4444'
   return <span style={{ color }}>{q + val + q}</span>
 }
 

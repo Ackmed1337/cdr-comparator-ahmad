@@ -1,75 +1,6 @@
 import React, { useMemo } from 'react'
-import { makeStyles } from '@material-ui/core'
-
-const useStyles = makeStyles(theme => ({
-  chart: {
-    padding: '12px 0',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 16,
-  },
-  section: {
-    paddingBottom: 12,
-    borderBottom: '1px solid #e2e8f0',
-  },
-  title: {
-    fontSize: '0.85rem',
-    fontWeight: 700,
-    color: '#1e293b',
-    marginBottom: 8,
-  },
-  bars: {
-    display: 'flex',
-    gap: 6,
-    alignItems: 'flex-end',
-    height: 80,
-    [theme.breakpoints.down('sm')]: {
-      height: 60,
-      gap: 4,
-    }
-  },
-  bar: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    minWidth: 0,
-  },
-  barFill: {
-    width: '100%',
-    background: '#3b82f6',
-    borderRadius: '4px 4px 0 0',
-    minHeight: 4,
-  },
-  barLabel: {
-    fontSize: '0.65rem',
-    fontWeight: 600,
-    color: '#64748b',
-    marginTop: 4,
-    textAlign: 'center',
-    wordBreak: 'break-word',
-    maxWidth: '100%',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '0.6rem',
-      marginTop: 2,
-    }
-  },
-  barValue: {
-    fontSize: '0.7rem',
-    color: '#374151',
-    fontWeight: 700,
-    marginTop: 2,
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '0.65rem',
-      marginTop: 1,
-    }
-  },
-}))
 
 const RateChart = ({ products, dataSources }) => {
-  const classes = useStyles()
-
   const depositRates = useMemo(() => {
     return products.map(pd => {
       const rates = pd.product.depositRates || []
@@ -102,26 +33,26 @@ const RateChart = ({ products, dataSources }) => {
     const range = maxRate - minRate || 0.001
 
     return (
-      <div key={label} className={classes.section}>
-        <div className={classes.title}>{label}</div>
-        <div className={classes.bars}>
+      <div key={label} className="pb-3 mb-4 border-b border-slate-700/50 last:border-b-0 last:mb-0 last:pb-0">
+        <div className="text-sm font-bold text-slate-300 mb-3">{label}</div>
+        <div className="flex gap-1.5 sm:gap-1 items-end h-20 sm:h-16">
           {rates.map((rate, i) => (
-            <div key={i} className={classes.bar}>
+            <div key={i} className="flex-1 flex flex-col items-center justify-end min-w-0">
               {rate !== null ? (
                 <>
                   <div
-                    className={classes.barFill}
+                    className="w-full rounded-t-sm min-h-1 transition-all duration-200"
                     style={{
                       height: `${((rate - minRate) / range) * 90 + 10}px`,
                       background: isDeposit ? '#10b981' : '#ef4444',
                     }}
                   />
-                  <div className={classes.barValue}>{(rate * 100).toFixed(2)}%</div>
+                  <div className="text-xs text-slate-300 font-bold mt-1 sm:mt-0.5">{(rate * 100).toFixed(2)}%</div>
                 </>
               ) : (
-                <div style={{ height: '10px', color: '#d1d5db', fontSize: '0.7rem' }}>N/A</div>
+                <div className="h-3 text-slate-500 text-xs">N/A</div>
               )}
-              <div className={classes.barLabel}>
+              <div className="text-xs sm:text-xs font-semibold text-slate-400 mt-1 sm:mt-0.5 text-center break-words max-w-full">
                 {dataSources[products[i].dataSourceIdx]?.name || 'Source'}
               </div>
             </div>
@@ -132,7 +63,7 @@ const RateChart = ({ products, dataSources }) => {
   }
 
   return (
-    <div className={classes.chart}>
+    <div className="py-3 flex flex-col gap-4">
       {hasDeposit && renderBars(depositRates, 'Max Deposit Rate (%)', true)}
       {hasLending && renderBars(lendingRates, 'Min Lending Rate (%)', false)}
     </div>

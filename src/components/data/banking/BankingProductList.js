@@ -1,24 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { START_RETRIEVE_PRODUCT_LIST, startRetrieveProductList, retrieveProductList } from '../../../store/banking/data'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import ProductCategory from './ProductCategory'
 import ProductSearch from './ProductSearch'
 import FeatureFilter from './FeatureFilter'
 import { normalise } from '../../../utils/url'
 import { translateProductCategory } from '../../../utils/dict'
-
-const pillBase = {
-  border: 'none',
-  borderRadius: 20,
-  padding: '3px 10px',
-  fontSize: '0.7rem',
-  fontWeight: 600,
-  cursor: 'pointer',
-  fontFamily: 'inherit',
-  transition: 'all 0.1s',
-  whiteSpace: 'nowrap',
-}
 
 class BankingProductList extends React.Component {
   state = { inputValue: '', search: '', activeCategory: null, filteredProducts: [], selectedFeatures: [] }
@@ -110,17 +97,24 @@ class BankingProductList extends React.Component {
     const pct = totalRecords ? (processed / totalRecords) * 100 : 0
 
     return (
-      <div style={{ maxHeight: 420, overflow: 'auto', paddingRight: 4 }}>
+      <div className="max-h-[420px] overflow-auto pr-1">
         {progress === START_RETRIEVE_PRODUCT_LIST && (
-          <div style={{ padding: '12px 0' }}>
-            <LinearProgress style={{ width: '100%', marginBottom: 8 }} />
-            <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>Fetching product list...</span>
+          <div className="py-3 mb-6">
+            <div className="w-full h-2 bg-slate-700/50 rounded-full mb-2 overflow-hidden">
+              <div className="h-full bg-blue-500 w-full"></div>
+            </div>
+            <span className="text-xs text-slate-400">Fetching product list...</span>
           </div>
         )}
         {!!totalRecords && processed < totalRecords && (
-          <div style={{ padding: '4px 0 8px' }}>
-            <LinearProgress variant="determinate" value={pct} style={{ width: '100%', marginBottom: 6 }} />
-            <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+          <div className="py-1 pb-2 mb-6">
+            <div className="w-full h-2 bg-slate-700/50 rounded-full mb-1.5 overflow-hidden">
+              <div
+                className="h-full bg-blue-500 transition-all duration-300"
+                style={{ width: `${pct}%` }}
+              ></div>
+            </div>
+            <span className="text-xs text-slate-400">
               Loading details {processed} / {totalRecords}
             </span>
           </div>
@@ -128,14 +122,14 @@ class BankingProductList extends React.Component {
         {done && products && (
           <>
             {categories.length > 1 && (
-              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 6 }}>
+              <div className="flex gap-2 flex-wrap mb-6">
                 <button
                   onClick={this.handleResetCategory}
-                  style={{
-                    ...pillBase,
-                    background: activeCategory === null ? '#2563eb' : '#f1f5f9',
-                    color: activeCategory === null ? '#fff' : '#475569',
-                  }}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
+                    activeCategory === null
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-slate-800 border border-slate-700 text-slate-400 hover:border-slate-600'
+                  }`}
                 >
                   All
                 </button>
@@ -143,11 +137,11 @@ class BankingProductList extends React.Component {
                   <button
                     key={cat}
                     onClick={() => this.handleToggleCategory(cat)}
-                    style={{
-                      ...pillBase,
-                      background: activeCategory === cat ? '#2563eb' : '#f1f5f9',
-                      color: activeCategory === cat ? '#fff' : '#475569',
-                    }}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
+                      activeCategory === cat
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-slate-800 border border-slate-700 text-slate-400 hover:border-slate-600'
+                    }`}
                   >
                     {translateProductCategory(cat)}
                   </button>
@@ -159,33 +153,18 @@ class BankingProductList extends React.Component {
               onFilter={this.handleProductSearchFilter}
             />
             <FeatureFilter onFilterChange={this.handleFeatureFilterChange} />
-            <div style={{ position: 'relative', marginBottom: 8 }}>
+            <div className="relative mb-6">
               <input
                 type="text"
                 placeholder="Filter products..."
                 value={inputValue}
                 onChange={this.handleSearchChange}
-                style={{
-                  width: '100%',
-                  padding: '6px 28px 6px 10px',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: 6,
-                  fontSize: '0.82rem',
-                  fontFamily: 'inherit',
-                  outline: 'none',
-                  boxSizing: 'border-box',
-                  color: '#1e293b',
-                  background: '#fff',
-                }}
+                className="w-full px-3 py-2 pr-8 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-200"
               />
               {inputValue && (
                 <button
                   onClick={() => this.setState({ inputValue: '', search: '' })}
-                  style={{
-                    position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)',
-                    background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8',
-                    fontSize: 14, lineHeight: 1, padding: 2,
-                  }}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-none border-none cursor-pointer text-slate-500 hover:text-slate-300 text-lg leading-none p-1 transition-colors duration-200"
                 >
                   ✕
                 </button>
@@ -197,12 +176,12 @@ class BankingProductList extends React.Component {
           <ProductCategory key={i} category={cat} products={filtered[cat]} dataSourceIndex={dataSourceIndex} />
         ))}
         {done && products && Object.keys(filtered).length === 0 && (
-          <div style={{ padding: '12px 0', fontSize: '0.82rem', color: '#94a3b8' }}>
+          <div className="py-3 text-sm text-slate-400 text-center">
             {search.trim() ? `No products matching "${search}"` : 'No products found.'}
           </div>
         )}
         {done && (search.trim() || activeCategory) && totalFiltered > 0 && (
-          <div style={{ fontSize: '0.72rem', color: '#94a3b8', padding: '4px 2px' }}>
+          <div className="text-xs text-slate-400 py-1 px-0.5">
             {totalFiltered} result{totalFiltered !== 1 ? 's' : ''}
           </div>
         )}

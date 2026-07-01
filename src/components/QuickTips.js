@@ -1,41 +1,7 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core'
-import Accordion from '@material-ui/core/Accordion'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
-import AccordionDetails from '@material-ui/core/AccordionDetails'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    marginBottom: 16,
-    backgroundColor: 'transparent',
-    border: 'none',
-    boxShadow: 'none',
-  },
-  heading: {
-    fontSize: '0.9rem',
-    fontWeight: 700,
-    color: '#f59e0b',
-  },
-  details: {
-    display: 'grid',
-    gap: 8,
-    padding: '12px 16px 16px',
-  },
-  tip: {
-    padding: 10,
-    background: '#fffbeb',
-    border: '1px solid #fce7f3',
-    borderLeft: '3px solid #f59e0b',
-    borderRadius: 4,
-    fontSize: '0.8rem',
-    color: '#78350f',
-    lineHeight: 1.5,
-  },
-}))
 
 const QuickTips = () => {
-  const classes = useStyles()
+  const [isExpanded, setIsExpanded] = React.useState(false)
 
   const tips = [
     'Use Quick Filters (High Rates, No Fees, Digital Wallet) to instantly narrow down products',
@@ -49,20 +15,34 @@ const QuickTips = () => {
   ]
 
   return (
-    <Accordion className={classes.root} defaultExpanded={false}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <div className={classes.heading}>Quick Tips</div>
-      </AccordionSummary>
-      <AccordionDetails style={{ flexDirection: 'column', width: '100%' }}>
-        <div className={classes.details}>
-          {tips.map((tip, idx) => (
-            <div key={idx} className={classes.tip}>
-              {tip}
-            </div>
-          ))}
+    <div className="bg-slate-800 border border-slate-700 rounded mb-4">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full flex items-center gap-3 px-4 py-3 bg-slate-900 hover:bg-slate-800 border-l-4 border-blue-500 transition-all duration-200"
+      >
+        <span className="text-sm font-semibold text-blue-400">Quick Tips</span>
+        <svg
+          className={`ml-auto w-5 h-5 text-blue-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </button>
+
+      {isExpanded && (
+        <div className="bg-slate-800 p-4 transition-all duration-300">
+          <div className="grid gap-3">
+            {tips.map((tip, idx) => (
+              <div key={idx} className="bg-slate-900 border-l-4 border-blue-500 p-3 text-xs text-slate-300 rounded-r transition-all duration-200 hover:bg-slate-800">
+                {tip}
+              </div>
+            ))}
+          </div>
         </div>
-      </AccordionDetails>
-    </Accordion>
+      )}
+    </div>
   )
 }
 

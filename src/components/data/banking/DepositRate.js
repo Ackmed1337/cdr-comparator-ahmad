@@ -2,22 +2,9 @@ import React from 'react'
 import RateTier from './RateTier'
 import Duration from '../Duration'
 import {translateDepositRateType} from '../../../utils/dict'
-import {makeStyles} from '@material-ui/core'
 import ecomp from '../../../utils/enum-comp'
 
-const useStyles = makeStyles(() => ({
-  sectionTitle: {
-    fontStyle: 'italic'
-  },
-  sectionContent: {
-    marginTop: 0,
-    marginBottom: 0,
-    paddingLeft: 20
-  }
-}))
-
 const DepositRate = (props) => {
-  const classes = useStyles()
   const {
     rate,
     depositRateType,
@@ -29,9 +16,9 @@ const DepositRate = (props) => {
     additionalInfoUri
   } = props.depositRate
   return (
-    <li>
-      <div>{(rate * 100).toFixed(2)}%</div>
-      <div>
+    <li className="bg-slate-800/30 p-2 rounded border-l-2 border-green-500 mb-1">
+      <div className="text-base font-bold text-green-400">{(rate * 100).toFixed(2)}%</div>
+      <div className="text-xs font-semibold text-slate-400">
         {translateDepositRateType(depositRateType)}
         {
           (depositRateType === 'FIXED' || depositRateType === 'INTRODUCTORY') && !!additionalValue &&
@@ -45,19 +32,19 @@ const DepositRate = (props) => {
           <span> - {additionalValue}</span>
         }
       </div>
-      {!!calculationFrequency && <div>Calculated <Duration prefix="every" value={calculationFrequency}/></div>}
-      {!!applicationFrequency && <div>Applied <Duration prefix="every" value={applicationFrequency}/></div>}
+      {!!calculationFrequency && <div className="text-xs text-slate-500">Calculated <Duration prefix="every" value={calculationFrequency}/></div>}
+      {!!applicationFrequency && <div className="text-xs text-slate-500">Applied <Duration prefix="every" value={applicationFrequency}/></div>}
       {
         !!tiers && tiers.length > 0 &&
           <div>
-            <div className={classes.sectionTitle}>Rate Tiers:</div>
-            <ul className={classes.sectionContent}>
+            <div className="text-xs italic text-slate-500">Rate Tiers:</div>
+            <ul className="pl-5">
               {tiers.sort((a, b)=>ecomp(a.name, b.name)).map((tier, index) => <RateTier key={index} tier={tier}/>)}
             </ul>
           </div>
       }
-      {!!additionalInfo && <div>{additionalInfo}</div>}
-      {!!additionalInfoUri && <div><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer'>More info</a></div>}
+      {!!additionalInfo && <div className="text-xs text-slate-400">{additionalInfo}</div>}
+      {!!additionalInfoUri && <div><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer' className="text-xs text-green-400 hover:text-green-300">More info</a></div>}
     </li>
   )
 }

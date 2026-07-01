@@ -1,33 +1,23 @@
 import React from 'react'
-import {makeStyles} from '@material-ui/core'
-
-const useStyles = makeStyles(() => ({
-  cardArt: {
-    display: 'table-row',
-    '& img': {
-    maxWidth: 100,
-    maxHeight: 100,
-    display: 'table-cell',
-    verticalAlign: 'middle',
-    paddingRight: 5
-    },
-    '& span': {
-    display: 'table-cell',
-    verticalAlign: 'middle'
-    }
-  }
-}))
 
 function CardArt(props) {
   const {cardArt} = props
-  const classes = useStyles()
   return (
-    <li>
-      {!!cardArt.title && <div>{cardArt.title}</div>}
+    <li className="bg-slate-800/30 p-2 rounded border-l-2 border-purple-500 mb-1">
+      {!!cardArt.title && <div className="text-xs font-semibold text-slate-400 mb-2">{cardArt.title}</div>}
       <div>
-        <a className={classes.cardArt} href={cardArt.imageUri} target="_blank" rel="noopener noreferrer">
-          <img src={cardArt.imageUri} alt=""/>
-          <span>{cardArt.imageUri}</span>
+        <a
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+          href={cardArt.imageUri}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src={cardArt.imageUri}
+            alt="Card art"
+            className="w-24 h-24 object-contain flex-shrink-0"
+          />
+          <span className="text-xs text-slate-400 break-all">{cardArt.imageUri}</span>
         </a>
       </div>
     </li>

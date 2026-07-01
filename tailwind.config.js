@@ -62,6 +62,9 @@ module.exports = {
         '4.5': '1.125rem',
         '5.5': '1.375rem',
       },
+      maxHeight: {
+        '160': '40rem',
+      },
       borderRadius: {
         'sm': '4px',
         'md': '8px',
