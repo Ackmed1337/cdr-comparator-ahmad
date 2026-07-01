@@ -63,4 +63,4 @@ const Feature = (props) => {
   )
 }
 
-export default Feature
+export default React.memo(Feature)

@@ -62,4 +62,4 @@ const DepositRate = (props) => {
   )
 }
 
-export default DepositRate
+export default React.memo(DepositRate)

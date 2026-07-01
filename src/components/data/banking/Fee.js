@@ -70,4 +70,4 @@ const Fee = (props) => {
   )
 }
 
-export default Fee
+export default React.memo(Fee)

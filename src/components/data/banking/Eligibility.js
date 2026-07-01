@@ -38,4 +38,4 @@ const Eligibility = (props) => {
   )
 }
 
-export default Eligibility
+export default React.memo(Eligibility)

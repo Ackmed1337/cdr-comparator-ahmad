@@ -29,4 +29,9 @@ const rootReducer = combineReducers({
 })
 
 const middleWares = [thunk, promise]
+if (process.env.NODE_ENV === 'development') {
+  const logger = require('redux-logger').logger
+  middleWares.push(logger)
+}
+
 export default createStore(rootReducer, applyMiddleware(...middleWares))

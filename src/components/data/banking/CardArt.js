@@ -34,4 +34,4 @@ function CardArt(props) {
   )
 }
 
-export default CardArt
+export default React.memo(CardArt)

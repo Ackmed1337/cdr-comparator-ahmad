@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import Accordion from '@material-ui/core/Accordion'
@@ -107,6 +107,8 @@ const listStyle = { margin: 0, padding: '0 0 0 16px' }
 
 const RATE_KEYS = new Set(['depositRates', 'lendingRates'])
 
+const sortByName = (arr) => [...arr].sort((a, b) => ecomp(a.name, b.name))
+
 const getRepresentativeRate = (product, key) => {
   const val = product[key]
   if (!val?.length) return null
@@ -126,7 +128,7 @@ const getHighlight = (products, key) => {
   return { bestIdx: values.indexOf(bestVal), worstIdx: values.indexOf(worstVal) }
 }
 
-const render = (product, key) => {
+const renderRow = (product, key) => {
   const val = product[key]
   switch (key) {
     case 'description':
@@ -144,19 +146,19 @@ const render = (product, key) => {
     case 'additionalInformation':
       return val ? <AdditionalInfo additionalInfo={val} tableCell /> : null
     case 'bundles':
-      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <Bundle key={i} bundle={x} />)}</ul> : null
+      return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <Bundle key={i} bundle={x} />)}</ul> : null
     case 'constraints':
-      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <Constraint key={i} constraint={x} />)}</ul> : null
+      return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <Constraint key={i} constraint={x} />)}</ul> : null
     case 'depositRates':
-      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <DepositRate key={i} depositRate={x} />)}</ul> : null
+      return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <DepositRate key={i} depositRate={x} />)}</ul> : null
     case 'lendingRates':
-      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <LendingRate key={i} lendingRate={x} />)}</ul> : null
+      return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <LendingRate key={i} lendingRate={x} />)}</ul> : null
     case 'eligibility':
-      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <Eligibility key={i} eligibility={x} />)}</ul> : null
+      return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <Eligibility key={i} eligibility={x} />)}</ul> : null
     case 'features':
-      return val?.length > 0 ? <ul style={listStyle}>{val.sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <Feature key={i} feature={x} />)}</ul> : null
+      return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <Feature key={i} feature={x} />)}</ul> : null
     case 'fees':
-      return val?.length > 0 ? <ul style={listStyle}>{val.filter(Boolean).sort((a, b) => ecomp(a.name, b.name)).map((x, i) => <Fee key={i} fee={x} />)}</ul> : null
+      return val?.length > 0 ? <ul style={listStyle}>{sortByName(val.filter(Boolean)).map((x, i) => <Fee key={i} fee={x} />)}</ul> : null
     case 'cardArt':
       return val?.length > 0 ? <ul style={listStyle}>{val.map((x, i) => <CardArt key={i} cardArt={x} />)}</ul> : null
     default:
@@ -197,28 +199,40 @@ const toText = (product, key) => {
   }
 }
 
-const downloadCSV = (products, dataSources) => {
-  const headers = ['Field', ...products.map(pd => `${dataSources[pd.dataSourceIdx]?.name} - ${pd.product.name}`)]
-  const rows = productDataKeys
-    .map(dk => {
-      const cells = products.map(pd => toText(pd.product, dk.key))
-      if (cells.every(c => !c)) return null
-      return [dk.label, ...cells]
-    })
-    .filter(Boolean)
-  const esc = v => `"${String(v).replace(/"/g, '""')}"`
-  const csv = [headers, ...rows].map(row => row.map(esc).join(',')).join('\r\n')
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `comparison-${new Date().toISOString().slice(0, 10)}.csv`
-  a.click()
-  URL.revokeObjectURL(url)
-}
-
 const BankingComparisonPanel = ({ dataSources, products }) => {
   const classes = useStyles()
+
+  const rowData = useMemo(() => {
+    if (!products || products.length === 0) return []
+    return productDataKeys.map(dataKey => {
+      const cells = products.map(pd => renderRow(pd.product, dataKey.key))
+      const hasAny = cells.some(c => c !== null && c !== undefined && c !== false)
+      if (!hasAny) return null
+      const highlight = RATE_KEYS.has(dataKey.key) ? getHighlight(products, dataKey.key) : null
+      return { dataKey, cells, highlight }
+    }).filter(Boolean)
+  }, [products])
+
+  const handleDownload = useCallback(() => {
+    if (!products || products.length === 0) return
+    const headers = ['Field', ...products.map(pd => `${dataSources[pd.dataSourceIdx]?.name} - ${pd.product.name}`)]
+    const rows = productDataKeys
+      .map(dk => {
+        const cells = products.map(pd => toText(pd.product, dk.key))
+        if (cells.every(c => !c)) return null
+        return [dk.label, ...cells]
+      })
+      .filter(Boolean)
+    const esc = v => `"${String(v).replace(/"/g, '""')}"`
+    const csv = [headers, ...rows].map(row => row.map(esc).join(',')).join('\r\n')
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `comparison-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }, [products, dataSources])
 
   if (!products || products.length === 0) return null
 
@@ -248,36 +262,30 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
             </tr>
           </thead>
           <tbody>
-            {productDataKeys.map((dataKey, rowIdx) => {
-              const cells = products.map(pd => render(pd.product, dataKey.key))
-              const hasAny = cells.some(c => c !== null && c !== undefined && c !== false)
-              if (!hasAny) return null
-              const highlight = RATE_KEYS.has(dataKey.key) ? getHighlight(products, dataKey.key) : null
-              return (
-                <tr key={dataKey.key} style={{ background: rowIdx % 2 === 0 ? '#fff' : '#f8fafc' }}>
-                  <td className={classes.labelCell} style={{ background: rowIdx % 2 === 0 ? '#f8fafc' : '#f1f5f9' }}>
-                    {dataKey.label}
-                  </td>
-                  {cells.map((cell, i) => {
-                    const isBest = highlight?.bestIdx === i
-                    const isWorst = highlight?.worstIdx === i
-                    return (
-                      <td
-                        key={i}
-                        className={[
-                          classes.dataCell,
-                          !cell ? classes.emptyCell : '',
-                          isBest ? classes.bestCell : '',
-                          isWorst ? classes.worstCell : '',
-                        ].join(' ')}
-                      >
-                        {cell || '—'}
-                      </td>
-                    )
-                  })}
-                </tr>
-              )
-            })}
+            {rowData.map(({ dataKey, cells, highlight }, rowIdx) => (
+              <tr key={dataKey.key} style={{ background: rowIdx % 2 === 0 ? '#fff' : '#f8fafc' }}>
+                <td className={classes.labelCell} style={{ background: rowIdx % 2 === 0 ? '#f8fafc' : '#f1f5f9' }}>
+                  {dataKey.label}
+                </td>
+                {cells.map((cell, i) => {
+                  const isBest = highlight?.bestIdx === i
+                  const isWorst = highlight?.worstIdx === i
+                  return (
+                    <td
+                      key={i}
+                      className={[
+                        classes.dataCell,
+                        !cell ? classes.emptyCell : '',
+                        isBest ? classes.bestCell : '',
+                        isWorst ? classes.worstCell : '',
+                      ].join(' ')}
+                    >
+                      {cell || '—'}
+                    </td>
+                  )
+                })}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -294,7 +302,7 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
           </span>
         </div>
         <Tooltip title="Export as CSV">
-          <Fab size="small" color="primary" onClick={() => downloadCSV(products, dataSources)}>
+          <Fab size="small" color="primary" onClick={handleDownload}>
             <GetAppIcon style={{ fontSize: 18 }} />
           </Fab>
         </Tooltip>

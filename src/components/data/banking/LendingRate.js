@@ -77,4 +77,4 @@ const LendingRate = (props) => {
   )
 }
 
-export default LendingRate
+export default React.memo(LendingRate)

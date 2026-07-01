@@ -95,15 +95,26 @@ const Section = ({ title, children }) => {
   )
 }
 
+const sortArray = (arr, key) => [...arr].sort((a, b) => ecomp(a[key], b[key]))
+
 const Product = (props) => {
   const classes = useStyles()
   const { product, dataSourceIndex, selectedProducts } = props
   const selected = selectedProducts.some(p => p.dataSourceIdx === dataSourceIndex && p.product.productId === product.productId)
-  const blob = new Blob([JSON.stringify(product, null, 2)], { type: 'application/json' })
 
   const toggle = e => e.target.checked
     ? props.selectProduct(dataSourceIndex, product)
     : props.deselectProduct(dataSourceIndex, product)
+
+  const downloadJSON = () => {
+    const blob = new Blob([JSON.stringify(product, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${product.productId}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   return (
     <div className={classes.root}>
@@ -121,7 +132,7 @@ const Product = (props) => {
             </div>
           )}
           <Field label="Brand" value={product.brand} />
-          <Field label="Last updated" value={<><DateTime rfc3339={product.lastUpdated} /> &nbsp;<a href={URL.createObjectURL(blob)} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.72rem' }}>JSON</a></>} />
+          <Field label="Last updated" value={<><DateTime rfc3339={product.lastUpdated} /> &nbsp;<button onClick={downloadJSON} style={{ cursor: 'pointer', fontSize: '0.72rem', color: '#2563eb', border: 'none', padding: 0, background: 'none', textDecoration: 'underline' }}>JSON</button></>} />
           <Field label="Tailored" value={product.isTailored ? 'Yes' : 'No'} />
           {product.effectiveFrom && <Field label="Effective from" value={<DateTime rfc3339={product.effectiveFrom} />} />}
           {product.effectiveTo && <Field label="Effective to" value={<DateTime rfc3339={product.effectiveTo} />} />}
@@ -134,37 +145,37 @@ const Product = (props) => {
           )}
           {product.bundles?.length > 0 && (
             <Section title="Bundles">
-              {product.bundles.sort((a, b) => ecomp(a.name, b.name)).map((b, i) => <Bundle key={i} bundle={b} />)}
+              {sortArray(product.bundles, 'name').map((b, i) => <Bundle key={i} bundle={b} />)}
             </Section>
           )}
           {product.constraints?.length > 0 && (
             <Section title="Constraints">
-              {product.constraints.sort((a, b) => ecomp(a.constraintType, b.constraintType)).map((c, i) => <Constraint key={i} constraint={c} />)}
+              {sortArray(product.constraints, 'constraintType').map((c, i) => <Constraint key={i} constraint={c} />)}
             </Section>
           )}
           {product.depositRates?.length > 0 && (
             <Section title="Deposit Rates">
-              {product.depositRates.sort((a, b) => ecomp(a.depositRateType, b.depositRateType)).map((r, i) => <DepositRate key={i} depositRate={r} />)}
+              {sortArray(product.depositRates, 'depositRateType').map((r, i) => <DepositRate key={i} depositRate={r} />)}
             </Section>
           )}
           {product.lendingRates?.length > 0 && (
             <Section title="Lending Rates">
-              {product.lendingRates.sort((a, b) => ecomp(a.lendingRateType, b.lendingRateType)).map((r, i) => <LendingRate key={i} lendingRate={r} />)}
+              {sortArray(product.lendingRates, 'lendingRateType').map((r, i) => <LendingRate key={i} lendingRate={r} />)}
             </Section>
           )}
           {product.eligibility?.length > 0 && (
             <Section title="Eligibility">
-              {product.eligibility.sort((a, b) => ecomp(a.eligibilityType, b.eligibilityType)).map((e, i) => <Eligibility key={i} eligibility={e} />)}
+              {sortArray(product.eligibility, 'eligibilityType').map((e, i) => <Eligibility key={i} eligibility={e} />)}
             </Section>
           )}
           {product.features?.length > 0 && (
             <Section title="Features">
-              {product.features.sort((a, b) => ecomp(a.featureType, b.featureType)).map((f, i) => <Feature key={i} feature={f} />)}
+              {sortArray(product.features, 'featureType').map((f, i) => <Feature key={i} feature={f} />)}
             </Section>
           )}
           {product.fees?.length > 0 && (
             <Section title="Fees">
-              {product.fees.filter(Boolean).sort((a, b) => ecomp(a.feeType, b.feeType)).map((f, i) => <Fee key={i} fee={f} />)}
+              {sortArray(product.fees.filter(Boolean), 'feeType').map((f, i) => <Fee key={i} fee={f} />)}
             </Section>
           )}
           {product.cardArt?.length > 0 && (

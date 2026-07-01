@@ -48,4 +48,4 @@ const Constraint = (props) => {
   )
 }
 
-export default Constraint
+export default React.memo(Constraint)

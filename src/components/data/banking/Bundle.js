@@ -12,4 +12,4 @@ const Bundle = (props) => {
   )
 }
 
-export default Bundle
+export default React.memo(Bundle)
