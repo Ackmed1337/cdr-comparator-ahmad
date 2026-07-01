@@ -6,6 +6,7 @@ import ConsolePanel from './data/ConsolePanel'
 import Header from './header'
 import BankingComparisonPanel from './comparison/BankingComparisonPanel'
 import DiscoveryInfo from './data/discovery/DiscoveryInfo'
+import QuickTips from './QuickTips'
 
 const useStyles = makeStyles(() => ({
   hidden: { display: 'none' },
@@ -53,6 +54,7 @@ function Page() {
       <Header title="Comparator" />
       <div className={classes.content}>
         <DataSourcePanel />
+        <QuickTips />
         <ConsolePanel />
         <div className={classes.tabRow}>
           {tabs.map((label, i) => (
