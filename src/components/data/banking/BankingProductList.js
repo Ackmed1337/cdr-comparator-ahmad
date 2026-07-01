@@ -97,7 +97,7 @@ class BankingProductList extends React.Component {
     const pct = totalRecords ? (processed / totalRecords) * 100 : 0
 
     return (
-      <div className="max-h-[420px] overflow-auto pr-1">
+      <div className="pb-2">
         {progress === START_RETRIEVE_PRODUCT_LIST && (
           <div className="py-4 mb-6 px-1 animate-fadeIn">
             <div className="w-full h-2 bg-slate-700/50 rounded-full mb-2 overflow-hidden shadow-sm">

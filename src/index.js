@@ -23,8 +23,10 @@ const App = () => {
 
   return (
     <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
-      <div className="bg-slate-950 text-slate-100 min-h-screen font-sans">
-        <Page />
+      <div className={darkMode ? 'dark' : ''}>
+        <div className="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen font-sans">
+          <Page />
+        </div>
       </div>
     </ThemeContext.Provider>
   )

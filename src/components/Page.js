@@ -14,21 +14,21 @@ function Page() {
   return (
     <>
       <Header title="Comparator" />
-      <div className="bg-slate-950 min-h-screen">
-        <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="dark:bg-slate-950 bg-slate-100 min-h-screen">
+        <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
           <DataSourcePanel />
           <ConsolePanel />
 
           {/* Tab Navigation */}
-          <div className="flex gap-8 border-b border-slate-800 mb-8">
+          <div className="flex gap-8 border-b border-slate-300 dark:border-slate-800 pt-2">
             {tabs.map((label, i) => (
               <button
                 key={i}
                 onClick={() => setTab(i)}
                 className={`pb-3 font-semibold text-sm transition-all duration-200 ${
                   tab === i
-                    ? 'text-blue-400 border-b-2 border-blue-500'
-                    : 'text-slate-400 hover:text-slate-200 border-b-2 border-transparent'
+                    ? 'text-blue-500 border-b-2 border-blue-500'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 border-b-2 border-transparent'
                 }`}
               >
                 {label}
@@ -37,7 +37,7 @@ function Page() {
           </div>
 
           {/* Tab Content */}
-          <div className={tab !== 0 ? 'hidden' : ''}>
+          <div className={`space-y-6 ${tab !== 0 ? 'hidden' : ''}`}>
             <BankingPanel />
             <BankingComparisonPanel />
           </div>

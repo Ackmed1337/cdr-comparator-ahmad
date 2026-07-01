@@ -49,7 +49,7 @@ const BankingPanel = (props) => {
                 isBankingDataSource(ds) && (
                   <div key={index} className="flex flex-col">
                     {/* Data Source Header */}
-                    <div className="flex items-center gap-3 p-3 mb-4 bg-slate-750 border-l-4 border-blue-500 rounded-lg border border-slate-700">
+                    <div className="flex items-center gap-3 p-3 mb-4 bg-slate-900 border-l-4 border-blue-500 rounded-lg border border-slate-700">
                       {ds.icon && <img src={ds.icon} alt="" className="w-7 h-7 object-contain flex-shrink-0" />}
                       <span className="text-sm font-bold text-slate-100">{ds.name}</span>
                     </div>
