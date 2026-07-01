@@ -1,10 +1,5 @@
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo, useCallback, useState } from 'react'
 import { connect } from 'react-redux'
-import Accordion from '@material-ui/core/Accordion'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
-import AccordionActions from '@material-ui/core/AccordionActions'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import GetAppIcon from '@material-ui/icons/GetApp'
 import Tooltip from '@material-ui/core/Tooltip'
 import { productDataKeys } from '../../utils/dict'
 import { format } from '../../utils/datetime'
@@ -25,7 +20,6 @@ import SavingsCalculator from '../tools/SavingsCalculator'
 import FeatureMatrix from './FeatureMatrix'
 import { generatePDFComparison } from '../../utils/export'
 import { encodeComparisonURL, copyToClipboard } from '../../utils/share'
-import ShareIcon from '@material-ui/icons/Share'
 
 const listStyle = { margin: 0, padding: '0 0 0 16px' }
 
@@ -124,6 +118,7 @@ const toText = (product, key) => {
 }
 
 const BankingComparisonPanel = ({ dataSources, products }) => {
+  const [isExpanded, setIsExpanded] = useState(true)
   const rowData = useMemo(() => {
     if (!products || products.length === 0) return []
     return productDataKeys.map(dataKey => {
@@ -167,16 +162,24 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
   const colWidth = `${85 / products.length}%`
 
   return (
-    <Accordion defaultExpanded style={{ backgroundColor: '#ffffff' }}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="comparison-content">
+    <div className="mb-4 bg-slate-900 border border-slate-800 rounded-lg overflow-hidden">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full px-4 py-3 bg-slate-900 hover:bg-slate-800 border-l-4 border-blue-500 transition-all flex items-center justify-between"
+      >
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-sm text-slate-900">Product Comparison</span>
-          <span className="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-0.5 rounded-full">
+          <span className="font-semibold text-sm text-blue-400">Product Comparison</span>
+          <span className="bg-blue-900/50 text-blue-300 text-xs font-bold px-2 py-0.5 rounded-full">
             {products.length} products
           </span>
         </div>
-      </AccordionSummary>
-      <div className="w-11/12 mx-auto mb-5 overflow-auto max-h-160 rounded-lg border border-slate-300 bg-slate-950">
+        <svg className={`w-5 h-5 text-blue-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </button>
+
+      {isExpanded && (
+        <div className="w-11/12 mx-auto my-5 overflow-auto max-h-160 rounded-lg border border-slate-700 bg-slate-950">
         <ComparisonStats products={products} />
         <RateChart products={products} dataSources={dataSources} />
 
@@ -246,14 +249,16 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
           ))}
         </div>
       </div>
-      <AccordionActions className="px-4 py-2 flex justify-between items-center flex-wrap gap-2 border-t border-slate-300">
-        <div className="flex gap-3 items-center text-xs text-slate-500">
+      )}
+
+      <div className="px-4 py-2 flex justify-between items-center flex-wrap gap-2 border-t border-slate-700 bg-slate-900">
+        <div className="flex gap-3 items-center text-xs text-slate-400">
           <span className="flex items-center gap-1">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-green-50 border border-green-500" />
+            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-green-900/50 border border-green-500" />
             Best rate
           </span>
           <span className="flex items-center gap-1">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-red-50 border border-red-500" />
+            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-red-900/50 border border-red-500" />
             Worst rate
           </span>
         </div>
@@ -263,7 +268,7 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
               onClick={handleShare}
               className="p-2 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-700 transition-colors duration-200 hover:shadow-lg"
             >
-              <ShareIcon style={{ fontSize: 16 }} />
+              🔗
             </button>
           </Tooltip>
           <Tooltip title="Download as HTML">
@@ -271,7 +276,7 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
               onClick={() => generatePDFComparison(products, dataSources, 'html')}
               className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 transition-colors duration-200 hover:shadow-lg"
             >
-              <GetAppIcon style={{ fontSize: 16 }} />
+              ⬇️
             </button>
           </Tooltip>
           <Tooltip title="Export as CSV">
@@ -279,12 +284,12 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
               onClick={handleDownload}
               className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200 hover:shadow-lg"
             >
-              <GetAppIcon style={{ fontSize: 16 }} />
+              📥
             </button>
           </Tooltip>
         </div>
-      </AccordionActions>
-    </Accordion>
+      </div>
+    </div>
   )
 }
 
