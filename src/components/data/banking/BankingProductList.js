@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { START_RETRIEVE_PRODUCT_LIST, startRetrieveProductList, retrieveProductList } from '../../../store/banking/data'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import ProductCategory from './ProductCategory'
+import ProductSearch from './ProductSearch'
+import FeatureFilter from './FeatureFilter'
 import { normalise } from '../../../utils/url'
 import { translateProductCategory } from '../../../utils/dict'
 
@@ -19,7 +21,7 @@ const pillBase = {
 }
 
 class BankingProductList extends React.Component {
-  state = { inputValue: '', search: '', activeCategory: null }
+  state = { inputValue: '', search: '', activeCategory: null, filteredProducts: [], selectedFeatures: [] }
   _debounceTimer = null
 
   componentDidMount() {
@@ -46,6 +48,14 @@ class BankingProductList extends React.Component {
     this._debounceTimer = setTimeout(() => {
       this.setState({ search: value })
     }, 250)
+  }
+
+  handleFeatureFilterChange = (features) => {
+    this.setState({ selectedFeatures: features })
+  }
+
+  handleProductSearchFilter = (filtered) => {
+    this.setState({ filteredProducts: filtered })
   }
 
   render() {
@@ -132,6 +142,11 @@ class BankingProductList extends React.Component {
                 ))}
               </div>
             )}
+            <ProductSearch
+              products={Object.values(filtered).flat()}
+              onFilter={this.handleProductSearchFilter}
+            />
+            <FeatureFilter onFilterChange={this.handleFeatureFilterChange} />
             <div style={{ position: 'relative', marginBottom: 8 }}>
               <input
                 type="text"
