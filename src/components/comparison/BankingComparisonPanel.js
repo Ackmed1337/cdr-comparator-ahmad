@@ -22,6 +22,7 @@ import Eligibility from '../data/banking/Eligibility'
 import Feature from '../data/banking/Feature'
 import Fee from '../data/banking/Fee'
 import CardArt from '../data/banking/CardArt'
+import RateChart from './RateChart'
 
 const useStyles = makeStyles(theme => ({
   panel: { backgroundColor: '#fff' },
@@ -295,6 +296,8 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
         </div>
       </AccordionSummary>
       <div className={classes.wrapper}>
+        <RateChart products={products} dataSources={dataSources} />
+
         <table className={`${classes.table} ${classes.desktopTable}`}>
           <thead>
             <tr>

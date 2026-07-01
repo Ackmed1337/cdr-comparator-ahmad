@@ -59,10 +59,6 @@ const BankingPanel = (props) => {
   const [expanded, setExpanded] = React.useState(true)
 
   const compare = () => {
-    if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-      alert('Screen too small — use a larger device to compare.')
-      return
-    }
     props.compareProducts(props.selectedProducts)
     setExpanded(false)
   }
