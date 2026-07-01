@@ -5,7 +5,6 @@ import ConsolePanel from './data/ConsolePanel'
 import Header from './layout/Header'
 import BankingComparisonPanel from './comparison/BankingComparisonPanel'
 import DiscoveryInfo from './data/discovery/DiscoveryInfo'
-import QuickTips from './QuickTips'
 
 const tabs = ['Banking', 'Status & Outages']
 
@@ -18,7 +17,6 @@ function Page() {
       <div className="bg-slate-950 min-h-screen">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <DataSourcePanel />
-          <QuickTips />
           <ConsolePanel />
 
           {/* Tab Navigation */}
