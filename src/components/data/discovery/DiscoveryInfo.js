@@ -24,11 +24,10 @@ const DiscoveryInfo = (props) => {
     // eslint-disable-next-line
   }, [props.dataSources])
 
-  const colWidth = (count) => {
-    if (count === 1) return 'w-full'
-    if (count === 2) return 'w-1/2'
-    if (count === 3) return 'w-1/3'
-    return 'w-1/4'
+  const gridCols = (count) => {
+    if (count <= 1) return 'grid-cols-1'
+    if (count === 2) return 'grid-cols-1 sm:grid-cols-2'
+    return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
   }
 
   return (
@@ -55,12 +54,12 @@ const DiscoveryInfo = (props) => {
       {expanded && (
         <div className="bg-slate-100 dark:bg-slate-800 p-4 text-slate-700 dark:text-slate-300 text-sm border-t border-slate-300 dark:border-slate-700">
           {savedDataSourcesCount > 0 ? (
-            <div className="flex flex-wrap gap-3">
+            <div className={`grid ${gridCols(savedDataSourcesCount)} gap-3`}>
               {dataSources.map((ds, i) => {
                 const data = props.data[i]
                 if (!data || ds.unsaved || !ds.enabled || ds.deleted) return null
                 return (
-                  <div key={i} className={`${colWidth(savedDataSourcesCount)} min-w-xs`}>
+                  <div key={i} className="min-w-0">
                     <div className="bg-slate-100/80 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-lg p-3">
                       <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-300 dark:border-slate-700">
                         {ds.icon && <img src={ds.icon} alt="" className="w-7 h-7 object-contain flex-shrink-0" onError={e => { e.target.style.display = 'none' }} />}

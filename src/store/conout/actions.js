@@ -1,5 +1,4 @@
 export const CONSOLE_OUT = 'CONSOLE_OUT'
-export const CONSOLE_REFRESH = 'CONSOLE_REFRESH'
 export const CONSOLE_CLEAN = 'CONSOLE_CLEAN'
 
 export const conoutInfo = (txt, obj) => {
@@ -29,10 +28,6 @@ function createLogEntry(payload) {
     timestamp: new Date()
   }
 }
-
-export const refreshConout = () => ({
-  type: CONSOLE_REFRESH
-})
 
 export const cleanConout = () => ({
   type: CONSOLE_CLEAN

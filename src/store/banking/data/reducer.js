@@ -14,7 +14,7 @@ export default function banking(state = [], action) {
       const {idx} = action.payload
       const item = s[idx]
       if (item) {
-        item.progress = action.type
+        s[idx] = {...item, progress: action.type}
       } else {
         s[idx] = {
           progress: action.type,
@@ -30,21 +30,21 @@ export default function banking(state = [], action) {
       const s = [...state]
       const {idx, response} = action.payload
       const item = s[idx]
-      item.progress = action.type
-      item.totalRecords = response.meta.totalRecords
-      item.products = [...item.products, ...response.data.products]
+      s[idx] = {
+        ...item,
+        progress: action.type,
+        totalRecords: response.meta.totalRecords,
+        products: [...item.products, ...response.data.products]
+      }
       return s
     }
     case fulfilled(RETRIEVE_PRODUCT_DETAIL): {
       const s = [...state]
       const {idx, response} = action.payload
       const item = s[idx]
-      if (response) {
-        item.productDetails.push(response.data)
-        item.detailRecords++
-      } else {
-        item.failedDetailRecords++
-      }
+      s[idx] = response
+        ? {...item, productDetails: [...item.productDetails, response.data], detailRecords: item.detailRecords + 1}
+        : {...item, failedDetailRecords: item.failedDetailRecords + 1}
       return s
     }
     case DELETE_DATA:

@@ -54,7 +54,7 @@ const LendingRate = (props) => {
         <div>
           <div className="text-xs italic text-slate-500">Rate Tiers:</div>
           <ul className="pl-5">
-            {tiers.sort((a, b)=>ecomp(a.name, b.name)).map((tier, index) => <RateTier key={index} tier={tier}/>)}
+            {[...tiers].sort((a, b)=>ecomp(a.name, b.name)).map((tier, index) => <RateTier key={index} tier={tier}/>)}
           </ul>
         </div>
       }

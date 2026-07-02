@@ -47,7 +47,7 @@ const FeeDiscount = (props) => {
         <div>
           <div className="text-xs text-slate-500 dark:text-slate-400 italic">Discount Eligibilities</div>
           <ul className="pl-5">
-            {eligibility.sort((a, b)=>ecomp(a.discountEligibilityType, b.discountEligibilityType)).map(
+            {[...eligibility].sort((a, b)=>ecomp(a.discountEligibilityType, b.discountEligibilityType)).map(
               (discountEligibility, index) => <DiscountEligibility key={index} eligibility={discountEligibility}/>)}
           </ul>
         </div>

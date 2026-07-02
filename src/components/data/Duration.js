@@ -12,7 +12,7 @@ const Duration = props => {
     return <span>{value}</span>
   }
   const duration = parse(value)
-  const units = ['year', 'month', 'day', 'hour', 'minute', 'second']
+  const units = ['year', 'month', 'week', 'day', 'hour', 'minute', 'second']
   return <span>{prefix ? prefix + ' ' : ''}{units.map((unit, idx) => {
     const num = duration[unit + 's']
     if (!num) {

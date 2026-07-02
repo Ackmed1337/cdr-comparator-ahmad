@@ -1,4 +1,5 @@
 const ecomp = (a, b) => {
+  if (a === b) return 0
   if (b === 'OTHER') return -1
   if (a === 'OTHER') return 1
   if (a < b) return -1

@@ -1,14 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Slider from '@material-ui/core/Slider'
+import { bestLendingRate } from '../../utils/rates'
 
 const LoanCalculator = ({ products, dataSources }) => {
   const [loanAmount, setLoanAmount] = useState(300000)
   const [term, setTerm] = useState(25)
   const [selectedProduct, setSelectedProduct] = useState(products?.[0])
+  const [rate, setRate] = useState(0.05)
 
   const product = selectedProduct || products?.[0]
-  const rate = product ? (product.lendingRates?.[0]?.rate || 0.05) : 0.05
+  const productRate = product ? bestLendingRate(product.lendingRates) : null
+
+  // Re-sync the rate to the selected product's published rate, but keep it in
+  // its own state so the slider below can still be dragged to model other scenarios.
+  useEffect(() => {
+    setRate(productRate ?? 0.05)
+  }, [productRate])
 
   const monthlyRate = rate / 12
   const numPayments = term * 12
@@ -63,15 +71,19 @@ const LoanCalculator = ({ products, dataSources }) => {
       <div className="mb-4">
         <div className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
           Interest Rate: {(rate * 100).toFixed(2)}%
+          {productRate === null && (
+            <span className="text-xs font-normal text-slate-400 dark:text-slate-500 ml-2">
+              (no rate published for this product — showing an estimate, drag to adjust)
+            </span>
+          )}
         </div>
         <Slider
           value={rate * 100}
-          onChange={(_, val) => {}}
+          onChange={(_, val) => setRate(val / 100)}
           min={1}
-          max={10}
-          step={0.1}
-          marks={[{ value: 1, label: '1%' }, { value: 5, label: '5%' }, { value: 10, label: '10%' }]}
-          disabled
+          max={30}
+          step={0.05}
+          marks={[{ value: 1, label: '1%' }, { value: 10, label: '10%' }, { value: 20, label: '20%' }, { value: 30, label: '30%' }]}
         />
       </div>
 

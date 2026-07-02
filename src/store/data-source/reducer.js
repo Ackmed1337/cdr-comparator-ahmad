@@ -26,8 +26,7 @@ export default function dataSources(state=[], action) {
       return dataSources
     }
     case DELETE_DATA_SOURCE: {
-      const dataSources = [...state]
-      dataSources[action.index].deleted = true
+      const dataSources = state.map((dataSource, index) => (index === action.index ? {...dataSource, deleted: true} : dataSource))
       persistSavedDataSources(dataSources)
       return dataSources
     }

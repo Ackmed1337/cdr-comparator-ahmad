@@ -20,6 +20,7 @@ import SavingsCalculator from '../tools/SavingsCalculator'
 import FeatureMatrix from './FeatureMatrix'
 import { generatePDFComparison } from '../../utils/export'
 import { encodeComparisonURL, copyToClipboard } from '../../utils/share'
+import { bestDepositRate, bestLendingRate } from '../../utils/rates'
 
 const listStyle = { margin: 0, padding: '0 0 0 16px' }
 
@@ -28,11 +29,7 @@ const RATE_KEYS = new Set(['depositRates', 'lendingRates'])
 const sortByName = (arr) => [...arr].sort((a, b) => ecomp(a.name, b.name))
 
 const getRepresentativeRate = (product, key) => {
-  const val = product[key]
-  if (!val?.length) return null
-  const rates = val.map(r => parseFloat(r.rate)).filter(r => !isNaN(r))
-  if (!rates.length) return null
-  return key === 'depositRates' ? Math.max(...rates) : Math.min(...rates)
+  return key === 'depositRates' ? bestDepositRate(product[key]) : bestLendingRate(product[key])
 }
 
 const getHighlight = (products, key) => {
@@ -213,15 +210,24 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
                 {cells.map((cell, i) => {
                   const isBest = highlight?.bestIdx === i
                   const isWorst = highlight?.worstIdx === i
-                  const bgColor = isBest ? 'bg-green-100 dark:bg-green-900/40 border-l-4 border-t-4 border-green-500 text-green-700 dark:text-green-300' :
-                                 isWorst ? 'bg-red-100 dark:bg-red-900/40 border-l-4 border-t-4 border-red-500 text-red-700 dark:text-red-300' :
-                                 'text-slate-700 dark:text-slate-300 border-r border-slate-300 dark:border-slate-700 last:border-r-0'
+                  const accent = isBest ? 'bg-green-50 dark:bg-green-950/40 border-l-2 border-green-500' :
+                                 isWorst ? 'bg-red-50 dark:bg-red-950/40 border-l-2 border-red-500' :
+                                 'border-r border-slate-300 dark:border-slate-700 last:border-r-0'
                   return (
                     <td
                       key={i}
-                      className={`text-center text-sm p-3 px-3.5 transition-colors duration-200 ${bgColor} ${!cell ? 'opacity-50' : ''}`}
+                      className={`align-top text-center text-sm p-3 px-3.5 text-slate-700 dark:text-slate-300 transition-colors duration-200 ${accent} ${!cell ? 'opacity-50' : ''}`}
                     >
-                      {cell || '—'}
+                      {(isBest || isWorst) && (
+                        <span className={`inline-block mb-1.5 text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded ${
+                          isBest
+                            ? 'text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-900/50'
+                            : 'text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-900/50'
+                        }`}>
+                          {isBest ? 'Best' : 'Worst'}
+                        </span>
+                      )}
+                      <div>{cell || '—'}</div>
                     </td>
                   )
                 })}

@@ -88,25 +88,27 @@ const DataSource = (props) => {
 
   return (
     <div>
-      <div className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900/80 transition-colors duration-200" onClick={stop}>
-        <input
-          type="checkbox"
-          checked={dataSource.enabled}
-          onChange={change('enabled')}
-          className="w-4 h-4 accent-blue-500 cursor-pointer flex-shrink-0 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-all duration-200"
-        />
-        <div className="flex-shrink-0 w-[22%]">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 px-4 py-3 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900/80 transition-colors duration-200" onClick={stop}>
+        <div className="flex items-center gap-3">
           <input
-            type="text"
-            value={dataSource.name}
-            onChange={change('name')}
-            placeholder="e.g. Acme Bank"
-            className={`w-full px-3 py-2 bg-slate-100 dark:bg-slate-800 border rounded text-sm text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-              !dataSource.name.trim().length ? 'border-red-500/50' : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600'
-            }`}
+            type="checkbox"
+            checked={dataSource.enabled}
+            onChange={change('enabled')}
+            className="w-4 h-4 accent-blue-500 cursor-pointer flex-shrink-0 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 transition-all duration-200"
           />
+          <div className="flex-1 sm:flex-shrink-0 sm:w-[22%]">
+            <input
+              type="text"
+              value={dataSource.name}
+              onChange={change('name')}
+              placeholder="e.g. Acme Bank"
+              className={`w-full px-3 py-2 bg-slate-100 dark:bg-slate-800 border rounded text-sm text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+                !dataSource.name.trim().length ? 'border-red-500/50' : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600'
+              }`}
+            />
+          </div>
         </div>
-        <div className="flex-shrink-0 w-[34%]">
+        <div className="sm:flex-shrink-0 sm:w-[34%]">
           <input
             type="text"
             value={dataSource.url}
@@ -117,7 +119,7 @@ const DataSource = (props) => {
             }`}
           />
         </div>
-        <div className="flex-shrink-0 w-[28%]">
+        <div className="sm:flex-shrink-0 sm:w-[28%]">
           <input
             type="text"
             value={dataSource.icon || ''}
@@ -128,7 +130,7 @@ const DataSource = (props) => {
             }`}
           />
         </div>
-        <div className="flex-shrink-0 flex items-center gap-2">
+        <div className="flex-shrink-0 flex items-center justify-end sm:justify-start gap-2">
           {status && (
             <div
               className={`flex-shrink-0 rounded-full cursor-help transition-all duration-200 ${status.loading ? 'animate-pulse' : ''}`}

@@ -1,17 +1,12 @@
 import React from 'react'
+import { bestDepositRate, bestLendingRate } from '../../utils/rates'
 
 const ComparisonStats = ({ products }) => {
   if (!products || products.length < 2) return null
 
-  const bestDepositRates = products.map(pd => {
-    const rates = (pd.product.depositRates || []).map(r => parseFloat(r.rate)).filter(r => !isNaN(r))
-    return rates.length ? Math.max(...rates) : null
-  }).filter(r => r !== null)
+  const bestDepositRates = products.map(pd => bestDepositRate(pd.product.depositRates)).filter(r => r !== null)
 
-  const bestLendingRates = products.map(pd => {
-    const rates = (pd.product.lendingRates || []).map(r => parseFloat(r.rate)).filter(r => !isNaN(r))
-    return rates.length ? Math.min(...rates) : null
-  }).filter(r => r !== null)
+  const bestLendingRates = products.map(pd => bestLendingRate(pd.product.lendingRates)).filter(r => r !== null)
 
   const average = arr => arr.length ? arr.reduce((sum, r) => sum + r, 0) / arr.length : 0
 

@@ -15,7 +15,7 @@ function Page() {
     <>
       <Header title="Comparator" />
       <div className="dark:bg-slate-950 bg-slate-100 min-h-screen">
-        <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-8 space-y-6">
           <DataSourcePanel />
           <ConsolePanel />
 

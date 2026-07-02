@@ -1,13 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from '@material-ui/core/TextField'
+import Slider from '@material-ui/core/Slider'
+import { bestDepositRate } from '../../utils/rates'
 
 const SavingsCalculator = ({ products }) => {
   const [principalAmount, setPrincipalAmount] = useState(100000)
   const [years, setYears] = useState(5)
   const [selectedProduct, setSelectedProduct] = useState(products?.[0])
+  const [rate, setRate] = useState(0.02)
 
   const product = selectedProduct || products?.[0]
-  const rate = product ? (product.depositRates?.[0]?.rate || 0.02) : 0.02
+  const productRate = product ? bestDepositRate(product.depositRates) : null
+
+  // Re-sync the rate to the selected product's published rate, but keep it in
+  // its own state so the slider below can still be dragged to model other scenarios.
+  useEffect(() => {
+    setRate(productRate ?? 0.02)
+  }, [productRate])
 
   // Simple compound interest: A = P(1 + r/n)^(nt)
   // Monthly compounding (n=12)
@@ -64,7 +73,20 @@ const SavingsCalculator = ({ products }) => {
       <div className="mb-4">
         <div className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
           Interest Rate: {(rate * 100).toFixed(2)}% per annum (compounded monthly)
+          {productRate === null && (
+            <span className="text-xs font-normal text-slate-400 dark:text-slate-500 ml-2">
+              (no rate published for this product — showing an estimate, drag to adjust)
+            </span>
+          )}
         </div>
+        <Slider
+          value={rate * 100}
+          onChange={(_, val) => setRate(val / 100)}
+          min={0}
+          max={10}
+          step={0.05}
+          marks={[{ value: 0, label: '0%' }, { value: 5, label: '5%' }, { value: 10, label: '10%' }]}
+        />
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

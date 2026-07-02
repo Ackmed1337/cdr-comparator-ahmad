@@ -1,22 +1,13 @@
 import React, { useMemo } from 'react'
+import { bestDepositRate, bestLendingRate } from '../../utils/rates'
 
 const RateChart = ({ products, dataSources }) => {
   const depositRates = useMemo(() => {
-    return products.map(pd => {
-      const rates = pd.product.depositRates || []
-      if (!rates.length) return null
-      const rateValues = rates.map(r => parseFloat(r.rate)).filter(r => !isNaN(r))
-      return rateValues.length ? Math.max(...rateValues) : null
-    })
+    return products.map(pd => bestDepositRate(pd.product.depositRates))
   }, [products])
 
   const lendingRates = useMemo(() => {
-    return products.map(pd => {
-      const rates = pd.product.lendingRates || []
-      if (!rates.length) return null
-      const rateValues = rates.map(r => parseFloat(r.rate)).filter(r => !isNaN(r))
-      return rateValues.length ? Math.min(...rateValues) : null
-    })
+    return products.map(pd => bestLendingRate(pd.product.lendingRates))
   }, [products])
 
   const hasDeposit = depositRates.some(r => r !== null)

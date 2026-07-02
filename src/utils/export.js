@@ -1,3 +1,7 @@
+import { bestDepositRate, bestLendingRate } from './rates'
+
+const formatRate = (rate) => rate === null ? '—' : (rate * 100).toFixed(2) + '%'
+
 export const generatePDFComparison = (products, dataSources, format = 'html') => {
   const timestamp = new Date().toLocaleString()
 
@@ -41,21 +45,11 @@ const generateHTMLReport = (products, dataSources, timestamp) => {
     },
     {
       label: 'Max Deposit Rate',
-      values: products.map(p => {
-        const rates = p.product.depositRates || []
-        if (!rates.length) return '—'
-        const rateValues = rates.map(r => parseFloat(r.rate)).filter(r => !isNaN(r))
-        return rateValues.length ? (Math.max(...rateValues) * 100).toFixed(2) + '%' : '—'
-      })
+      values: products.map(p => formatRate(bestDepositRate(p.product.depositRates)))
     },
     {
       label: 'Min Lending Rate',
-      values: products.map(p => {
-        const rates = p.product.lendingRates || []
-        if (!rates.length) return '—'
-        const rateValues = rates.map(r => parseFloat(r.rate)).filter(r => !isNaN(r))
-        return rateValues.length ? (Math.min(...rateValues) * 100).toFixed(2) + '%' : '—'
-      })
+      values: products.map(p => formatRate(bestLendingRate(p.product.lendingRates)))
     },
     {
       label: 'Features',

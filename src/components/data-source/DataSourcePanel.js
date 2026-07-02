@@ -67,7 +67,7 @@ const DataSourcePanel = (props) => {
           <div className="max-h-72 overflow-y-auto bg-white dark:bg-slate-800">
             {dataSources.length > 0 && (
               <div>
-                <div className="flex gap-2 px-9 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800 z-10">
+                <div className="hidden sm:flex gap-2 px-9 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800 z-10">
                   <div className="flex-0 w-[22%]">Name</div>
                   <div className="flex-0 w-[34%]">API base URL</div>
                   <div className="flex-0 w-[28%]">Icon URL</div>
