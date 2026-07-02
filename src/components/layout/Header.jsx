@@ -17,7 +17,7 @@ export default function Header({ title }) {
             className="h-8 w-8 object-contain opacity-90 dark:brightness-0 dark:invert"
           />
           <div>
-            <div className="font-bold text-lg text-slate-900 dark:text-slate-100 leading-tight">
+            <div className="font-bold text-lg text-blue-600 dark:text-blue-400 leading-tight">
               {title}
             </div>
             <div className="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-widest font-medium">
@@ -37,14 +37,15 @@ export default function Header({ title }) {
             Demo
           </span>
           <Button
-            variant="ghost"
+            variant="secondary"
             size="sm"
             onClick={toggleDarkMode}
-            className="!px-2"
+            className="gap-2"
             title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            {darkMode ? '☀️' : '🌙'}
+            <span aria-hidden="true">{darkMode ? '☀️' : '🌙'}</span>
+            {darkMode ? 'Light mode' : 'Dark mode'}
           </Button>
         </div>
       </div>

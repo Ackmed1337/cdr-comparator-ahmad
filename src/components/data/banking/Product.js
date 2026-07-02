@@ -43,14 +43,11 @@ const Product = (props) => {
     ? props.selectProduct(dataSourceIndex, product)
     : props.deselectProduct(dataSourceIndex, product)
 
-  const downloadJSON = () => {
+  const viewJSON = () => {
     const blob = new Blob([JSON.stringify(product, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${product.productId}.json`
-    a.click()
-    URL.revokeObjectURL(url)
+    window.open(url, '_blank')
+    setTimeout(() => URL.revokeObjectURL(url), 60000)
   }
 
   return (
@@ -63,13 +60,13 @@ const Product = (props) => {
           onChange={toggle}
           className="absolute opacity-0 w-4 h-4 cursor-pointer"
         />
-        <div className={`w-4 h-4 rounded border-2 transition-colors duration-200 ${
+        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors duration-200 ${
           selected
             ? 'bg-blue-500 border-blue-500'
             : 'border-slate-400 dark:border-slate-600 bg-white dark:bg-slate-900 group-hover:border-blue-500'
         }`}>
           {selected && (
-            <svg className="w-3 h-3 text-white absolute inset-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
             </svg>
           )}
@@ -109,10 +106,10 @@ const Product = (props) => {
               <span className="text-slate-700 dark:text-slate-300">
                 <DateTime rfc3339={product.lastUpdated} /> &nbsp;
                 <button
-                  onClick={downloadJSON}
+                  onClick={viewJSON}
                   className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 text-xs font-semibold underline cursor-pointer bg-transparent border-none p-0"
                 >
-                  JSON
+                  View JSON
                 </button>
               </span>
             } />

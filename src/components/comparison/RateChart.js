@@ -29,8 +29,6 @@ const RateChart = ({ products, dataSources }) => {
     if (!validRates.length) return null
 
     const maxRate = Math.max(...validRates)
-    const minRate = Math.min(...validRates)
-    const range = maxRate - minRate || 0.001
 
     return (
       <div key={label} className="pb-3 mb-4 border-b border-slate-300/50 dark:border-slate-700/50 last:border-b-0 last:mb-0 last:pb-0">
@@ -43,7 +41,7 @@ const RateChart = ({ products, dataSources }) => {
                   <div
                     className="w-full rounded-t-sm min-h-1 transition-all duration-200"
                     style={{
-                      height: `${((rate - minRate) / range) * 90 + 10}px`,
+                      height: `${(rate / maxRate) * 90 + 10}px`,
                       background: isDeposit ? '#10b981' : '#ef4444',
                     }}
                   />

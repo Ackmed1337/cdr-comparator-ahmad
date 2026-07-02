@@ -75,26 +75,22 @@ const BankingPanel = (props) => {
         </div>
       )}
 
-      {/* Panel Footer/Actions */}
-      <div className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {selCount > 0 && (
-              <span className="text-sm text-slate-500 dark:text-slate-400">
-                {selCount} product{selCount !== 1 ? 's' : ''} selected
-                {selCount > 4 && <span className="text-red-500 ml-1">(max 4)</span>}
-              </span>
-            )}
-          </div>
-
-          {/* Floating Compare Button */}
+      {/* Floating Compare Bar — stays on screen regardless of scroll position, since a bank's
+          product list can be long enough that a footer-anchored button would be unreachable. */}
+      {selCount > 0 && (
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 pl-5 pr-2 py-2 rounded-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 shadow-2xl">
+          <span className="text-sm text-slate-600 dark:text-slate-300 whitespace-nowrap">
+            {selCount} product{selCount !== 1 ? 's' : ''} selected
+            {selCount > 4 && <span className="text-red-500 ml-1">(max 4)</span>}
+            {selCount === 1 && <span className="text-slate-400 dark:text-slate-500 ml-1">(select at least 2)</span>}
+          </span>
           <button
             onClick={compare}
             disabled={!canCompare}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm whitespace-nowrap transition-all duration-200 ${
               canCompare
                 ? 'bg-blue-500 hover:bg-blue-600 text-white shadow-lg hover:shadow-blue-500/50 cursor-pointer'
-                : 'bg-slate-300 dark:bg-slate-600 text-slate-500 dark:text-slate-400 cursor-not-allowed'
+                : 'bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed'
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,7 +99,7 @@ const BankingPanel = (props) => {
             Compare {canCompare ? `(${selCount})` : ''}
           </button>
         </div>
-      </div>
+      )}
     </div>
   )
 }

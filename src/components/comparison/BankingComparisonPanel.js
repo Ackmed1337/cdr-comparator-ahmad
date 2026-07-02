@@ -179,7 +179,7 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
       </button>
 
       {isExpanded && (
-        <div className="w-11/12 mx-auto my-5 overflow-auto max-h-160 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-950">
+        <div className="mx-auto my-5 w-11/12 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-950 p-4">
         <ComparisonStats products={products} />
         <RateChart products={products} dataSources={dataSources} />
 
@@ -191,12 +191,13 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
         )}
         <FeatureMatrix products={products} dataSources={dataSources} />
 
+        <div className="overflow-x-auto rounded-lg border border-slate-300 dark:border-slate-700">
         <table className="w-full border-collapse border-spacing-0 hidden md:table">
           <thead>
             <tr>
-              <th className="sticky top-0 z-40 bg-gradient-to-r from-white to-slate-100 dark:from-slate-900 dark:to-slate-800 border-t-2 border-blue-500 text-left text-xs font-bold text-slate-700 dark:text-slate-300 p-3 px-3.5 border-r-2 border-slate-300 dark:border-slate-700 w-1/6 min-w-32" />
+              <th className="sticky top-16 z-40 bg-gradient-to-r from-white to-slate-100 dark:from-slate-900 dark:to-slate-800 border-t-2 border-blue-500 text-left text-xs font-bold text-slate-700 dark:text-slate-300 p-3 px-3.5 border-r-2 border-slate-300 dark:border-slate-700 w-1/6 min-w-32" />
               {products.map((pd, i) => (
-                <th key={i} className="sticky top-0 z-40 bg-gradient-to-r from-white to-slate-100 dark:from-slate-900 dark:to-slate-800 border-t-2 border-blue-500 px-3.5 py-3 border-r border-slate-300 dark:border-slate-700 last:border-r-0 text-center" style={{ width: colWidth }}>
+                <th key={i} className="sticky top-16 z-40 bg-gradient-to-r from-white to-slate-100 dark:from-slate-900 dark:to-slate-800 border-t-2 border-blue-500 px-3.5 py-3 border-r border-slate-300 dark:border-slate-700 last:border-r-0 text-center" style={{ width: colWidth }}>
                   <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{dataSources[pd.dataSourceIdx]?.name}</div>
                   <div className="font-bold text-slate-900 dark:text-slate-100 text-sm">{pd.product.name}</div>
                 </th>
@@ -228,6 +229,7 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
             ))}
           </tbody>
         </table>
+        </div>
 
         <div className="md:hidden px-2 py-4">
           {products.map((pd, prodIdx) => (
@@ -272,13 +274,13 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
               🔗
             </button>
           </Tooltip>
-          <Tooltip title="Download as HTML">
+          <Tooltip title="Open report in a new tab">
             <button
               onClick={() => generatePDFComparison(products, dataSources, 'html')}
-              aria-label="Download comparison as HTML"
+              aria-label="Open comparison report in a new tab"
               className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-300 transition-colors duration-200 hover:shadow-lg"
             >
-              ⬇️
+              📄
             </button>
           </Tooltip>
           <Tooltip title="Export as CSV">

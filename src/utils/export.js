@@ -5,11 +5,8 @@ export const generatePDFComparison = (products, dataSources, format = 'html') =>
     const html = generateHTMLReport(products, dataSources, timestamp)
     const blob = new Blob([html], { type: 'text/html' })
     const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `comparison-${new Date().toISOString().slice(0, 10)}.html`
-    a.click()
-    URL.revokeObjectURL(url)
+    window.open(url, '_blank')
+    setTimeout(() => URL.revokeObjectURL(url), 60000)
     return
   }
 
