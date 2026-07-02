@@ -18,6 +18,11 @@ const BankingPanel = (props) => {
     setExpanded(false)
   }
 
+  const reset = () => {
+    props.clearAllSelection()
+    props.compareProducts([])
+  }
+
   const selCount = props.selectedProducts.length
   const canCompare = selCount >= 2 && selCount <= 4
 
@@ -88,7 +93,7 @@ const BankingPanel = (props) => {
             Compare {canCompare ? `(${selCount})` : ''}
           </Button>
           <Button
-            onClick={props.clearAllSelection}
+            onClick={reset}
             variant="ghost"
             size="sm"
             className="rounded-full px-3"
