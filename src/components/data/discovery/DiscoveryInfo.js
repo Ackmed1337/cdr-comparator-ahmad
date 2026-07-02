@@ -12,6 +12,7 @@ import { cn } from '../../../lib/utils'
 const DiscoveryInfo = (props) => {
   const { dataSources, savedDataSourcesCount } = props
   const [expanded, setExpanded] = React.useState(true)
+  const [refreshing, setRefreshing] = React.useState(false)
 
   const refresh = () => {
     const { versionInfo } = props
@@ -28,6 +29,15 @@ const DiscoveryInfo = (props) => {
     refresh()
     // eslint-disable-next-line
   }, [props.dataSources])
+
+  // retrieveStatus/retrieveOutages are fire-and-forget thunks (they don't hand back a
+  // promise to await), so tie the spin to a fixed visible duration instead — it's about
+  // confirming the click registered, not tracking exact network completion.
+  const handleRefreshClick = () => {
+    refresh()
+    setRefreshing(true)
+    setTimeout(() => setRefreshing(false), 900)
+  }
 
   const gridCols = (count) => {
     if (count <= 1) return 'grid-cols-1'
@@ -85,13 +95,14 @@ const DiscoveryInfo = (props) => {
       {/* Footer with Refresh Button */}
       <div className="border-t border-border px-4 py-3 flex justify-center">
         <Button
-          onClick={refresh}
+          onClick={handleRefreshClick}
+          disabled={refreshing}
           size="icon"
           className="rounded-full"
           title="Refresh status"
           aria-label="Refresh status and outages"
         >
-          <RefreshCw className="w-4 h-4" />
+          <RefreshCw className={cn('w-4 h-4', refreshing && 'animate-spin')} />
         </Button>
       </div>
     </Card>

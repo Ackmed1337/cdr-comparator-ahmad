@@ -19,12 +19,32 @@ const xVVersions = ['999', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 const DataSourcePanel = (props) => {
   const { dataSources, addDataSource, syncDataSources, vHeaders, readOnly, setVersionsEditable, setVersionsReadOnly, saveVersionInfo, clearSelection, clearData, startRetrieveProductList, retrieveProductList, loadDataSource, loadVersionInfo } = props
   const [isExpanded, setIsExpanded] = React.useState(false)
+  const [syncing, setSyncing] = React.useState(false)
+  const listRef = React.useRef(null)
+  const prevCountRef = React.useRef(dataSources.length)
   let { xV, xMinV } = vHeaders
 
   React.useEffect(() => {
     loadDataSource()
     loadVersionInfo()
   }, [loadDataSource, loadVersionInfo])
+
+  // Scroll the (scrollable, fixed-height) list down to reveal a newly-added row —
+  // otherwise it lands below the fold and looks like nothing happened.
+  React.useEffect(() => {
+    if (dataSources.length > prevCountRef.current && listRef.current) {
+      listRef.current.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' })
+    }
+    prevCountRef.current = dataSources.length
+  }, [dataSources.length])
+
+  const handleSync = () => {
+    setSyncing(true)
+    // Keep the spin visible for a minimum stretch so fast/cached responses aren't an
+    // imperceptible flash, while still waiting for the real sync to actually finish.
+    Promise.all([Promise.resolve(syncDataSources()), new Promise(r => setTimeout(r, 600))])
+      .finally(() => setSyncing(false))
+  }
 
   const applyVersions = () => {
     if (xV && xMinV && (xV !== vHeaders.xV || xMinV !== vHeaders.xMinV)) {
@@ -56,7 +76,7 @@ const DataSourcePanel = (props) => {
 
       {isExpanded && (
         <div className="transition-all duration-300">
-          <div className="max-h-72 overflow-y-auto border-t border-border">
+          <div ref={listRef} className="max-h-72 overflow-y-auto border-t border-border">
             {dataSources.length > 0 && (
               <div>
                 <div className="hidden sm:flex gap-2 px-9 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-widest border-b border-border sticky top-0 bg-card z-10">
@@ -72,13 +92,14 @@ const DataSourcePanel = (props) => {
           <div className="border-t border-border p-4">
             <div className="flex items-center gap-4">
               <Button
-                onClick={syncDataSources}
+                onClick={handleSync}
+                disabled={syncing}
                 size="icon"
                 className="rounded-full"
                 title="Sync with CDR Register"
                 aria-label="Sync data sources with CDR Register"
               >
-                <RefreshCw className="w-4 h-4" />
+                <RefreshCw className={cn('w-4 h-4', syncing && 'animate-spin')} />
               </Button>
 
               <div className="flex-1 flex items-center justify-center gap-4">

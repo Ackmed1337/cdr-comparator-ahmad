@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { ChevronDown, Landmark, GitCompare } from 'lucide-react'
+import { ChevronDown, Landmark, GitCompare, RotateCcw } from 'lucide-react'
 import BankingProductList from './BankingProductList'
 import { compareProducts } from '../../../store/banking/comparison'
+import { clearAllSelection } from '../../../store/banking/selection'
 import { Card } from '../../ui/Card'
 import { Badge } from '../../ui/Badge'
 import { Button } from '../../ui/Button'
@@ -86,6 +87,17 @@ const BankingPanel = (props) => {
             <GitCompare className="w-4 h-4" />
             Compare {canCompare ? `(${selCount})` : ''}
           </Button>
+          <Button
+            onClick={props.clearAllSelection}
+            variant="ghost"
+            size="sm"
+            className="rounded-full px-3"
+            title="Clear selection"
+            aria-label="Clear selection"
+          >
+            <RotateCcw className="w-4 h-4" />
+            Reset
+          </Button>
         </div>
       )}
     </Card>
@@ -102,4 +114,4 @@ const mapStateToProps = state => ({
   selectedProducts: state.bankingSelection,
 })
 
-export default connect(mapStateToProps, { compareProducts })(BankingPanel)
+export default connect(mapStateToProps, { compareProducts, clearAllSelection })(BankingPanel)
