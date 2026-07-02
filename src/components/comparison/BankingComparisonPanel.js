@@ -65,9 +65,9 @@ const renderRow = (product, key) => {
     case 'constraints':
       return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <Constraint key={i} constraint={x} />)}</ul> : null
     case 'depositRates':
-      return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <DepositRate key={i} depositRate={x} />)}</ul> : null
+      return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <DepositRate key={i} depositRate={x} compact />)}</ul> : null
     case 'lendingRates':
-      return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <LendingRate key={i} lendingRate={x} />)}</ul> : null
+      return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <LendingRate key={i} lendingRate={x} compact />)}</ul> : null
     case 'eligibility':
       return val?.length > 0 ? <ul style={listStyle}>{sortByName(val).map((x, i) => <Eligibility key={i} eligibility={x} />)}</ul> : null
     case 'features':
@@ -210,8 +210,8 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
                 {cells.map((cell, i) => {
                   const isBest = highlight?.bestIdx === i
                   const isWorst = highlight?.worstIdx === i
-                  const accent = isBest ? 'bg-green-50 dark:bg-green-950/40 border-l-2 border-green-500' :
-                                 isWorst ? 'bg-red-50 dark:bg-red-950/40 border-l-2 border-red-500' :
+                  const accent = isBest ? 'border-l-2 border-green-500' :
+                                 isWorst ? 'border-l-2 border-red-500' :
                                  'border-r border-slate-300 dark:border-slate-700 last:border-r-0'
                   return (
                     <td

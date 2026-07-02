@@ -5,6 +5,7 @@ import {translateInterestPaymentDue, translateLendingRateType, translateRepaymen
 import ecomp from '../../../utils/enum-comp'
 
 const LendingRate = (props) => {
+  const { compact } = props
   const {
     lendingRateType,
     rate,
@@ -44,11 +45,7 @@ const LendingRate = (props) => {
           <span> - {additionalValue}</span>
         }
       </div>
-      {!!calculationFrequency && <div className="text-xs text-slate-500">Calculated <Duration prefix="every" value={calculationFrequency}/></div>}
-      {!!applicationFrequency && <div className="text-xs text-slate-500">Applied <Duration prefix="every" value={applicationFrequency}/></div>}
-      {!!interestPaymentDue && <div className="text-xs text-slate-500">Interest Payment {translateInterestPaymentDue(interestPaymentDue)}</div>}
       {!!repaymentType && <div className="text-xs text-slate-500">Repayment Type {translateRepaymentType(repaymentType)}</div>}
-      {!!loanPurpose && <div className="text-xs text-slate-500">Loan Purpose {translateloanPurpose(loanPurpose)}</div>}
       {
         !!tiers && tiers.length > 0 &&
         <div>
@@ -58,8 +55,12 @@ const LendingRate = (props) => {
           </ul>
         </div>
       }
-      {!!additionalInfo && <div className="text-xs text-slate-500 dark:text-slate-400">{additionalInfo}</div>}
-      {!!additionalInfoUri && <div><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer' className="text-xs text-red-600 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300">More info</a></div>}
+      {!compact && !!calculationFrequency && <div className="text-xs text-slate-500">Calculated <Duration prefix="every" value={calculationFrequency}/></div>}
+      {!compact && !!applicationFrequency && <div className="text-xs text-slate-500">Applied <Duration prefix="every" value={applicationFrequency}/></div>}
+      {!compact && !!interestPaymentDue && <div className="text-xs text-slate-500">Interest Payment {translateInterestPaymentDue(interestPaymentDue)}</div>}
+      {!compact && !!loanPurpose && <div className="text-xs text-slate-500">Loan Purpose {translateloanPurpose(loanPurpose)}</div>}
+      {!compact && !!additionalInfo && <div className="text-xs text-slate-500 dark:text-slate-400">{additionalInfo}</div>}
+      {!compact && !!additionalInfoUri && <div><a href={additionalInfoUri} target='_blank' rel='noopener noreferrer' className="text-xs text-red-600 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300">More info</a></div>}
     </li>
   )
 }
