@@ -17,8 +17,8 @@ const DepositRate = (props) => {
     additionalInfoUri
   } = props.depositRate
   return (
-    <li className="bg-slate-100/30 dark:bg-slate-800/30 p-2 rounded border-l-2 border-green-500 mb-1">
-      <div className="text-base font-bold text-green-600 dark:text-green-400">{(rate * 100).toFixed(2)}%</div>
+    <li className={`bg-slate-100/30 dark:bg-slate-800/30 p-2 rounded border-l-2 mb-1 ${compact ? 'border-border' : 'border-green-500'}`}>
+      <div className={`text-base font-bold ${compact ? 'text-foreground' : 'text-green-600 dark:text-green-400'}`}>{(rate * 100).toFixed(2)}%</div>
       <div className="text-xs font-semibold text-slate-500 dark:text-slate-400">
         {translateDepositRateType(depositRateType)}
         {
