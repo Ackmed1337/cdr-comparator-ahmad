@@ -55,6 +55,7 @@ const ConsolePanel = (props) => {
             <button
               onClick={props.cleanConout}
               title="Clear console"
+              aria-label="Clear console"
               className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200"
             >
               <DeleteIcon style={{ fontSize: 18 }} />
@@ -75,7 +76,15 @@ const TreeView = ({ data, toggled = false, name = null, isLast = true, isChildEl
     <div className={`tree-element${isParentToggled ? '' : ' collapsed'} ${isChildElement || isToggled ? 'child' : 'parent'}`}>
       {!_.isEmpty(data) && (
         <>
-          <span className={`tree-toggler${isToggled ? ' open' : ''}${plain ? ' collapsed' : ''}`} onClick={() => setIsToggled(!isToggled)} />
+          <span
+            className={`tree-toggler${isToggled ? ' open' : ''}${plain ? ' collapsed' : ''}`}
+            onClick={() => setIsToggled(!isToggled)}
+            onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), setIsToggled(!isToggled))}
+            role="button"
+            tabIndex={0}
+            aria-expanded={isToggled}
+            aria-label={isToggled ? 'Collapse node' : 'Expand node'}
+          />
           <>&nbsp;&nbsp;</>
         </>
       )}

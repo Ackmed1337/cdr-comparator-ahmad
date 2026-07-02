@@ -266,7 +266,8 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
           <Tooltip title="Share this comparison">
             <button
               onClick={handleShare}
-              className="p-2 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-700 transition-colors duration-200 hover:shadow-lg"
+              aria-label="Share comparison link"
+              className="p-2 rounded-full bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/30 dark:hover:bg-amber-900/50 text-amber-700 dark:text-amber-300 transition-colors duration-200 hover:shadow-lg"
             >
               🔗
             </button>
@@ -274,7 +275,8 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
           <Tooltip title="Download as HTML">
             <button
               onClick={() => generatePDFComparison(products, dataSources, 'html')}
-              className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 transition-colors duration-200 hover:shadow-lg"
+              aria-label="Download comparison as HTML"
+              className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-300 transition-colors duration-200 hover:shadow-lg"
             >
               ⬇️
             </button>
@@ -282,6 +284,7 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
           <Tooltip title="Export as CSV">
             <button
               onClick={handleDownload}
+              aria-label="Export comparison as CSV"
               className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200 hover:shadow-lg"
             >
               📥

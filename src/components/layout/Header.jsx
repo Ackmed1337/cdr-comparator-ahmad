@@ -42,6 +42,7 @@ export default function Header({ title }) {
             onClick={toggleDarkMode}
             className="!px-2"
             title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {darkMode ? '☀️' : '🌙'}
           </Button>

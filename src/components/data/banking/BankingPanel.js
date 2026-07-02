@@ -15,6 +15,12 @@ const BankingPanel = (props) => {
   const selCount = props.selectedProducts.length
   const canCompare = selCount >= 2 && selCount <= 4
 
+  const gridCols = (count) => {
+    if (count <= 1) return 'grid-cols-1'
+    if (count === 2) return 'grid-cols-1 md:grid-cols-2'
+    return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+  }
+
   return (
     <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden shadow-xl">
       {/* Panel Header/Accordion Summary */}
@@ -44,7 +50,7 @@ const BankingPanel = (props) => {
       {expanded && (
         <div className="p-6 max-w-full mx-auto">
           {savedDataSourcesCount > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className={`grid ${gridCols(savedDataSourcesCount)} gap-4`}>
               {dataSources.map((ds, index) =>
                 isBankingDataSource(ds) && (
                   <div key={index} className="flex flex-col">

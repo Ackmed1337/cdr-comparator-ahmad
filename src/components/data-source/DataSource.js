@@ -150,6 +150,7 @@ const DataSource = (props) => {
                   : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'
               }`}
               title="Save"
+              aria-label="Save data source"
               disabled={!valid()}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,6 +162,7 @@ const DataSource = (props) => {
               onClick={del}
               className="px-3 py-1.5 rounded text-sm font-semibold bg-red-600/20 hover:bg-red-600/30 text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 border border-red-300 hover:border-red-400 dark:border-red-600/30 dark:hover:border-red-600/50 transition-all duration-200 active:scale-95 flex items-center gap-2"
               title="Remove"
+              aria-label="Remove data source"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

@@ -8,6 +8,13 @@
   box-sizing: border-box;
 }
 
+/* Suppress the per-element color transitions while the dark/light toggle
+   is switching, so the whole page flips instantly instead of every
+   card/button cross-fading its colors at once. */
+.theme-switching, .theme-switching * {
+  transition: none !important;
+}
+
 body {
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

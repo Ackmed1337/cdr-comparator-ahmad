@@ -54,32 +54,40 @@ const Product = (props) => {
   }
 
   return (
-    <div className="flex items-start gap-4 mb-4 p-4 bg-slate-100 dark:bg-slate-800 border-l-4 border-blue-500 rounded-lg shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
-      {/* Modern Toggle Checkbox */}
-      <div className="flex-shrink-0 mt-1">
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            checked={selected}
-            onChange={toggle}
-            className="sr-only peer"
-          />
-          <div className="w-11 h-6 bg-slate-300 dark:bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
-        </label>
-      </div>
+    <div className="flex items-start gap-3 mb-2 px-3 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors duration-200">
+      {/* Selection Checkbox */}
+      <label className="relative flex-shrink-0 mt-1.5 w-4 h-4 cursor-pointer group">
+        <input
+          type="checkbox"
+          checked={selected}
+          onChange={toggle}
+          className="absolute opacity-0 w-4 h-4 cursor-pointer"
+        />
+        <div className={`w-4 h-4 rounded border-2 transition-colors duration-200 ${
+          selected
+            ? 'bg-blue-500 border-blue-500'
+            : 'border-slate-400 dark:border-slate-600 bg-white dark:bg-slate-900 group-hover:border-blue-500'
+        }`}>
+          {selected && (
+            <svg className="w-3 h-3 text-white absolute inset-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+            </svg>
+          )}
+        </div>
+      </label>
 
       {/* Accordion Content */}
       <div className="flex-1 min-w-0">
         {/* Summary/Header */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className={`w-full flex items-center justify-between py-2 text-left font-semibold text-sm transition-colors duration-200 ${
+          className={`w-full flex items-center justify-between py-0.5 text-left font-semibold text-sm transition-colors duration-200 ${
             selected ? 'text-blue-700 dark:text-blue-300' : 'text-slate-900 dark:text-slate-100'
           } hover:text-blue-500 dark:hover:text-blue-300`}
         >
           <span className="line-height-1.4">{product.name}</span>
           <svg
-            className={`w-5 h-5 transition-transform duration-200 flex-shrink-0 ml-2 ${expanded ? 'rotate-180' : ''}`}
+            className={`w-4 h-4 transition-transform duration-200 flex-shrink-0 ml-2 ${expanded ? 'rotate-180' : ''}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

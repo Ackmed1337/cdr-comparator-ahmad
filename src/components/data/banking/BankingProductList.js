@@ -2,14 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { START_RETRIEVE_PRODUCT_LIST, startRetrieveProductList, retrieveProductList } from '../../../store/banking/data'
 import ProductCategory from './ProductCategory'
-import ProductSearch from './ProductSearch'
+import ProductSearch, { QUICK_FILTERS } from './ProductSearch'
 import FeatureFilter from './FeatureFilter'
 import { normalise } from '../../../utils/url'
 import { translateProductCategory } from '../../../utils/dict'
 
 class BankingProductList extends React.Component {
-  state = { inputValue: '', search: '', activeCategory: null, filteredProducts: [], selectedFeatures: [] }
-  _debounceTimer = null
+  state = { activeCategory: null, search: '', activeQuickFilters: [], selectedFeatures: [] }
 
   componentDidMount() {
     const { dataSourceIndex, dataSource, versionInfo } = this.props
@@ -18,36 +17,31 @@ class BankingProductList extends React.Component {
     this.props.retrieveProductList(dataSourceIndex, base, base + '/banking/products', versionInfo.xV, versionInfo.xMinV)
   }
 
-  componentWillUnmount() {
-    clearTimeout(this._debounceTimer)
-  }
-
   handleResetCategory = () => this.setState({ activeCategory: null })
 
   handleToggleCategory = (cat) => {
     this.setState(prev => ({ activeCategory: prev.activeCategory === cat ? null : cat }))
   }
 
-  handleSearchChange = (e) => {
-    const value = e.target.value
-    this.setState({ inputValue: value })
-    clearTimeout(this._debounceTimer)
-    this._debounceTimer = setTimeout(() => {
-      this.setState({ search: value })
-    }, 250)
-  }
-
   handleFeatureFilterChange = (features) => {
     this.setState({ selectedFeatures: features })
   }
 
-  handleProductSearchFilter = (filtered) => {
-    this.setState({ filteredProducts: filtered })
+  handleSearchChange = (value) => this.setState({ search: value })
+
+  handleToggleQuickFilter = (key) => {
+    this.setState(prev => ({
+      activeQuickFilters: prev.activeQuickFilters.includes(key)
+        ? prev.activeQuickFilters.filter(k => k !== key)
+        : [...prev.activeQuickFilters, key],
+    }))
   }
+
+  handleClearSearch = () => this.setState({ search: '', activeQuickFilters: [] })
 
   render() {
     const { dataSourceIndex } = this.props
-    const { search, inputValue, activeCategory, filteredProducts } = this.state
+    const { activeCategory, search, activeQuickFilters, selectedFeatures } = this.state
     const data = this.props.productList[dataSourceIndex] || {}
     const { progress, totalRecords, detailRecords = 0, failedDetailRecords = 0, products, productDetails } = data
     const processed = detailRecords + failedDetailRecords
@@ -71,29 +65,23 @@ class BankingProductList extends React.Component {
 
     const categories = Object.keys(byCategory).sort()
 
-    // First filter by category and search
-    let filtered = {}
+    const q = search.trim().toLowerCase()
+    const filtered = {}
     if (done) {
-      const q = search.trim().toLowerCase()
       Object.entries(byCategory).forEach(([cat, prods]) => {
         if (activeCategory && cat !== activeCategory) return
-        const matched = q ? prods.filter(p => p.name?.toLowerCase().includes(q)) : prods
+        const matched = prods.filter(p => {
+          if (q && !p.name?.toLowerCase().includes(q)) return false
+          if (activeQuickFilters.length && !activeQuickFilters.every(k => QUICK_FILTERS.find(f => f.key === k)?.test(p))) return false
+          if (selectedFeatures.length && !selectedFeatures.every(ft => p.features?.some(f => f.featureType === ft))) return false
+          return true
+        })
         if (matched.length) filtered[cat] = matched
       })
     }
 
-    // Then apply ProductSearch filters if active
-    if (filteredProducts && filteredProducts.length > 0) {
-      const filteredIds = new Set(filteredProducts.map(p => p.productId))
-      const result = {}
-      Object.entries(filtered).forEach(([cat, prods]) => {
-        const matched = prods.filter(p => filteredIds.has(p.productId))
-        if (matched.length) result[cat] = matched
-      })
-      filtered = result
-    }
-
     const totalFiltered = Object.values(filtered).reduce((s, a) => s + a.length, 0)
+    const filtersActive = !!activeCategory || !!q || activeQuickFilters.length > 0 || selectedFeatures.length > 0
     const pct = totalRecords ? (processed / totalRecords) * 100 : 0
 
     return (
@@ -150,32 +138,22 @@ class BankingProductList extends React.Component {
             )}
             <div className="px-1 mb-6 animate-fadeIn">
               <ProductSearch
-                products={Object.values(filtered).flat()}
-                onFilter={this.handleProductSearchFilter}
+                search={search}
+                onSearchChange={this.handleSearchChange}
+                activeFilters={activeQuickFilters}
+                onToggleFilter={this.handleToggleQuickFilter}
+                onClear={this.handleClearSearch}
               />
             </div>
             <div className="px-1 mb-6 animate-fadeIn">
               <FeatureFilter onFilterChange={this.handleFeatureFilterChange} />
             </div>
-            <div className="relative mb-6 px-1 animate-fadeIn">
-              <input
-                type="text"
-                placeholder="Filter products..."
-                value={inputValue}
-                onChange={this.handleSearchChange}
-                className="w-full px-4 py-2 pr-10 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 hover:border-slate-400 dark:hover:border-slate-600 transition-all duration-200 shadow-md focus:shadow-lg"
-              />
-              {inputValue && (
-                <button
-                  onClick={() => this.setState({ inputValue: '', search: '' })}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-none border-none cursor-pointer text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-lg leading-none p-1 transition-all duration-200 hover:scale-110 active:scale-95"
-                  title="Clear search"
-                >
-                  ✕
-                </button>
-              )}
-            </div>
           </>
+        )}
+        {done && filtersActive && (
+          <div className="text-xs text-slate-500 dark:text-slate-400 mb-3 px-1 animate-fadeIn">
+            {totalFiltered} product{totalFiltered !== 1 ? 's' : ''} found
+          </div>
         )}
         {done && Object.keys(filtered).sort().map((cat, i) => (
           <div key={i} className="px-1 animate-fadeIn" style={{ animationDelay: `${i * 30}ms` }}>
@@ -187,12 +165,7 @@ class BankingProductList extends React.Component {
             <svg className="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            {search.trim() ? `No products matching "${search}"` : 'No products found.'}
-          </div>
-        )}
-        {done && (search.trim() || activeCategory) && totalFiltered > 0 && (
-          <div className="text-xs text-slate-500 dark:text-slate-400 py-2 px-1 mt-2 border-t border-slate-300/50 dark:border-slate-700/50 animate-fadeIn">
-            {totalFiltered} result{totalFiltered !== 1 ? 's' : ''}
+            {filtersActive ? 'No products match the selected filters.' : 'No products found.'}
           </div>
         )}
       </div>

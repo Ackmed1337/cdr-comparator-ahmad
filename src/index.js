@@ -16,9 +16,15 @@ const App = () => {
   })
 
   const toggleDarkMode = () => {
+    document.documentElement.classList.add('theme-switching')
     setDarkMode(prev => {
       localStorage.setItem('darkMode', JSON.stringify(!prev))
       return !prev
+    })
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.documentElement.classList.remove('theme-switching')
+      })
     })
   }
 

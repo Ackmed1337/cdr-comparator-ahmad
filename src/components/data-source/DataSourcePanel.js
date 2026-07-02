@@ -82,6 +82,7 @@ const DataSourcePanel = (props) => {
               <button
                 onClick={syncDataSources}
                 title="Sync with CDR Register"
+                aria-label="Sync data sources with CDR Register"
                 className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200"
               >
                 <SyncIcon style={{ fontSize: 20 }} />
@@ -101,6 +102,7 @@ const DataSourcePanel = (props) => {
                     <button
                       onClick={setVersionsEditable}
                       title="Edit API versions"
+                      aria-label="Edit API versions"
                       className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200 ml-2"
                     >
                       <EditIcon style={{ fontSize: 18 }} />
@@ -134,6 +136,7 @@ const DataSourcePanel = (props) => {
                     <button
                       onClick={applyVersions}
                       title="Apply versions"
+                      aria-label="Apply API versions"
                       className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200 ml-2"
                     >
                       <DoneOutlineIcon style={{ fontSize: 18 }} />
@@ -145,6 +148,7 @@ const DataSourcePanel = (props) => {
               <button
                 onClick={addDataSource}
                 title="Add data source"
+                aria-label="Add data source"
                 className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-200"
               >
                 <PlayListAddIcon style={{ fontSize: 20 }} />
