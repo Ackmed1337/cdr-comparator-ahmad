@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useState } from 'react'
 import { connect } from 'react-redux'
-import Tooltip from '@material-ui/core/Tooltip'
+import { ChevronDown, Link2, FileText, Download } from 'lucide-react'
 import { productDataKeys } from '../../utils/dict'
 import { format } from '../../utils/datetime'
 import AdditionalInfo from '../data/banking/AdditionalInfo'
@@ -21,6 +21,11 @@ import FeatureMatrix from './FeatureMatrix'
 import { generatePDFComparison } from '../../utils/export'
 import { encodeComparisonURL, copyToClipboard } from '../../utils/share'
 import { bestDepositRate, bestLendingRate } from '../../utils/rates'
+import { Card } from '../ui/Card'
+import { Badge } from '../ui/Badge'
+import { Button } from '../ui/Button'
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../ui/Tooltip'
+import { cn } from '../../lib/utils'
 
 const listStyle = { margin: 0, padding: '0 0 0 16px' }
 
@@ -114,6 +119,17 @@ const toText = (product, key) => {
   }
 }
 
+const IconAction = ({ label, onClick, children }) => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <Button variant="outline" size="icon" onClick={onClick} aria-label={label}>
+        {children}
+      </Button>
+    </TooltipTrigger>
+    <TooltipContent>{label}</TooltipContent>
+  </Tooltip>
+)
+
 const BankingComparisonPanel = ({ dataSources, products }) => {
   const [isExpanded, setIsExpanded] = useState(true)
   const rowData = useMemo(() => {
@@ -159,24 +175,20 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
   const colWidth = `${85 / products.length}%`
 
   return (
-    <div className="mb-4 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg overflow-hidden">
+    <Card className="mb-4 overflow-hidden">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full px-4 py-3 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border-l-4 border-blue-500 transition-all flex items-center justify-between"
+        className="w-full px-4 py-3 hover:bg-accent/50 border-l-4 border-primary transition-colors flex items-center justify-between"
       >
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-sm text-blue-600 dark:text-blue-400">Product Comparison</span>
-          <span className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-bold px-2 py-0.5 rounded-full">
-            {products.length} products
-          </span>
+          <span className="font-semibold text-sm text-primary">Product Comparison</span>
+          <Badge variant="primary">{products.length} products</Badge>
         </div>
-        <svg className={`w-5 h-5 text-blue-600 dark:text-blue-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-        </svg>
+        <ChevronDown className={cn('w-5 h-5 text-primary transition-transform duration-300', isExpanded && 'rotate-180')} />
       </button>
 
       {isExpanded && (
-        <div className="mx-auto my-5 w-11/12 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-950 p-4">
+        <div className="mx-auto my-5 w-11/12 rounded-lg border border-border bg-muted/30 p-4">
         <ComparisonStats products={products} />
         <RateChart products={products} dataSources={dataSources} />
 
@@ -188,42 +200,41 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
         )}
         <FeatureMatrix products={products} dataSources={dataSources} />
 
-        <div className="overflow-x-auto rounded-lg border border-slate-300 dark:border-slate-700">
+        <div className="overflow-x-auto rounded-lg border border-border">
         <table className="w-full border-collapse border-spacing-0 hidden md:table">
           <thead>
             <tr>
-              <th className="sticky top-16 z-40 bg-gradient-to-r from-white to-slate-100 dark:from-slate-900 dark:to-slate-800 border-t-2 border-blue-500 text-left text-xs font-bold text-slate-700 dark:text-slate-300 p-3 px-3.5 border-r-2 border-slate-300 dark:border-slate-700 w-1/6 min-w-32" />
+              <th className="bg-muted/50 border-t-2 border-primary text-left text-xs font-bold text-foreground/90 p-3 px-3.5 border-r-2 border-border w-1/6 min-w-32" />
               {products.map((pd, i) => (
-                <th key={i} className="sticky top-16 z-40 bg-gradient-to-r from-white to-slate-100 dark:from-slate-900 dark:to-slate-800 border-t-2 border-blue-500 px-3.5 py-3 border-r border-slate-300 dark:border-slate-700 last:border-r-0 text-center" style={{ width: colWidth }}>
-                  <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{dataSources[pd.dataSourceIdx]?.name}</div>
-                  <div className="font-bold text-slate-900 dark:text-slate-100 text-sm">{pd.product.name}</div>
+                <th key={i} className="bg-muted/50 border-t-2 border-primary px-3.5 py-3 border-r border-border last:border-r-0 text-center" style={{ width: colWidth }}>
+                  <div className="text-xs font-bold text-primary">{dataSources[pd.dataSourceIdx]?.name}</div>
+                  <div className="font-bold text-foreground text-sm">{pd.product.name}</div>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {rowData.map(({ dataKey, cells, highlight }, rowIdx) => (
-              <tr key={dataKey.key} className={`transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/20 ${rowIdx % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-100 dark:bg-slate-800'}`}>
-                <td className={`text-left font-bold text-slate-700 dark:text-slate-300 text-xs px-3.5 py-3 border-r-2 border-slate-300 dark:border-slate-700 sticky left-0 z-10 w-1/6 min-w-32 ${rowIdx % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-100 dark:bg-slate-800'}`}>
+              <tr key={dataKey.key} className={cn('transition-colors duration-200 hover:bg-primary/5', rowIdx % 2 === 0 ? 'bg-card' : 'bg-muted/30')}>
+                <td className={cn('text-left font-bold text-foreground/90 text-xs px-3.5 py-3 border-r-2 border-border sticky left-0 z-10 w-1/6 min-w-32', rowIdx % 2 === 0 ? 'bg-card' : 'bg-muted/30')}>
                   {dataKey.label}
                 </td>
                 {cells.map((cell, i) => {
                   const isBest = highlight?.bestIdx === i
                   const isWorst = highlight?.worstIdx === i
-                  const accent = isBest ? 'border-l-2 border-green-500' :
-                                 isWorst ? 'border-l-2 border-red-500' :
-                                 'border-r border-slate-300 dark:border-slate-700 last:border-r-0'
+                  const accent = isBest ? 'border-l-2 border-emerald-500' :
+                                 isWorst ? 'border-l-2 border-destructive' :
+                                 'border-r border-border last:border-r-0'
                   return (
                     <td
                       key={i}
-                      className={`align-top text-center text-sm p-3 px-3.5 text-slate-700 dark:text-slate-300 transition-colors duration-200 ${accent} ${!cell ? 'opacity-50' : ''}`}
+                      className={cn('align-top text-center text-sm p-3 px-3.5 text-foreground/90 transition-colors duration-200', accent, !cell && 'opacity-50')}
                     >
                       {(isBest || isWorst) && (
-                        <span className={`inline-block mb-1.5 text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded ${
-                          isBest
-                            ? 'text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-900/50'
-                            : 'text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-900/50'
-                        }`}>
+                        <span className={cn(
+                          'inline-block mb-1.5 text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded',
+                          isBest ? 'text-emerald-700 dark:text-emerald-400 bg-emerald-500/10' : 'text-destructive bg-destructive/10'
+                        )}>
                           {isBest ? 'Best' : 'Worst'}
                         </span>
                       )}
@@ -239,17 +250,17 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
 
         <div className="md:hidden px-2 py-4">
           {products.map((pd, prodIdx) => (
-            <div key={prodIdx} className="mb-4 p-3 border border-slate-400 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 break-inside-avoid">
-              <div className="font-bold text-sm text-slate-900 dark:text-slate-100 mb-3 pb-2 border-b-2 border-slate-300 dark:border-slate-700">
+            <div key={prodIdx} className="mb-4 p-3 border border-border rounded-lg bg-card break-inside-avoid">
+              <div className="font-bold text-sm text-foreground mb-3 pb-2 border-b-2 border-border">
                 {dataSources[pd.dataSourceIdx]?.name} — {pd.product.name}
               </div>
               {rowData.map(({ dataKey, cells }) => {
                 const cell = cells[prodIdx]
                 if (!cell) return null
                 return (
-                  <div key={dataKey.key} className="grid grid-cols-[45%_1fr] gap-2 py-2 px-0 text-xs border-b border-slate-300 dark:border-slate-700 last:border-b-0">
-                    <div className="font-semibold text-slate-500 dark:text-slate-400 break-words">{dataKey.label}:</div>
-                    <div className="text-slate-700 dark:text-slate-300 text-right break-words">{cell}</div>
+                  <div key={dataKey.key} className="grid grid-cols-[45%_1fr] gap-2 py-2 px-0 text-xs border-b border-border last:border-b-0">
+                    <div className="font-semibold text-muted-foreground break-words">{dataKey.label}:</div>
+                    <div className="text-foreground/90 text-right break-words">{cell}</div>
                   </div>
                 )
               })}
@@ -259,48 +270,32 @@ const BankingComparisonPanel = ({ dataSources, products }) => {
       </div>
       )}
 
-      <div className="px-4 py-2 flex justify-between items-center flex-wrap gap-2 border-t border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900">
-        <div className="flex gap-3 items-center text-xs text-slate-500 dark:text-slate-400">
+      <div className="px-4 py-2 flex justify-between items-center flex-wrap gap-2 border-t border-border">
+        <div className="flex gap-3 items-center text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-green-900/50 border border-green-500" />
+            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-emerald-500/20 border border-emerald-500" />
             Best rate
           </span>
           <span className="flex items-center gap-1">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-red-900/50 border border-red-500" />
+            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-destructive/20 border border-destructive" />
             Worst rate
           </span>
         </div>
-        <div className="flex gap-2">
-          <Tooltip title="Share this comparison">
-            <button
-              onClick={handleShare}
-              aria-label="Share comparison link"
-              className="p-2 rounded-full bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/30 dark:hover:bg-amber-900/50 text-amber-700 dark:text-amber-300 transition-colors duration-200 hover:shadow-lg"
-            >
-              🔗
-            </button>
-          </Tooltip>
-          <Tooltip title="Open report in a new tab">
-            <button
-              onClick={() => generatePDFComparison(products, dataSources, 'html')}
-              aria-label="Open comparison report in a new tab"
-              className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-300 transition-colors duration-200 hover:shadow-lg"
-            >
-              📄
-            </button>
-          </Tooltip>
-          <Tooltip title="Export as CSV">
-            <button
-              onClick={handleDownload}
-              aria-label="Export comparison as CSV"
-              className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200 hover:shadow-lg"
-            >
-              📥
-            </button>
-          </Tooltip>
-        </div>
+        <TooltipProvider delayDuration={200}>
+          <div className="flex gap-2">
+            <IconAction label="Share comparison link" onClick={handleShare}>
+              <Link2 className="w-4 h-4" />
+            </IconAction>
+            <IconAction label="Open report in a new tab" onClick={() => generatePDFComparison(products, dataSources, 'html')}>
+              <FileText className="w-4 h-4" />
+            </IconAction>
+            <IconAction label="Export as CSV" onClick={handleDownload}>
+              <Download className="w-4 h-4" />
+            </IconAction>
+          </div>
+        </TooltipProvider>
       </div>
-    </div>
+    </Card>
   )
 }
 

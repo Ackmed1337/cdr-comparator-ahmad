@@ -1,10 +1,9 @@
-import React, { useState, createContext, useMemo } from 'react'
+import React, { useState, useEffect, createContext } from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import Page from './components/Page'
 import * as serviceWorker from './serviceWorker'
 import { Provider as StoreProvider } from 'react-redux'
-import { createTheme, ThemeProvider } from '@material-ui/core/styles'
 import store from './store'
 
 export const ThemeContext = createContext()
@@ -14,6 +13,14 @@ const App = () => {
     const saved = localStorage.getItem('darkMode')
     return saved ? JSON.parse(saved) : true
   })
+
+  // The `dark` class must live on <html>, not an inner div: Radix components
+  // (Select, Tooltip, etc.) render their popups via a portal appended directly
+  // to <body>, which sits outside any inner div's subtree and would otherwise
+  // never see the dark-mode CSS variables.
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode)
+  }, [darkMode])
 
   const toggleDarkMode = () => {
     document.documentElement.classList.add('theme-switching')
@@ -28,22 +35,11 @@ const App = () => {
     })
   }
 
-  const muiTheme = useMemo(() => createTheme({
-    palette: {
-      type: darkMode ? 'dark' : 'light',
-      background: { paper: darkMode ? '#1e293b' : '#ffffff', default: darkMode ? '#0f172a' : '#f1f5f9' },
-    },
-  }), [darkMode])
-
   return (
     <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
-      <ThemeProvider theme={muiTheme}>
-        <div className={darkMode ? 'dark' : ''}>
-          <div className="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen font-sans">
-            <Page />
-          </div>
-        </div>
-      </ThemeProvider>
+      <div className="bg-background text-foreground min-h-screen font-sans">
+        <Page />
+      </div>
     </ThemeContext.Provider>
   )
 }

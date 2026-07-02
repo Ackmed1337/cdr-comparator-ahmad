@@ -1,38 +1,18 @@
 import React from 'react'
+import { cn } from '../../lib/utils'
 
-export const Input = ({
-  label,
-  error,
-  size = 'md',
-  className = '',
-  ...props
-}) => {
-  const sizes = {
-    sm: 'px-2 py-1 text-xs',
-    md: 'px-3 py-2 text-sm',
-    lg: 'px-4 py-3 text-base',
-  }
-
-  return (
-    <div className="w-full">
-      {label && (
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
-          {label}
-        </label>
-      )}
-      <input
-        className={`w-full bg-slate-100 dark:bg-slate-800 border rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 transition-all duration-200 focus:outline-none focus:ring-2 ${
-          error
-            ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20'
-            : 'border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-500/20'
-        } ${sizes[size]} ${className}`}
-        {...props}
-      />
-      {error && (
-        <p className="text-red-600 dark:text-red-400 text-xs mt-1">{error}</p>
-      )}
-    </div>
-  )
-}
+export const Input = React.forwardRef(({ className, type = 'text', error, ...props }, ref) => (
+  <input
+    type={type}
+    ref={ref}
+    className={cn(
+      'flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
+      error && 'border-destructive focus-visible:ring-destructive',
+      className
+    )}
+    {...props}
+  />
+))
+Input.displayName = 'Input'
 
 export default Input

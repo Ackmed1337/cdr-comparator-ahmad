@@ -1,11 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { SearchX } from 'lucide-react'
 import { START_RETRIEVE_PRODUCT_LIST, startRetrieveProductList, retrieveProductList } from '../../../store/banking/data'
 import ProductCategory from './ProductCategory'
 import ProductSearch, { QUICK_FILTERS } from './ProductSearch'
 import FeatureFilter from './FeatureFilter'
 import { normalise } from '../../../utils/url'
 import { translateProductCategory } from '../../../utils/dict'
+import { Progress } from '../../ui/Progress'
+import { Button } from '../../ui/Button'
 
 class BankingProductList extends React.Component {
   state = { activeCategory: null, search: '', activeQuickFilters: [], selectedFeatures: [] }
@@ -88,21 +91,14 @@ class BankingProductList extends React.Component {
       <div className="pb-2">
         {progress === START_RETRIEVE_PRODUCT_LIST && (
           <div className="py-4 mb-6 px-1 animate-fadeIn">
-            <div className="w-full h-2 bg-slate-300/50 dark:bg-slate-700/50 rounded-full mb-2 overflow-hidden shadow-sm">
-              <div className="h-full bg-gradient-to-r from-blue-500 to-blue-400 w-full rounded-full animate-pulse"></div>
-            </div>
-            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Fetching product list...</span>
+            <Progress value={100} className="mb-2 animate-pulse" />
+            <span className="text-xs text-muted-foreground font-medium">Fetching product list...</span>
           </div>
         )}
         {!!totalRecords && processed < totalRecords && (
           <div className="py-3 pb-3 mb-6 px-1 animate-fadeIn">
-            <div className="w-full h-2 bg-slate-300/50 dark:bg-slate-700/50 rounded-full mb-1.5 overflow-hidden shadow-sm">
-              <div
-                className="h-full bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-500 ease-out rounded-full"
-                style={{ width: `${pct}%` }}
-              ></div>
-            </div>
-            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+            <Progress value={pct} className="mb-1.5" />
+            <span className="text-xs text-muted-foreground font-medium">
               Loading details {processed} / {totalRecords}
             </span>
           </div>
@@ -110,29 +106,25 @@ class BankingProductList extends React.Component {
         {done && products && (
           <>
             {categories.length > 1 && (
-              <div className="flex gap-3 flex-wrap mb-6 px-1 animate-fadeIn">
-                <button
+              <div className="flex gap-2 flex-wrap mb-6 px-1 animate-fadeIn">
+                <Button
+                  size="sm"
+                  variant={activeCategory === null ? 'primary' : 'outline'}
+                  className="rounded-full"
                   onClick={this.handleResetCategory}
-                  className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 ${
-                    activeCategory === null
-                      ? 'bg-blue-600 text-white shadow-lg hover:shadow-xl hover:bg-blue-700'
-                      : 'bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-800'
-                  }`}
                 >
                   All
-                </button>
+                </Button>
                 {categories.map(cat => (
-                  <button
+                  <Button
                     key={cat}
+                    size="sm"
+                    variant={activeCategory === cat ? 'primary' : 'outline'}
+                    className="rounded-full"
                     onClick={() => this.handleToggleCategory(cat)}
-                    className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 active:scale-95 ${
-                      activeCategory === cat
-                        ? 'bg-blue-600 text-white shadow-lg hover:shadow-xl hover:bg-blue-700'
-                        : 'bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-800'
-                    }`}
                   >
                     {translateProductCategory(cat)}
-                  </button>
+                  </Button>
                 ))}
               </div>
             )}
@@ -151,7 +143,7 @@ class BankingProductList extends React.Component {
           </>
         )}
         {done && filtersActive && (
-          <div className="text-xs text-slate-500 dark:text-slate-400 mb-3 px-1 animate-fadeIn">
+          <div className="text-xs text-muted-foreground mb-3 px-1 animate-fadeIn">
             {totalFiltered} product{totalFiltered !== 1 ? 's' : ''} found
           </div>
         )}
@@ -161,10 +153,8 @@ class BankingProductList extends React.Component {
           </div>
         ))}
         {done && products && Object.keys(filtered).length === 0 && (
-          <div className="py-8 text-sm text-slate-500 dark:text-slate-400 text-center animate-fadeIn">
-            <svg className="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+          <div className="py-8 text-sm text-muted-foreground text-center animate-fadeIn">
+            <SearchX className="w-10 h-10 mx-auto mb-2 opacity-50" strokeWidth={1.5} />
             {filtersActive ? 'No products match the selected filters.' : 'No products found.'}
           </div>
         )}

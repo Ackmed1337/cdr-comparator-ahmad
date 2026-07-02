@@ -22,8 +22,8 @@ const RateChart = ({ products, dataSources }) => {
     const maxRate = Math.max(...validRates)
 
     return (
-      <div key={label} className="pb-3 mb-4 border-b border-slate-300/50 dark:border-slate-700/50 last:border-b-0 last:mb-0 last:pb-0">
-        <div className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">{label}</div>
+      <div key={label} className="pb-3 mb-4 border-b border-border/60 last:border-b-0 last:mb-0 last:pb-0">
+        <div className="text-sm font-bold text-foreground/90 mb-3">{label}</div>
         <div className="flex gap-1.5 sm:gap-1 items-end h-20 sm:h-16">
           {rates.map((rate, i) => (
             <div key={i} className="flex-1 flex flex-col items-center justify-end min-w-0">
@@ -36,12 +36,12 @@ const RateChart = ({ products, dataSources }) => {
                       background: isDeposit ? '#10b981' : '#ef4444',
                     }}
                   />
-                  <div className="text-xs text-slate-700 dark:text-slate-300 font-bold mt-1 sm:mt-0.5">{(rate * 100).toFixed(2)}%</div>
+                  <div className="text-xs text-foreground/90 font-bold mt-1 sm:mt-0.5">{(rate * 100).toFixed(2)}%</div>
                 </>
               ) : (
-                <div className="h-3 text-slate-500 text-xs">N/A</div>
+                <div className="h-3 text-muted-foreground text-xs">N/A</div>
               )}
-              <div className="text-xs sm:text-xs font-semibold text-slate-500 dark:text-slate-400 mt-1 sm:mt-0.5 text-center break-words max-w-full">
+              <div className="text-xs font-semibold text-muted-foreground mt-1 sm:mt-0.5 text-center break-words max-w-full">
                 {dataSources[products[i].dataSourceIdx]?.name || 'Source'}
               </div>
             </div>

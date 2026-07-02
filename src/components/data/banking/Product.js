@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import { ChevronDown } from 'lucide-react'
 import Bundle from './Bundle'
 import Constraint from './Constraint'
 import DepositRate from './DepositRate'
@@ -12,12 +13,15 @@ import { deselectProduct, selectProduct } from '../../../store/banking/selection
 import DateTime from '../DateTime'
 import AdditionalInfo from './AdditionalInfo'
 import ecomp from '../../../utils/enum-comp'
+import { Checkbox } from '../../ui/Checkbox'
+import { Button } from '../../ui/Button'
+import { cn } from '../../../lib/utils'
 
 const Field = ({ label, value }) => {
   if (!value && value !== 0 && value !== false) return null
   return (
     <div className="mb-2">
-      <span className="text-slate-500 dark:text-slate-400 font-medium mr-4">{label}:</span>
+      <span className="text-muted-foreground font-medium mr-4">{label}:</span>
       {value}
     </div>
   )
@@ -25,8 +29,8 @@ const Field = ({ label, value }) => {
 
 const Section = ({ title, children }) => {
   return (
-    <div className="mt-8 pt-6 border-t border-slate-300 dark:border-slate-700">
-      <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide mb-2">{title}</div>
+    <div className="mt-8 pt-6 border-t border-border">
+      <div className="text-xs font-bold text-primary uppercase tracking-wide mb-2">{title}</div>
       <ul className="m-0 pl-4">{children}</ul>
     </div>
   )
@@ -39,7 +43,7 @@ const Product = (props) => {
   const [expanded, setExpanded] = useState(false)
   const selected = selectedProducts.some(p => p.dataSourceIdx === dataSourceIndex && p.product.productId === product.productId)
 
-  const toggle = e => e.target.checked
+  const toggle = checked => checked
     ? props.selectProduct(dataSourceIndex, product)
     : props.deselectProduct(dataSourceIndex, product)
 
@@ -51,66 +55,37 @@ const Product = (props) => {
   }
 
   return (
-    <div className="flex items-start gap-3 mb-2 px-3 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors duration-200">
+    <div className="flex items-start gap-3 mb-2 px-3 py-2.5 bg-card border border-border rounded-md hover:border-primary/50 transition-colors duration-200">
       {/* Selection Checkbox */}
-      <label className="relative flex-shrink-0 mt-1.5 w-4 h-4 cursor-pointer group">
-        <input
-          type="checkbox"
-          checked={selected}
-          onChange={toggle}
-          className="absolute opacity-0 w-4 h-4 cursor-pointer"
-        />
-        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors duration-200 ${
-          selected
-            ? 'bg-blue-500 border-blue-500'
-            : 'border-slate-400 dark:border-slate-600 bg-white dark:bg-slate-900 group-hover:border-blue-500'
-        }`}>
-          {selected && (
-            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-            </svg>
-          )}
-        </div>
-      </label>
+      <Checkbox checked={selected} onCheckedChange={toggle} className="mt-1.5 flex-shrink-0" />
 
       {/* Accordion Content */}
       <div className="flex-1 min-w-0">
         {/* Summary/Header */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className={`w-full flex items-center justify-between py-0.5 text-left font-semibold text-sm transition-colors duration-200 ${
-            selected ? 'text-blue-700 dark:text-blue-300' : 'text-slate-900 dark:text-slate-100'
-          } hover:text-blue-500 dark:hover:text-blue-300`}
+          className={cn(
+            'w-full flex items-center justify-between py-0.5 text-left font-semibold text-sm transition-colors duration-200 hover:text-primary',
+            selected ? 'text-primary' : 'text-foreground'
+          )}
         >
           <span className="line-height-1.4">{product.name}</span>
-          <svg
-            className={`w-4 h-4 transition-transform duration-200 flex-shrink-0 ml-2 ${expanded ? 'rotate-180' : ''}`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
+          <ChevronDown className={cn('w-4 h-4 transition-transform duration-200 flex-shrink-0 ml-2', expanded && 'rotate-180')} />
         </button>
 
         {/* Body Content */}
         {expanded && (
-          <div className="mt-4 pl-0 text-slate-700 dark:text-slate-300 text-sm leading-relaxed space-y-2">
+          <div className="mt-4 pl-0 text-foreground/90 text-sm leading-relaxed space-y-2">
             {product.description && (
-              <div className="text-slate-500 dark:text-slate-400 mb-3 text-xs leading-normal">
+              <div className="text-muted-foreground mb-3 text-xs leading-normal">
                 {product.description}
               </div>
             )}
             <Field label="Brand" value={product.brand} />
             <Field label="Last updated" value={
-              <span className="text-slate-700 dark:text-slate-300">
+              <span className="text-foreground/90">
                 <DateTime rfc3339={product.lastUpdated} /> &nbsp;
-                <button
-                  onClick={viewJSON}
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 text-xs font-semibold underline cursor-pointer bg-transparent border-none p-0"
-                >
-                  View JSON
-                </button>
+                <Button variant="link" size="sm" className="h-auto p-0 text-xs" onClick={viewJSON}>View JSON</Button>
               </span>
             } />
             <Field label="Tailored" value={product.isTailored ? 'Yes' : 'No'} />
@@ -122,15 +97,15 @@ const Product = (props) => {
                   href={product.applicationUri}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-semibold text-sm"
+                  className="text-primary hover:underline font-semibold text-sm"
                 >
                   Apply here →
                 </a>
               </div>
             )}
             {product.additionalInformation && (
-              <div className="mt-8 pt-6 border-t border-slate-300 dark:border-slate-700">
-                <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide mb-2">Additional Info</div>
+              <div className="mt-8 pt-6 border-t border-border">
+                <div className="text-xs font-bold text-primary uppercase tracking-wide mb-2">Additional Info</div>
                 <AdditionalInfo additionalInfo={product.additionalInformation} />
               </div>
             )}

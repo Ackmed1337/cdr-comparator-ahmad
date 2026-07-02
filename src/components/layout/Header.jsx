@@ -1,13 +1,16 @@
 import React, { useContext } from 'react'
+import { Sun, Moon } from 'lucide-react'
 import logo from '../header/CDS-logo.png'
 import { ThemeContext } from '../../index'
-import { Button } from '../ui/Button'
+import { Switch } from '../ui/Switch'
+import { Badge } from '../ui/Badge'
+import { Separator } from '../ui/Separator'
 
 export default function Header({ title }) {
   const { darkMode, toggleDarkMode } = useContext(ThemeContext)
 
   return (
-    <header className="sticky top-0 z-50 bg-gradient-to-r from-white via-slate-50 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-b border-slate-200 dark:border-slate-800 shadow-lg shadow-slate-300/50 dark:shadow-slate-950/50">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-sm">
       <div className="flex items-center justify-between h-16 px-3 sm:px-6 gap-2 sm:gap-6">
         {/* Left: Logo & Title */}
         <div className="flex items-center gap-2 sm:gap-4 min-w-0">
@@ -17,36 +20,36 @@ export default function Header({ title }) {
             className="h-7 w-7 sm:h-8 sm:w-8 object-contain opacity-90 dark:brightness-0 dark:invert flex-shrink-0"
           />
           <div className="min-w-0">
-            <div className="font-bold text-base sm:text-lg text-blue-600 dark:text-blue-400 leading-tight truncate">
+            <div className="font-bold text-base sm:text-lg text-primary leading-tight truncate">
               {title}
             </div>
-            <div className="hidden sm:block text-slate-500 dark:text-slate-400 text-xs uppercase tracking-widest font-medium truncate">
+            <div className="hidden sm:block text-muted-foreground text-xs uppercase tracking-widest font-medium truncate">
               CDR Banking API Explorer
             </div>
           </div>
         </div>
 
         {/* Center: User Info */}
-        <div className="hidden md:block text-slate-700 dark:text-slate-300 text-sm font-semibold whitespace-nowrap">
+        <div className="hidden md:block text-foreground/80 text-sm font-semibold whitespace-nowrap">
           Ahmad ElSayed — Ultradata Version
         </div>
 
         {/* Right: Demo Badge & Dark Mode Toggle */}
-        <div className="flex items-center gap-2 sm:gap-4 ml-auto flex-shrink-0">
-          <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold px-2 sm:px-3 py-1 rounded-full border border-blue-300 dark:border-blue-800/50 uppercase tracking-wider whitespace-nowrap">
-            Demo
-          </span>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={toggleDarkMode}
-            className="gap-2 !px-2 sm:!px-4"
+        <div className="flex items-center gap-3 sm:gap-4 ml-auto flex-shrink-0">
+          <Badge variant="primary" className="whitespace-nowrap">Demo</Badge>
+          <Separator orientation="vertical" className="hidden sm:block h-5" />
+          <div
+            className="flex items-center gap-1.5 sm:gap-2"
             title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            <span aria-hidden="true">{darkMode ? '☀️' : '🌙'}</span>
-            <span className="hidden sm:inline">{darkMode ? 'Light mode' : 'Dark mode'}</span>
-          </Button>
+            <Sun className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+            <Switch
+              checked={darkMode}
+              onCheckedChange={toggleDarkMode}
+              aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            />
+            <Moon className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+          </div>
         </div>
       </div>
     </header>
