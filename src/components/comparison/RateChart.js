@@ -19,7 +19,7 @@ const RateChart = ({ products, dataSources }) => {
     const validRates = rates.filter(r => r !== null)
     if (!validRates.length) return null
 
-    const maxRate = Math.max(...validRates)
+    const maxRate = Math.max(...validRates) || 1
 
     return (
       <div key={label} className="pb-3 mb-4 border-b border-border/60 last:border-b-0 last:mb-0 last:pb-0">
